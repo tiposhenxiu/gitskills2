@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration>
+
+	<!-- include environment settings -->
+    <!-- <if condition='isDefined("spring.profiles.active")'> -->
+    <!--     <then> -->
+    <!--         <include resource="logback-${spring.profiles.active}.xml" /> -->
+    <!--     </then> -->
+    <!--     <else> -->
+           <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <!--     </else> -->
+    <!-- </if> -->
+
+</configuration>

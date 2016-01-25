@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+<link rel="stylesheet" href="/plugins/jQueryUI/jQuery-ui.css" th:href="@{/plugins/jQueryUI/jQuery-ui.css}" />
+	<!-- fullCalendar 2.2.5 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+	<script src="/plugins/fullcalendar/fullcalendar.min.js" th:src="@{/plugins/fullcalendar/fullcalendar.min.js}"></script>
+	<script src="/plugins/jQueryUI/jQuery-ui.min.js" th:src="@{/plugins/jQueryUI/jQuery-ui.min.js}"></script>
+	<script th:inline="javascript">
+	$(function() {
+
+		/* initialize the external events
+		 -----------------------------------------------------------------*/
+		function ini_events(ele) {
+			ele.each(function() {
+
+				// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+				// it doesn't need to have a start or end
+				var eventObject = {
+					title : $.trim($(this).text())
+				// use the element's text as the event title
+				};
+
+				// store the Event Object in the DOM element so we can get to it later
+				$(this).data('eventObject', eventObject);
+
+				// make the event draggable using jQuery UI
+				$(this).draggable({
+					zIndex : 1070,
+					revert : true, // will cause the event to go back to its
+					revertDuration : 0
+				//  original position after the drag
+				});
+
+			});
+		}
+		ini_events($('#external-events div.external-event'));
+
+		/* initialize the calendar
+		 -----------------------------------------------------------------*/
+		//Date for the calendar events (dummy data)
+		var date = new Date();
+		var d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+
+		$('#calendar').fullCalendar(
+						{
+							header : {
+								left : 'prev,next today',
+								center : 'title',
+								right : 'month,agendaWeek,agendaDay'
+							},
+							titleFormat : {
+								month : 'YYYY年 M月',
+								week : 'YYYY年M月D日',
+								day : 'YYYY年 M月 D日（dddd）'
+							},
+							timeFormat : 'HH:mm',
+							columnFormat : {
+								month : 'ddd',
+								week : 'M/D（ddd）',
+								day : 'M/D（ddd）'
+							},
+							dayNames : [ '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日' ],
+							dayNamesShort : [ /*[[#{portal.calendar.sunday}]]*/,
+							                  /*[[#{portal.calendar.monday}]]*/,
+							                  /*[[#{portal.calendar.tuesday}]]*/,
+							                  /*[[#{portal.calendar.wednesday}]]*/,
+							                  /*[[#{portal.calendar.thursday}]]*/,
+							                  /*[[#{portal.calendar.friday}]]*/,
+							                  /*[[#{portal.calendar.saturday}]]*/, ],
+							buttonText : {
+								today : '今日',
+								month : '月',
+								week : '週',
+								day : '日'
+							},
+							eventClick : function(calEvent, jsEvent, view) {
+								$("#dialog").dialog({
+					                autoOpen: false,
+					                width: 400,
+					            });
+								$("#kbn").val(calEvent.dataKbn);
+					            $("#title").val(calEvent.scheduleTitle);
+					            $("#telNo").val(calEvent.scheduleTelno);
+					            $("#memo").val(calEvent.scheduleMemo);
+								var anchorList = document.getElementById("linkUrl");
+								anchorList.href = "../event/list";
+					            if (calEvent.url) {
+									anchorList.href = calEvent.url;
+					            }
+					            $('#dialog').dialog('open');
+							},
+							editable : false,
+							droppable : false, // this allows things to be dropped onto the calendar !!!
+							drop : function(date, allDay) { // this function is called when something is dropped
+
+								// retrieve the dropped element's stored Event Object
+								var originalEventObject = $(this).data(
+										'eventObject');
+
+								// we need to copy it, so that multiple events don't have a reference to the same object
+								var copiedEventObject = $.extend({},
+										originalEventObject);
+
+								// assign it the date that was reported
+								copiedEventObject.start = date;
+								copiedEventObject.allDay = allDay;
+								copiedEventObject.backgroundColor = $(this)
+										.css("background-color");
+								copiedEventObject.borderColor = $(this)
+										.css("border-color");
+
+								// render the event on the calendar
+								// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+								$('#calendar').fullCalendar('renderEvent',
+										copiedEventObject, true);
+
+								// is the "remove after drop" checkbox checked?
+								if ($('#drop-remove').is(':checked')) {
+									// if so, remove the element from the "Draggable Events" list
+									$(this).remove();
+								}
+							}
+						});
+
+		var start = $('#calendar').fullCalendar('getView').intervalStart;
+		var end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		$('.fc-prev-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		$('.fc-next-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		$('.fc-today-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		$('.fc-month-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		$('.fc-agendaWeek-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		$('.fc-agendaDay-button').click(function(){
+			start = $('#calendar').fullCalendar('getView').intervalStart;
+			end = $('#calendar').fullCalendar('getView').intervalEnd.subtract(1,'days');
+		});
+		var url = /*[[@{/api/schedule/}]]*/ 'url';
+		var startDate = [start.format("YYYYMMDD"),end.format("YYYYMMDD")];
+		url = url + startDate + "/";
+		$.getJSON(url, null, function(data){
+		    $.each(data, function(i, event){
+		    	$('#calendar').fullCalendar('renderEvent', event, true);
+		    });
+		});
+
+		/* ADDING EVENTS */
+		var currColor = "#3c8dbc"; //Red by default
+		//Color chooser button
+		var colorChooser = $("#color-chooser-btn");
+		$("#color-chooser > li > a").click(function(e) {
+			e.preventDefault();
+			//Save color
+			currColor = $(this).css("color");
+			//Add color effect to button
+			$('#add-new-event').css({
+				"background-color" : currColor,
+				"border-color" : currColor
+			});
+		});
+		$("#add-new-event").click(function(e) {
+			e.preventDefault();
+			//Get value and make sure it is not null
+			var val = $("#new-event").val();
+			if (val.length == 0) {
+				return;
+			}
+
+			//Create events
+			var event = $("<div />");
+			event.css({
+				"background-color" : currColor,
+				"border-color" : currColor,
+				"color" : "#fff"
+			}).addClass("external-event");
+			event.html(val);
+			$('#external-events').prepend(event);
+
+			//Add draggable funtionality
+			ini_events(event);
+
+			//Remove event from text input
+			$("#new-event").val("");
+		});
+
+	});
+	</script>
+	<!-- Page specific script -->
+	<script>
+	</script>
+</th:block>
+
+
+<body class="hold-transition skin-purple sidebar-mini">
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* 権限
+			<div class="bg-info" th:replace="common/role :: common_role">
+				<h1>権限</h1>
+				<div>
+					<h2>権限1-1</h2>
+				</div>
+			</div>
+			 */-->
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1 th:text="#{portal.title.name}">マイポータル</h1>
+			</section>
+			<!-- Main content -->
+			<section class="content">
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title" th:text="#{portal.subtitle.information}">お知らせ</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse" data-toggle="tooltip" title="">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div style="display: block;" class="box-body" th:each="item,iterStat : ${infoList}">
+						<ul class="list-unstyled">
+							<li class="text-red">
+								<th th:text="${item.sendDate != null}?
+								${#dates.format(item.sendDate,#messages.msg('format.ymd.option'))} + ' ：': ''">YYYY/MM/DD ：</th>
+
+								<a th:href="${item.dataKbn == '1'}? @{../support/list}:''">
+									<th th:text="${item.dataKbn == '1'}? #{portal.name.support} : ''"></th>
+								</a>
+								<th th:text="${item.dataKbn == '1'}?が + #{${item.opeKbn}} :''"></th>
+								<a th:href="${item.dataKbn == '2'}? @{../equipment/list}:''">
+									<th th:text="${item.dataKbn == '2'}? #{portal.name.equipment} : ''"></th>
+								</a>
+								<th th:text="${item.dataKbn == '2'}?が + #{${item.opeKbn}} : ''"></th>
+								<a th:href="${item.dataKbn == '3'}? @{../event/list}:''">
+									<th th:text="${item.dataKbn == '3'}? #{portal.name.event} : ''"></th>
+								</a>
+								<th th:text="${item.dataKbn == '3'}?が + #{${item.opeKbn}} : ''"></th>
+								<a th:href="${item.dataKbn == '4'}? @{../internship/list}:''">
+									<th th:text="${item.dataKbn == '4'}? #{portal.name.internship} : ''"></th>
+								</a>
+								<th th:text="${item.dataKbn == '4'}?が + #{${item.opeKbn}} : ''"></th>
+								<a th:href="${item.dataKbn == '5'}? @{../consultation}:''">
+									<th th:text="${item.dataKbn == '5'}? #{portal.name.consultation} : ''"></th>
+								</a>
+								<th th:text="${item.dataKbn == '5'}?が + #{${item.opeKbn}} : ''"></th>
+							</li>
+<!-- 							<li class="text-red">2015/XX/XX ： <a href="event_browse.html">「イベント」</a>が追加されました。</li> -->
+						</ul>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- Your Page Content Here -->
+				<div class="box box-default">
+					<div class="box-body no-padding">
+						<!-- THE CALENDAR -->
+						<div id="calendar"></div>
+						<div id="dialog" title="スケジュール詳細情報" style="display:none">
+						    <form>
+						        <fieldset>
+						            <label for="lbl">区分</label>
+						            <input type="text" name="kbn" id="kbn" /><br/>
+						            <label for="lbl">タイトル</label>
+						            <input type="text" name="title" id="title" /><br/>
+						            <label for="lbl">連絡先</label>
+						            <input type="text" name="telNo" id="telNo" /><br/>
+						            <label for="lbl">概要</label>
+						            <input type="text" name="memo" id="memo" /><br/>
+						            <label for="lbl">リンク先</label>
+						            <a href="" id="linkUrl">詳細</a>
+						        </fieldset>
+						    </form>
+						</div>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /. box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title" th:text="#{portal.subtitle.operationHistory}">操作履歴</h3>
+						<div class="box-tools pull-right">
+							<button data-original-title="Collapse" type="button"
+								class="btn btn-box-tool" data-widget="collapse"
+								data-toggle="tooltip" title="">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div style="display: block;" class="box-body" th:each="item,iterStat : ${operationHistoryList}">
+						<ul class="list-unstyled">
+							<li class="text-red">
+								<th th:text="${item.operationDate != null}?
+									${#dates.format(item.operationDate,#messages.msg('format.ymd.option'))} + ' ：': ''">YYYY/MM/DD ：</th>
+								<th th:text="'「' + #{${item.operationFuncId}} + '」が'"></th>
+								<th th:text="#{${item.operationActionId}}"></th>
+							</li>
+						</ul>
+					</div>
+					<!-- /.box-body -->
+				</div>
+			</section>
+			<!-- /.content -->
+
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

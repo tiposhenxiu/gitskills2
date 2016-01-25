@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!--/* current link */-->
+<th:block layout:fragment="layout-link">
+<style type="text/css">
+<!--
+/* Error Tooltip */
+.has-error .tooltip, .tooltip-arrow:after {
+    background: #ee0101;
+    border: 2px solid white;
+  }
+
+.has-error .tooltip {
+    padding: 0px;
+    background: #ee0101;
+    color: #fff;
+    border-radius: 6px;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px #000;
+  }
+.has-error .tooltip > .tooltip-inner {
+    text-align: left;
+	width: 100%;
+	background: #ee0101;
+	position:relative;
+	color: #fff;
+	min-width: 120px;
+	font-size: 11px;
+}
+
+.has-error .tooltip > .tooltip-arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -95px;
+    bottom: -11px;
+  }
+.has-error .tooltip > .tooltip-arrow.top {
+    top: -11px;
+    bottom: auto;
+  }
+.has-error .tooltip > .tooltip-arrow.left {
+    left: 20%;
+  }
+.has-error .tooltip > .tooltip-arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px #ee0101;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    tranform: rotate(45deg);
+  }
+.has-error .tooltip > .tooltip-arrow.top:after {
+    bottom: -20px;
+    top: auto;
+  }
+
+-->
+</style>
+</th:block>
+
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+<script>
+$().ready(function() {
+	$("#formRegist").validationEngine();
+	//
+	$('.has-error.has-feedback').children('input').tooltip({
+		placement: 'top',
+		title: function() {
+			return $(this).parent().children('span[class~="text-danger"]').text();
+		},
+	});
+});
+</script>
+</th:block>
+
+
+<body>
+
+<div layout:decorator="layout">
+	<th:block layout:fragment="layout-content">
+	<div>
+	<!--/* Start */-->
+
+		<!--/* 戻るためのform */-->
+		<form th:action="@{/admin/mscode/list}" method="post" role="form" autocomplete="off" id="formBack" name="form">
+			<input type="hidden" name="selectedJosuKbn" value="0" th:value="${selectedJosuKbn}" />
+		</form>
+
+		<!--/* form */-->
+		<form th:action="@{|/admin/mscode/__${form.pageActionUrl}__|}" method="post" role="form" autocomplete="off" th:object="${form}" id="formRegist" name="form">
+			<button type="button" class="btn btn-primary regist" name="regist" th:text="#{button.regist}">登録</button>
+			&nbsp;<button type="button" class="btn btn-default back" name="back" th:text="#{button.back}">戻る</button>
+
+			<input type="hidden" name="1" value="1" th:name="${T(jp.co.sraw.common.CommonConst).ACTION_URL}" th:value="${form.pageActionUrl}"/>
+			<input type="hidden" name="1" value="1" th:name="${T(jp.co.sraw.common.CommonConst).PAGE_MODE}" th:value="${form.pageMode}"/>
+		<hr/>
+
+		<!--/* form body */-->
+		<div class="panel-group">
+			<div class="panel-body">
+				<div class="form-group col-xs-8">
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuKbn')}? 'has-error has-feedback'">
+					<label for="inputJosuKbn" th:text="#{josuKbn}">josuKbn</label>
+					<input type="text" class="form-control validate[required, maxSize[4]]" id="inputJosuKbn" required="required" readonly="readonly" th:placeholder="#{field.placeholder.input.code}" th:field="*{josuKbn}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuKbn')}" th:errors="*{josuKbn}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuCode')}? 'has-error has-feedback'">
+					<label for="inputJosuCd" th:text="#{josuCode}">josuCode</label>
+					<input type="text" class="form-control" id="inputJosuCd" required="required" th:classappend="'validate[required, minSize['+ ${sizMap.get('codeMin')} +'], maxSize['+ ${sizMap.get('codeMax')} +']]'" th:readonly="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_EDIT == form.pageMode ? 'true' : 'false'}" th:placeholder="#{field.placeholder.input.code}" th:field="*{josuCode}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuCode')}" th:errors="*{josuCode}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuName')}? 'has-error has-feedback'">
+					<label for="inputJosuName" th:text="#{josuName}">josuName</label>
+					<input type="text" class="form-control validate[required, maxSize[600]]" id="inputJosuName" required="required" th:placeholder="#{field.placeholder.input.name}" th:field="*{josuName}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuName')}" th:errors="*{josuName}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuNameEn')}? 'has-error has-feedback'">
+					<label for="inputJosuNameEn" th:text="#{josuNameEn}">josuNameEn</label>
+					<input type="text" class="form-control validate[maxSize[600]]" id="inputJosuNameEn" th:placeholder="#{field.placeholder.input.name}" th:field="*{josuNameEn}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuNameEn')}" th:errors="*{josuNameEn}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuNameAbbr')}? 'has-error has-feedback'">
+					<label for="inputjosuNameAbbr" th:text="#{josuNameAbbr}">josuNameAbbr</label>
+					<input type="text" class="form-control validate[maxSize[300]]" id="inputjosuNameAbbr" th:placeholder="#{field.placeholder.input.name}" th:field="*{josuNameAbbr}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuNameAbbr')}" th:errors="*{josuNameAbbr}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('josuNameAbbrEn')}? 'has-error has-feedback'">
+					<label for="inputjosuNameAbbrEn" th:text="#{josuNameAbbrEn}">josuNameAbbrEn</label>
+					<input type="text" class="form-control validate[maxSize[300]]" id="inputjosuNameAbbrEn" th:placeholder="#{field.placeholder.input.name}" th:field="*{josuNameAbbrEn}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('josuNameAbbrEn')}" th:errors="*{josuNameAbbrEn}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei1Txt')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei1Txt" th:text="#{sntaZksei1Txt}">sntaZksei1Txt</label>
+					<input type="text" class="form-control validate[maxSize[300]]" id="inputSntaZksei1Txt" th:placeholder="#{field.placeholder.input.text}" th:field="*{sntaZksei1Txt}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei1Txt')}" th:errors="*{sntaZksei1Txt}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei2Txt')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei2Txt" th:text="#{sntaZksei2Txt}">sntaZksei2Txt</label>
+					<input type="text" class="form-control validate[maxSize[300]]" id="inputSntaZksei2Txt" th:placeholder="#{field.placeholder.input.text}" th:field="*{sntaZksei2Txt}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei2Txt')}" th:errors="*{sntaZksei2Txt}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei3Txt')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei3txt" th:text="#{sntaZksei3Txt}">sntaZksei3Txt</label>
+					<input type="text" class="form-control validate[maxSize[300]]" id="inputSntaZksei3Txt" th:placeholder="#{field.placeholder.input.text}" th:field="*{sntaZksei3Txt}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei3Txt')}" th:errors="*{sntaZksei3Txt}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei1Num')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei1Num" th:text="#{sntaZksei1Num}">sntaZksei1Num</label>
+					<input type="number" class="form-control" id="inputSntaZksei1Num" th:classappend="'validate['+ *{josuKbn == '0000' ? 'required, ' : ''} +'min['+ ${sizMap.get('numMin')} +'], max['+ ${sizMap.get('numMax')} +']]'" th:placeholder="#{field.placeholder.input.number}" th:field="*{sntaZksei1Num}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei1Num')}" th:errors="*{sntaZksei1Num}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei2Num')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei2Num" th:text="#{sntaZksei2Num}">sntaZksei2Num</label>
+					<input type="number" class="form-control validate[min[-32767], max[32767]]" id="inputSntaZksei2Num" th:placeholder="#{field.placeholder.input.number}" th:field="*{sntaZksei2Num}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei2Num')}" th:errors="*{sntaZksei2Num}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('sntaZksei3Num')}? 'has-error has-feedback'">
+					<label for="inputSntaZksei3Num" th:text="#{sntaZksei3Num}">sntaZksei3Num</label>
+					<input type="number" class="form-control validate[min[-32767], max[32767]]" id="inputSntaZksei3Num" th:placeholder="#{field.placeholder.input.number}" th:field="*{sntaZksei3Num}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('sntaZksei3Num')}" th:errors="*{sntaZksei3Num}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('commentProperty')}? 'has-error has-feedback'">
+					<label for="inputCommentProperty" th:text="#{commentProperty}">commentProperty</label>
+					<input type="text" class="form-control validate[maxSize[256]]" id="inputcommentProperty" th:placeholder="#{field.placeholder.input.text}" th:field="*{commentProperty}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('commentProperty')}" th:errors="*{commentProperty}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('useFlag')}? 'has-error has-feedback'">
+					<label for="inputUseFlag" th:text="#{useFlag}">useFlag</label>
+					<select id="inputUseFlag" name="useFlag" class="form-control validate[required]" required="required" th:field="*{useFlag}">
+						<option value="0" th:each="yukoItem,iterStat : ${useFlagList}" th:selected="${yukoItem.code} == ${form.useFlag}" th:value="${yukoItem.code}" th:text="${yukoItem.value}">useFlag</option>
+					</select>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('useFlag')}" th:errors="*{useFlag}">is error</span>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('hyojiSrt')}? 'has-error has-feedback'">
+					<label for="inputHyojiSrt" th:text="#{hyojiSrt}">hyojiSrt</label>
+					<input type="number" class="form-control validate[required, min[1], max[9999]]" id="inputHyojiSrt" th:placeholder="#{field.placeholder.input.number}" th:field="*{hyojiSrt}"/>
+					<span class="text-danger hide" data-toggle="tooltip" th:if="${#fields.hasErrors('hyojiSrt')}" th:errors="*{hyojiSrt}">is error</span>
+				</div>
+				<div class="form-group" th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<label for="inputUpdDate" th:text="#{updDate}">updDate</label>
+					<div th:text="*{updDate != null}? *{#dates.format(updDate,#messages.msg('format.ymd'))} : '-'">-</div>
+					<input type="hidden" class="form-control" id="inputUpdDate" th:field="*{updDate}"/>
+				</div>
+				<div class="form-group" th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<label for="inputUpdUserKey" th:text="#{updUserKey}">updUserKey</label>
+					<div th:text="*{updUserKey != null}? *{updUserKey}">-</div>
+					<input type="hidden" class="form-control" id="inputUpdUserId" th:field="*{updUserKey}"/>
+				</div>
+				</div>
+			</div>
+		</div>
+
+	</form>
+	</div>
+
+	<!--/*- End */-->
+	</th:block>
+</div>
+
+</body>
+</html>

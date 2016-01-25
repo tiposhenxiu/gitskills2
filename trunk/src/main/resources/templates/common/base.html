@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+<meta name="_csrf" content="${_csrf.token}" />
+<!--/* default header name is X-CSRF-TOKEN */-->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<title th:text="#{system.public.name}">Base page</title>
+<!-- デザイン取込 meta.js include start -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+<!-- Bootstrap 3.3.5 -->
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+<!-- fullCalendar 2.2.5-->
+<link rel="stylesheet" href="/plugins/fullcalendar/fullcalendar.min.css" th:href="@{/plugins/fullcalendar/fullcalendar.min.css}" />
+<link rel="stylesheet" href="/plugins/fullcalendar/fullcalendar.print.css" media="print" th:href="@{/plugins/fullcalendar/fullcalendar.print.css}" />
+<!-- Theme style -->
+<link rel="stylesheet" href="/dist/css/AdminLTE.css" th:href="@{/dist/css/AdminLTE.css}" />
+<link rel="stylesheet" href="/dist/css/skins/skin-purple.min.css" th:href="@{/dist/css/skins/skin-purple.min.css}" />
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<!-- jQuery 2.1.4 -->
+<script src="/plugins/jQuery/jQuery-2.1.4.min.js" th:src="@{/plugins/jQuery/jQuery-2.1.4.min.js}"></script>
+<!-- Bootstrap 3.3.5 -->
+<script src="/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script src="/dist/js/app.min.js" th:src="@{/dist/js/app.min.js}"></script>
+<script src="/dist/js/custom.js" th:src="@{/dist/js/custom.js}"></script>
+<!-- デザイン取込 meta.js include end -->
+<!-- ValidationEngine -->
+<link rel="stylesheet" href="/plugins/validation-engine/css/validationEngine.jquery.css" th:href="@{/plugins/validation-engine/css/validationEngine.jquery.css}" />
+<script src="/plugins/validation-engine/languages/jquery.validationEngine-ja.js" th:src="@{/plugins/validation-engine/languages/jquery.validationEngine-ja.js}"></script>
+<script src="/plugins/validation-engine/jquery.validationEngine.js" th:src="@{/plugins/validation-engine/jquery.validationEngine.js}"></script>
+<!--/* current link */-->
+<th:block layout:fragment="layout-link">
+</th:block>
+
+<script th:inline="javascript">
+$().ready(function() {
+	//global
+	// <!--/* 一覧アコーディオン */-->
+	$('a[data-toggle="collapse"]').click(function() {
+		var objectID = $(this).attr('href');
+		if ($(objectID).hasClass('in')) {
+			$(objectID).collapse('hide');
+		}
+		else {
+			$(objectID).collapse('show');
+		}
+	});
+	<th:block th:if="${#httpServletRequest.remoteUser != null}">
+	<th:block th:if="${#sets.isEmpty(userInfo.loginRoleCodes) ? false : #sets.size(userInfo.loginRoleCodes) &gt; 1}">
+	<!--/* 権限選択 */-->
+	$('select[name="r"]').change(function() {
+		$('#formRoleCode').submit();
+	});
+	</th:block>
+	</th:block>
+
+	// <!--/*  Backボタン押下イベント設定 */-->
+	$("button[name='back'][class~='back'], a[data-name='back'][class~='back']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		$('#formBack').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Searchボタン押下イベント設定 */-->
+	$("button[name='search'][class~='search'], a[data-name='search'][class~='search']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		$('#formSearch').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Registボタン押下イベント設定 */-->
+	$("button[name='regist'][class~='regist'], a[data-name='regist'][class~='regist']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		var confirmMsg = /*[[#{message.confirm.regist}]]*/ '登録？';
+
+		if (window.confirm(confirmMsg)) {
+			$('#formRegist').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Createボタン押下イベント設定 */-->
+	$("button[name='create'][class~='create'], a[data-name='create'][class~='create']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		$('#formCreate').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Editボタン押下イベント設定 */-->
+	$("button[name='edit'][class~='edit'], a[data-name='edit'][class~='edit']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		//
+		$(this).parent().children('input[type=hidden]').each(function() {
+			var n = $(this).attr('name');
+			var v = $(this).val();
+			//alert("Edit:key="+ n +" val="+v);
+			$('<input />').attr({
+				type: 'hidden',
+				name: n,
+				value: v
+			}).appendTo('#formEdit');
+		});
+		$('#formEdit').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Copyボタン押下イベント設定 */-->
+	$("button[name='copy'][class~='copy'], a[data-name='copy'][class~='copy']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		//
+		$(this).parent().children('input[type=hidden]').each(function() {
+			var n = $(this).attr('name');
+			var v = $(this).val();
+			//alert("Copy:key="+ n +" val="+v);
+			$('<input />').attr({
+				type: 'hidden',
+				name: n,
+				value: v
+			}).appendTo('#formCopy');
+		});
+		$('#formCopy').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Deleteボタン押下イベント設定 */-->
+	$("button[name='delete'][class~='delete'], a[data-name='delete'][class~='delete']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+
+		var confirmMsg = /*[[#{message.confirm.delete}]]*/ '削除？';
+
+		if (window.confirm(confirmMsg)) {
+			//
+			$(this).parent().children('input[type=hidden]').each(function() {
+				var n = $(this).attr('name');
+				var v = $(this).val();
+				//alert("Edit:key="+ n +" val="+v);
+				$('<input />').attr({
+					type: 'hidden',
+					name: n,
+					value: v
+				}).appendTo('#formDelete');
+			});
+			$('#formDelete').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Deleteボタン(複数削除)押下イベント設定 */-->
+	$("button[name='delete'][class~='multi-delete']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+
+		var confirmMsg = /*[[#{message.confirm.delete}]]*/ '削除？';
+
+		if (window.confirm(confirmMsg)) {
+			$('#'+$(this).attr('data-target')).find('input[type=checkbox]:checked, input[type=hidden]').each(function() {
+				var n = $(this).attr('name');
+				var v = $(this).val();
+				$('<input />').attr({
+					type: 'hidden',
+					name: n,
+					value: v
+				}).appendTo('#formDelete');
+			});
+			$('#formDelete').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+});
+</script>
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+	<script>
+$().ready(function() {
+	//current
+});
+</script>
+</th:block>
+<th:block layout:fragment="layout-style">
+	<style>
+	</style>
+</th:block>
+
+</head>
+<body class="hold-transition skin-purple sidebar-mini">
+	<div class="wrapper">
+		<!--/* ヘッダー */-->
+		<header th:replace="common/header :: common_header">
+			<span>ヘッダー</span>
+		</header>
+		<!--/* ナビゲーション */-->
+		<aside th:replace="common/menu :: common_menu">
+			<span>ナビゲーション</span>
+		</aside>
+		<!-- ▼ content-wrapper ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+		<div class="content-wrapper">
+			<!--/* メッセージ表示 */-->
+			<div class="alert alert-success" th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_SUCCESS_MESSAGE}__}" th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_SUCCESS_MESSAGE}__}}">successfully message</div>
+			<div class="alert alert-danger" th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_DANGER_MESSAGE}__}" th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_DANGER_MESSAGE}__}}">danger message</div>
+			<div class="alert alert-warning" th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_WARNING_MESSAGE}__}" th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_WARNING_MESSAGE}__}}">warn message</div>
+			<div class="alert alert-info" th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_INFO_MESSAGE}__}" th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_INFO_MESSAGE}__}}">info message</div>
+			<!--/*
+			<span th:text="'requestURI='+${#httpServletRequest.requestURI}">Real Path</span><br/>
+			<span th:text="'requestURL='+${#httpServletRequest.requestURL}">Real Path</span><br/>
+			<span th:text="'servletPath='+${#httpServletRequest.servletPath}">Real Path</span><br/>
+			<span th:text="'contextPath='+${#httpServletRequest.contextPath}">Real Path</span><br/>
+			*/-->
+			<th:block th:if="${#httpServletRequest.remoteUser != null}">
+				<h3 th:if="${accessUri}"><font color="green">アクセス許可=OK</font></h3>
+				<h3 th:if="${!accessUri}"><font color="red">アクセス許可=NG</font></h3>
+			</th:block>
+			<th:block layout:fragment="layout-content">
+				<!-- section -->
+				<section>
+					<h1>コンテンツ１</h1>
+					<!-- article -->
+					<article>
+						<h2>サイト１</h2>
+					</article>
+				</section>
+			</th:block>
+		</div>
+		<!--/* フッター */-->
+		<footer th:replace="common/footer :: common_footer">
+			<span>フッター</span>
+		</footer>
+	</div>
+</body>
+</html>
+

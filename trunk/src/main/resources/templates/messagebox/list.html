@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/messagebox/edit}"
+				formCopy="@{/messagebox/copy}"
+				formDelete="@{/messagebox/delete}">
+			</my:form>
+			<!-- !title -->
+			<h1>受信トレイ</h1>
+			<h2>受信メッセージ一覧</h2>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">削除</th>
+					<th width="70">件名</th>
+					<th width="120">差出人</th>
+					<th>受信日時</th>
+				</tr>
+				<tr th:each="item,iterStat : ${messageboxList}">
+
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="messageKey" value="0"
+						th:value="${item.messageKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-success copy"
+							name="copy" th:text="${item.messageTitle}">詳細</button> <input
+						type="hidden" name="messageKey" value="0"
+						th:value="${item.messageKey}" />
+						<input
+						type="hidden" name="userKey" value="0"
+						th:value="${item.userKey}" />
+						<input
+						type="hidden" name="makeUserKey" value="0"
+						th:value="${item.makeUserKey}" />
+												 <input
+						type="hidden" name="messageTitle" value="0"
+						th:value="${item.messageTitle}" />
+						<input
+						type="hidden" name="messageContents" value="0"
+						th:value="${item.messageContents}" />
+						 <input type="hidden"
+						name="sendDate" value="1" th:value="${item.sendDate}" /></td>
+
+					<td th:text="${item.userFamilyName + item.userMiddleName + item.userName}">1</td>
+					<td th:text="${item.sendDate != null}? ${#dates.format(item.sendDate,#messages.msg('format.ymd'))} : '-'">1</td>
+				</tr>
+			</table>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

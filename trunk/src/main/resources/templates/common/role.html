@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<body>
+	<div th:fragment="common_role">
+	<th:block th:if="${#httpServletRequest.remoteUser != null}">
+		<th:block th:if="${#sets.isEmpty(userInfo.loginRoleCodes) ? false : #sets.size(userInfo.loginRoleCodes) &gt; 1}">
+		<div class="bg-info">
+		<!--/* 定数区分選択 */-->
+		<label class="control-label" th:text="#{field.selected}">Selected:</label>&nbsp;<span th:text="${roleCodeMap.get(userInfo.targetRoleCode)}">test</span>
+		<form th:action="@{/home/changeRole}" method="post" role="form" autocomplete="off" id="formRoleCode" name="form">
+			<label class="control-label" for="r" th:text="#{field.select.role}">Authority</label>
+			<select name="r" id="r">
+				<option value="001" th:each="roleCodeItem,iterStat : ${userInfo.loginRoleCodes}" th:selected="${userInfo.targetRoleCode}==${roleCodeItem}" th:value="${roleCodeItem}" th:text="${roleCodeMap.get(roleCodeItem)}">テスト1</option>
+			</select>
+		</form>
+		</div>
+		</th:block>
+		</th:block>
+	</div>
+</body>
+</html>

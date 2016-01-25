@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+			<div th:each="sby : ${sybList2}">
+				<h2 th:text="${sby.getValue()}">研究</h2>
+					<div th:each="item,iterStat : ${mapList.get(sby.getCode())}">
+<!-- 						<div th:each="item,iterStat : ${slist}"> -->
+						<div class="row">
+							<div class="col-md-2" th:utext="${item.partyName}">【概要】#1</div>
+							<div class="col-md-2" th:text="${item.userName}">(PF)</div>
+							<div class="col-md-2" th:text="${item.userName}">(HP)</div>
+						</div>
+					</div>
+			</div>
+			<!-- End -->
+		</th:block>
+	</div>
+</body>
+</html>

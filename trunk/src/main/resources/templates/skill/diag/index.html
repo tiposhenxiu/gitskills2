@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$(function() {
+			$(document).on("click", "input[name=pastAnswers]", function() {
+				var loc = /*[[@{/skill/diag/pastIndex}]]*/'url';
+				window.location = loc;
+			});
+		});
+	</script>
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1 th:text="#{skill.diag.title.diag.index}">能力診断</h1>
+			</section>
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-default">
+							<div class="box-header with-border">
+								<h3 class="box-title" th:text="#{skill.field.selfevalreport}">自己評価レポート</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="col-md-12">
+									<dl class="row">
+										<dt class="col-md-2">
+											<input class="btn btn-primary btn-block btn-sm" value="目標設定" type="button" name="selfEvalTarget"
+												th:value="#{skill.field.targetset}" />
+										</dt>
+										<dd class="col-md-10" th:text="#{skill.diag.comment.targetset}">アクションプラン達成のための目標を設定します。</dd>
+									</dl>
+									<dl class="row">
+										<dt class="col-md-2">
+											<input class="btn btn-primary btn-block btn-sm" value="レポート出力" type="button" name="selfEvalReport"
+												th:value="#{skill.field.downloadreport}" />
+										</dt>
+										<dd class="col-md-10" th:text="#{skill.diag.comment.downloadreport}">自己評価レポートを出力します。</dd>
+									</dl>
+								</div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+						<div class="box box-default">
+							<div class="box-header with-border">
+								<h3 class="box-title" th:text="${rubricName}">トランスファラブルスキル</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<p th:text="${rubricSummary}">英国Vitaeによってxxxxxxxx。</p>
+								<table class="col-md-12 text-center">
+									<tbody>
+										<tr>
+											<td><a href="./nouryoku01.html"
+												th:href="@{|/skill/diag/edit/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_BASIC}|}"><img
+													th:src="@{/img/vitae_select_chart_basic.png}" src="../../img/vitae_select_chart_kiso.png" width="80%"></a></td>
+											<td><a href="./nouryoku01.html"
+												th:href="@{|/skill/diag/edit/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_CAREER}|}"><img
+													th:src="@{/img/vitae_select_chart_career.png}" src="../../img/vitae_select_chart_carrier.png" width="80%"></a></td>
+											<td><a href="./nouryoku01.html"
+												th:href="@{|/skill/diag/edit/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_FULL}|}"><img
+													th:src="@{/img/vitae_select_chart_full.png}" src="../../img/vitae_select_chart_full.png" width="80%"></a></td>
+										</tr>
+										<tr>
+											<td><a href="nouryoku03.html"
+												th:href="@{|/skill/diag/viewList/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_BASIC}|}"
+												th:text="#{skill.field.latestanswer}">さいしん</a></td>
+											<td><a href="nouryoku03.html"
+												th:href="@{|/skill/diag/viewList/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_CAREER}|}"
+												th:text="#{skill.field.latestanswer}">さいしん</a></td>
+											<td><a href="nouryoku03.html"
+												th:href="@{|/skill/diag/viewList/${rubricKey}/${T(jp.co.sraw.common.CommonConst).LENSID_FULL}|}"
+												th:text="#{skill.field.latestanswer}">さいしん</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+						<div class="box box-default">
+							<div class="box-header with-border">
+								<h3 class="box-title" th:text="#{skill.field.pastanswers}">過去の診断結果</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="col-md-12">
+									<dl class="row">
+										<dt class="col-md-2">
+											<input class="btn btn-primary btn-block btn-sm" value="過去の診断結果" type="button" name="pastAnswers"
+												th:value="#{skill.field.pastanswers}" />
+										</dt>
+										<dd class="col-md-10" th:text="#{skill.diag.comment.pastanswers}">過去の診断結果を確認</dd>
+									</dl>
+								</div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</div>
+				</div>
+			</section>
+			<!-- /.content -->
+
+		</th:block>
+	</div>
+</body>
+</html>

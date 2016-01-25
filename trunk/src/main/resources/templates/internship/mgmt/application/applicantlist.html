@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://www.sraw.co.jp/dialect/my"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready();
+	</script>
+</th:block>
+
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/mgmt/internship/application/applicant/edit}"
+				formDelete="@{/mgmt/support/delete}">
+			</my:form>
+
+			<div class="panel panel-default" th:each="item : ${dto}">
+				<div class="panel-heading">
+					<div class="panel-title row">
+						<span class="col-md-1" ></span> <a
+							data-toggle="collapse" data-parent="#InternshipAccordion"
+							href="#collapse"
+							th:href="'#InternshipCollapse'+'_'+${item.internshipKey}">
+							<span
+							th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+							<span
+							th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></span>
+							<span
+							th:text="${item.internshipEndDate != null}? ${#dates.format(item.internshipEndDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+							<span th:text="${item.internshipTitle}"></span> <span
+							class="glyphicon glyphicon-collapse-down pull-right"></span>
+						</a>
+					</div>
+				</div>
+
+				<div id="InternshipCollapse" class="panel-collapse collapse"
+					th:id="'InternshipCollapse'+'_'+${item.internshipKey}">
+					<div class="panel-body">
+						<div class="row">
+							<!--/* 書類 */-->
+							<div th:if="${item.internshipRcFileNeedKbn == '1'}">
+								<input type="hidden" name="internshipKey" value="1"
+									th:value="${item.internshipKey}" />
+								<button type="button" name="download"
+									th:text="#{internship.button.download}">書類DL</button>
+							</div>
+
+							<!--/* 応募 */-->
+							<div>
+								<input type="hidden" name="internshipKey"
+									th:value="${item.internshipKey}" /> <input type="hidden"
+									name="internshipRcFileNeedKbn"
+									th:value="${item.internshipRcFileNeedKbn}" />
+								<button type="button" name="apply"
+									th:text="#{internship.button.apply}">応募</button>
+							</div>
+
+							<h3>詳細</h3>
+
+							<div class="col-md-4">【概要】</div>
+							<div class="col-md-6" th:text="${item.internshipMemo}"></div>
+							<div class="col-md-4">【応募期間】</div>
+							<div class="col-md-6"
+								th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+							<div class="col-md-6"
+								th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></div>
+							<div class="col-md-6"
+								th:text="${item.internshipEndDate != null}? ${#dates.format(item.internshipEndDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+
+							<div class="col-md-4">【配信日】</div>
+							<div class="col-md-6"
+								th:text="${item.internshipSendDate != null}? ${#dates.format(item.internshipSendDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+
+							<div class="col-md-4">【タイトル】</div>
+							<div class="col-md-6" th:text="${item.internshipTitle}">aaaa</div>
+							<div class="col-md-4">【公開範囲】</div>
+							<div class="col-md-6" th:text="${item.partyName}">aaaa</div>
+							<div class="col-md-4">【応募対象者】</div>
+							<div class="col-md-6" th:text="${item.internshipRange}">aaaa</div>
+							<div class="col-md-4">【募集者】</div>
+							<div class="col-md-6" th:text="${item.internshipPartyName}">aaaa</div>
+							<div class="col-md-4">【連絡先】</div>
+							<div class="col-md-6" th:text="${item.internshipTelno}">aaaa</div>
+							<div class="col-md-4">【養成能力】</div>
+							<div class="col-md-6">
+								<a
+									href="javascript:w=window.open('nouryoku_add.html','','scrollbars=yes,Width=855,Height=600');w.focus();"
+									th:text="${#messages.msg('button.capacityBuilding')}">aaaa</a>
+							</div>
+							<div class="col-md-4">【単位】</div>
+							<div class="col-md-6" th:text="${item.eventUnit}">aaaa</div>
+							<!-- #sub終了 -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- !title -->
+			<h1>応募一覧</h1>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70" th:text="#{internship.field.list.applicant}">応募者</th>
+					<th width="70" th:text="#{internship.field.list.applicant}">削除</th>
+					<th width="70" th:text="#{support.field.list.edit}">編集</th>
+					<th>大学名</th>
+					<th>名前</th>
+					<th>選考</th>
+					<th>合格</th>
+				</tr>
+				<tr th:each="item,iterStat : ${list}">
+					<td><button type="button" class="btn" name="editxx"
+							th:text="#{button.list}">編 集</button> <input type="hidden"
+						name="internshipKey" value="0" th:value="${item.internshipKey}" />
+						<input type="hidden" name="userKey" value="1"
+						th:value="${item.userKey}" /></td>
+					<td><button type="button" class="btn " name="delete"
+							th:text="#{button.list}">削 除</button> <input type="hidden"
+						name="internshipKey" value="0" th:value="${item.internshipKey}" />
+						<input type="hidden" name="userKey" value="1"
+						th:value="${item.userKey}" /></td>
+					<td><button type="button" class="btn edit" name="edit"
+							th:text="#{button.update}">編集</button> <input type="hidden"
+						name="internshipKey" value="0" th:value="${item.internshipKey}" />
+						<input type="hidden" name="userKey" value="1"
+						th:value="${item.userKey}" /></td>
+					<td th:text="${item.recruitPartyName}"></td>
+					<td th:text="${item.userName}">1</td>
+					<td>1</td>
+					<td>1</td>
+				</tr>
+			</table>
+
+			<br />
+			<br />
+			<br />
+
+			<!-- End -->
+		</th:block>
+	</div>
+</body>
+</html>

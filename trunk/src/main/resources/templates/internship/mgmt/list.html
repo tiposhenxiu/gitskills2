@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/mgmt/internship/edit}"
+				formCopy="@{/mgmt/internship/copy}"
+				formDelete="@{/mgmt/internship/delete}"></my:form>
+
+			<!-- !title -->
+			<h1 th:text="#{internship.title.mgmt.list}">インターンシップ情報管理</h1>
+
+			<!-- !menu -->
+			<form th:action="@{/mgmt/internship/edit}" method="post"
+				role="form" autocomplete="off" th:object="${form}" id="formCreate"
+				name="form">
+				<button type="button" class="btn btn-primary create" name="create">新規登録</button>
+				<input type="hidden" name="1" value="1"
+					th:name="${T(jp.co.sraw.common.CommonConst).PAGE_MODE}"
+					th:value="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD}" />
+			</form>
+
+			<!--/* メッセージ表示 */-->
+			<div class="alert alert-success"
+				th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_SUCCESS_MESSAGE}__}"
+				th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_SUCCESS_MESSAGE}__}}">successfully
+				message</div>
+			<div class="alert alert-danger"
+				th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_DANGER_MESSAGE}__}"
+				th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_DANGER_MESSAGE}__}}">danger
+				message</div>
+			<div class="alert alert-info"
+				th:if="${__${T(jp.co.sraw.common.CommonConst).PAGE_INFO_MESSAGE}__}"
+				th:text="#{${__${T(jp.co.sraw.common.CommonConst).PAGE_INFO_MESSAGE}__}}">info
+				message</div>
+
+			<tr th:each="kbn,iterStat : ${kbnList}">
+				<h2 th:text="${kbn.getValue()}">HIRAKUインターンシップ</h2>
+
+				<table class="box01 center stripe">
+					<tr class="line">
+						<th width="70" th:text="#{internship.field.list.edit}">編集</th>
+						<th width="70" th:text="#{internship.field.list.copy}">コピー</th>
+						<th width="70" th:text="#{internship.field.list.delete}">削除</th>
+						<th width="170" th:text="#{internship.field.list.applicationPeriod}">応募期間</th>
+						<th th:text="#{internship.field.list.title}">タイトル</th>
+						<th th:text="#{internship.field.list.recruiter}">募集者</th>
+						<th th:text="#{internship.field.list.publishingSettings}">公開設定</th>
+					</tr>
+
+					<tr th:each="item,iterStat : ${mapCurrentList.get(kbn.getCode())}">
+						<td>
+							<button type="button" class="btn btn-info edit" name="edit" th:text="#{button.update}">編 集</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td>
+							<button type="button" class="btn btn-success copy" name="copy" th:text="#{button.copy}">コピー</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td><button type="button" class="btn btn-danger delete" name="delete" th:text="#{button.delete}">削 除</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ''"></td>
+						<td th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></td>
+						<td th:text="${item.internshipSendDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ''"></td>
+						<td th:text="${item.internshipTitle}">タイトル</td>
+						<td th:text="${item.internshipPartyName}">募集者</td>
+						<td th:text="${item.publicFlag == '1'}? '公開' : '非公開'">公開設定</td>
+					</tr>
+				</table>
+			</tr>
+
+			<tr th:each="kbn,iterStat : ${kbnList}">
+				<h2 th:text="${kbn.getValue()} + #{internship.subtitle.list.name11}">HIRAKUインターンシップ(過去情報)</h2>
+
+				<table class="box01 center stripe">
+					<tr class="line">
+						<th width="70" th:text="#{internship.field.list.edit}">編集</th>
+						<th width="70" th:text="#{internship.field.list.copy}">コピー</th>
+						<th width="70" th:text="#{internship.field.list.delete}">削除</th>
+						<th width="170" th:text="#{internship.field.list.applicationPeriod}">応募期間</th>
+						<th th:text="#{internship.field.list.title}">タイトル</th>
+						<th th:text="#{internship.field.list.recruiter}">募集者</th>
+						<th th:text="#{internship.field.list.publishingSettings}">公開設定</th>
+					</tr>
+					<tr th:each="item,iterStat : ${mapPastList.get(kbn.getCode())}">
+						<td>
+							<button type="button" class="btn btn-info edit" name="edit" th:text="#{button.update}">編 集</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td>
+							<button type="button" class="btn btn-success copy" name="copy" th:text="#{button.copy}">コピー</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td><button type="button" class="btn btn-danger delete" name="delete" th:text="#{button.delete}">削 除</button>
+							<input type="hidden" name="internshipKey" value="0" th:value="${item.internshipKey}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</td>
+						<td th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ''"></td>
+						<td th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></td>
+						<td th:text="${item.internshipSendDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ''"></td>
+						<td th:text="${item.internshipTitle}">タイトル</td>
+						<td th:text="${item.internshipPartyName}">募集者</td>
+						<td th:text="${item.publicFlag == '1'}? '公開' : '非公開'">公開設定</td>
+					</tr>
+				</table>
+			</tr>
+			<!-- End -->
+		</th:block>
+	</div>
+	<!-- #bace終了 -->
+</body>
+</html>

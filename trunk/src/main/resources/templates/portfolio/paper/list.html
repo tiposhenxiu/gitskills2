@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+	<!-- Content Header (Page header) -->
+	<div layout:decorator="layout">
+	<section class="content-header" layout:fragment="layout-content">
+		<h1>eポートフォリオ(編集)</h1>
+	</section>
+	<!-- Main content -->
+	<section class="content" layout:fragment="layout-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="margin-b-20">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li>
+								<a href="epfolio_edit.html" th:href="@{/portfolio/detail/}">基本情報</a>
+							</li>
+							<li class="dropdown active">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">研究活動 <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li class="active" role="presentation">
+										<a href="epfolio_edit_kenkyu.html" role="menuitem" tabindex="-1" th:href="@{/portfolio/paper/}">論文</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/conference/}">講演・口頭発表等</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/biblio/}">書籍</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/keyword/}">研究キーワード</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/researchArea/}">研究分野</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/society/}">所属学協会</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/works/}">Works</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/patent/}">特許</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/academic/}">学歴</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/career/}">経歴</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/prize/}">受賞</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/others/}">その他</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/degree/}">学位</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/competition/}">競争的資金等の研究課題</a>
+									</li>
+								</ul></li>
+							<li>
+								<a href="epfolio_edit_3m.html" th:href="@{/portfolio/competitionMove/}">PR動画</a>
+							</li>
+							<li>
+								<a href="epfolio_edit_other.html" th:href="@{/portfolio/????/}">その他成果物</a>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<h2 class="page-header">
+								<i class="fa fa-globe"></i> 論文
+							</h2>
+							<div class="col-md-7">
+								<form class="box-body form-horizontal" th:action="@{/portfolio/paper/update/all}" method="post" role="form" autocomplete="off" th:object="${form}" id="formUpdate" name="form">
+									<div class="form-group text-muted well well-sm no-shadow">
+										<label class="col-sm-3 control-label">全体公開設定：</label>
+										<div class="radio col-sm-7">
+										<th:block th:each="item: ${list0024}">
+											<label  th:for="publicFlag+${item.code}">
+												<input type="radio" name="publicFlag" th:id="publicFlag+${item.code}" th:value="${item.code}" th:text="${item.value}" th:checked="${item.code == form.publicFlag}" />
+											</label>
+										</th:block>
+										</div>
+										<div class="col-sm-2">
+											<button type="submit" class="btn btn-primary update" name="update">更 新</button>
+										</div>
+									</div>
+								</form>
+								<div class="form-group">
+									<button type="button" class="btn btn-success create" name="create">新規登録</button>
+									<button type="button" class="btn btn-success export" name="export">業績ダウンロード</button>
+									<button type="button" class="btn btn-success import" name="import">業績アップロード</button>
+								</div>
+							</div>
+							<div class="table-ex">
+								<table class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>編集</th>
+											<th>削除</th>
+											<th>論文名称</th>
+											<th>出版年月</th>
+											<th>公開設定</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item,iterStat : ${list}">
+											<td>
+												<button type="button" class="btn btn-sm btn-warning edit" name="edit" th:text="#{button.update}">編集</button>
+												<input type="hidden" name="gyosekiKey" value="0" th:value="${item.gyosekiKey}" />
+												<input type="hidden" name="updDate" value="0" th:value="${item.updDate}" />
+											</td>
+											<td>
+												<button type="button" class="btn btn-sm btn-danger delete" name="delete" th:text="#{button.delete}">削除</button>
+												<input type="hidden" name="gyosekiKey" value="0" th:value="${item.gyosekiKey}" />
+												<input type="hidden" name="updDate" value="0" th:value="${item.updDate}" />
+											</td>
+											<td th:text="${item.title}">XXXXXXXXXX</td>
+											<td th:text="${item.publicationdate}">2016.XX.XX</td>
+											<td th:text="${item.publicFlag != null}? ${Map0024.get(item.publicFlag).getValue()}">全公開</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+		<!--/* Postするための隠しform */-->
+		<my:form
+			formEdit="@{/portfolio/paper/edit}"
+			formCopy="@{/portfolio/paper/copy}"
+			formDelete="@{/portfolio/paper/delete}"
+			formCreate="@{/portfolio/paper/create}"
+			formExport="@{/portfolio/paper/export}"
+			formImport="@{/portfolio/paper/import}">
+		</my:form>
+	</section>
+	</div>
+	<!-- /.content -->
+</body>
+</html>

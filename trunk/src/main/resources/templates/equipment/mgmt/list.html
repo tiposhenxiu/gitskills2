@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<div>
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/mgmt/equipment/edit}"
+				formDelete="@{/mgmt/equipment/delete}">
+				<input type="hidden" name="searchKeyword" th:value="${form.searchKeyword}" />
+			</my:form>
+			<!-- !title -->
+			<h1 th:terxt="#{equipment.title.mgmt.list}">機器、設備情報管理・一覧</h1>
+
+			<!-- !menu -->
+			<form th:action="@{/mgmt/equipment/edit}" method="post" role="form" autocomplete="off" th:object="${form}" id="formCreate" name="form">
+					<button type="button" class="btn btn-primary create" name="create">新規登録</button>
+					<input type="hidden" name="1" value="1" th:name="${T(jp.co.sraw.common.CommonConst).PAGE_MODE}" th:value="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD}"/>
+					<input type="hidden" name="searchKeyword" th:value="${form.searchKeyword}" />
+			</form>
+
+			<h2>検索条件</h2>
+			<form th:action="@{/mgmt/equipment/}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="formSearch" name="form">
+				<table>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="text" style="width: 300px;"
+							name="searchKeyword" placeholder="キーワード"
+							th:field="*{searchKeyword}" value="aaa" /> &nbsp;
+							<button type="button" class="search" name="search">検 索</button></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<br /> <br />
+			</form>
+
+			<h2 th:text="#{equipment.subtitle.list.name01}">機器</h2>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70" th:text="#{equipment.field.list.edit}">編集</th>
+					<th width="70" th:text="#{equipment.field.list.delete}">削除</th>
+					<th>タイトル</th>
+					<th>概要</th>
+				</tr>
+				<tr th:each="item,iterStat : ${renkeiKikanPresentList}">
+					<td><button type="button" class="btn btn-info edit"
+							name="edit" th:text="#{button.update}">編 集</button> <input
+						type="hidden" name="supportKey" value="0"
+						th:value="${item.supportKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="supportKey" value="0"
+						th:value="${item.supportKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td th:text="${item.supportTitle}">1</td>
+					<td my:textRemoveTags="${item.supportContent}">1</td>
+				</tr>
+			</table>
+
+
+			<br />
+
+			<h2 th:text="#{equipment.subtitle.list.name11}">機器(過去情報)</h2>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70" th:text="#{equipment.field.list.edit}">編集</th>
+					<th width="70" th:text="#{equipment.field.list.delete}">削除</th>
+					<th>タイトル</th>
+					<th>概要</th>
+				</tr>
+				<tr th:each="item,iterStat : ${renkeiKikanPastList}">
+					<td><button type="button" class="btn btn-info edit"
+							name="edit" th:text="#{button.update}">編 集</button> <input
+						type="hidden" name="supportKey" value="0"
+						th:value="${item.supportKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="supportKey" value="0"
+						th:value="${item.supportKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td th:text="${item.supportTitle}">1</td>
+					<td my:textRemoveTags="${item.supportContent}">1</td>
+				</tr>
+			</table>
+
+			<!-- End -->
+			</div>
+		</th:block>
+	</div>
+
+</body>
+</html>

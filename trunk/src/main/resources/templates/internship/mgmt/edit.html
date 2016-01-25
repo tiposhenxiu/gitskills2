@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			// validate signup form on keyup and submit
+			$("#formRegist").validate({
+				rules : {
+					internshipKbn : {
+						required : true
+					},
+					internshipStartDate : {
+						required : true
+					},
+					internshipEndDate : {
+						required : true
+					},
+					internshipSendDate : {
+						required : true
+					},
+					internshipTitle : {
+						required : true,
+						maxlength : 100
+					}
+				}
+			});
+
+			$('.input-group.date').datepicker({
+				format : "yyyy/mm/dd",
+				language : 'ja',
+				showOn : "button",
+				buttonImageOnly : true,
+				buttonImage : '/img/m_ical.png'
+			});
+			$('.datepicker').change(
+					function() {
+						//カレンダー確定時にフォームに反映
+						var dates = $(this).val().split('/');
+						$(this).parent().parent().find(".year")
+								.val(dates[0]);
+						$(this).parent().parent()
+								.find(".month").val(dates[1]);
+						$(this).parent().parent().find(".day")
+								.val(dates[2]);
+			});
+
+			$("input[class*='year'], input[class*='month'], input[class*='day']").change(function() {
+								//カレンダー確定時にフォームに反映
+								var year = $(this).parent()
+										.find(".year").val();
+								var month = $(this).parent()
+										.find(".month").val();
+								var day = $(this).parent()
+										.find(".day").val();
+								$(this).parent().find(
+										".datepicker").val(
+										year + "-" + month
+												+ "-" + day + " 00:00:00");
+			});
+
+			// <!--/*  読込ボタン押下イベント設定 */-->
+			$("button[name^='load']").click(function() {
+				// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+				var button = $(this);
+				button.attr('disabled', true);
+
+				$("input[type='file'][id='uploadFile']").click();
+				button.parent().children('input[type=hidden]').each(function() {
+					var n = $(this).attr('name');
+					var v = $(this).val();
+					$('<input />').attr({
+						type: 'hidden',
+						name: n,
+						value: v
+					}).appendTo('#formApply');
+				});
+				$('#formApply').submit();
+				//
+				button.attr("disabled", false);
+			});
+
+			$("input[id='rcFiles']").bind('drop', function(e){
+				// デフォルトの挙動を停止
+				e.preventDefault();
+				// ファイル情報を取得
+				var files = e.originalEvent.dataTransfer.files;
+				var txtFiles = $("input[id='rcFiles']");
+				setFilesName(files, txtFiles);
+
+			}).bind('dragenter', function(){
+				// デフォルトの挙動を停止
+				return false;
+			}).bind('dragover', function(){
+				// デフォルトの挙動を停止
+				return false;
+			});
+
+			$("input[id='gkFiles']").bind('drop', function(e){
+				// デフォルトの挙動を停止
+				e.preventDefault();
+				// ファイル情報を取得
+				var files = e.originalEvent.dataTransfer.files;
+				var txtFiles = $("input[id='gkFiles']");
+				setFilesName(files, txtFiles);
+
+			}).bind('dragenter', function(){
+				// デフォルトの挙動を停止
+				return false;
+			}).bind('dragover', function(){
+				// デフォルトの挙動を停止
+				return false;
+			});
+
+			$("button[name='removeRcFile']").click(function() {
+				$("input[id='rcFiles']").attr('value',"");
+			});
+			$("button[name='removeGkFile']").click(function() {
+				$("input[id='gkFiles']").attr('value',"");
+			});
+			$('#add').bind('click', function() {
+				$('#areaOpen option:selected').appendTo('#areaClose');
+			});
+			$('#remove').bind('click', function() {
+				$('#areaClose option:selected').appendTo('#areaOpen');
+			});
+			$('#areaOpen').bind('dblclick', function() {
+				$("option:selected", this).appendTo('#areaClose');
+			});
+			$('#areaClose').bind('dblclick', function() {
+				$("option:selected", this).appendTo('#areaOpen');
+			});
+		});
+
+		$('#chkUniversity').change(function(){
+			if ($('#chkUniversity').is(':checked')) {
+				$('#publicDiv :input').removeAttr('disabled');
+			} else {
+				$('#publicDiv :input').attr('disabled', true);
+			}
+		});
+	</script>
+<script type="text/javascript">
+// <![CDATA[
+function setFilesName(files, txtFiles) {
+	var fileName = txtFiles.attr('value');
+	for(var i = 0; i < files.length; i++) {
+		if (fileName != "") {
+			fileName = fileName + ",";
+		}
+		fileName = fileName + files[i].name;
+	}
+	txtFiles.attr('value', fileName);
+
+}
+// ]]>
+</script>
+</th:block>
+
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<!--/* 戻るためのform */-->
+			<form th:action="@{/mgmt/internship/list}" method="post" role="form" autocomplete="off" id="formBack" name="form"></form>
+
+			<!-- Start -->
+			<form th:action="@{|/mgmt/internship/__${form.pageActionUrl}__|}" method="post" role="form" autocomplete="off" th:object="${form}" id="formRegist" name="form">
+				<input type="hidden" name="pageMode" th:field="*{pageMode}" />
+				<input type="file" id="uploadFile" style="display: none;" multiple="multiple"/>
+
+				<div
+					th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<input type="hidden" name="updDate" th:field="*{updDate}" />
+				</div>
+
+				<!-- !title -->
+				<h1 th:text="#{internship.title.mgmt.edit}">インターンシップ情報登録・編集</h1>
+
+				<!-- !menu -->
+				<menu>
+					<ul>
+						<li><button type="button" class="btn btn-primary regist" name="regist" th:text="#{button.regist}">登 録</button></li>
+						<li><button type="button" class="btn btn-default back" name="back" th:text="#{button.back}">戻る</button></li>
+					</ul>
+				</menu>
+
+				<!-- !登録 -->
+				<h2 th:text="#{internship.subtitle.edit.name01}">インターンシップ情報</h2>
+
+				<font color="red" th:text="#{message.list.description1}">*の項目は一覧に掲載されます</font>
+				<table class="boxf01">
+					<tr>
+						<th th:text="${listPublicFlag != null}? #{internship.field.edit.publishingSettings} : ''">公開設定：</th>
+						<td>
+							<input type="radio" name="publicFlag" th:each="item: ${listPublicFlag}" th:value="${item.code}"
+							th:checked="${item.code == form.publicFlag}" th:text="${item.value}" th:field="*{publicFlag}" />
+							<label for="new1"></label>
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.classification}">種別：</th>
+						<td>
+							<select name="internshipKbn" th:field="*{internshipKbn}">
+								<option th:each="item : ${listClassification}" th:value="${item.code}" th:text="${item.value}"></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<font color="red">*</font><th th:text="#{internship.field.edit.applicationPeriod}">応募期間：</th>
+						<td>
+							<input type="text" class="year" name="internshipStartDateYear" size="4"
+							 th:value="${form.internshipStartDate != null}? ${#strings.substring(form.internshipStartDate,0,4)} : ''"/>年
+							<input type="text" class="month" name="internshipStartDateMonth" size="4"
+							 th:value="${form.internshipStartDate != null}? ${#strings.substring(form.internshipStartDate,5,7)} : ''"/>月
+							<input type="text" class="day" name="internshipStartDateDay" size="4"
+							 th:value="${form.internshipStartDate != null}? ${#strings.substring(form.internshipStartDate,8,10)} : ''"/>日
+							<div class="input-group date">
+								<input type="text" class="datepicker" id="internshipStartDate" name="internshipStartDate" th:field="*{internshipStartDate}" style="display:none;"/>
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-th"></i>
+								</span>
+							</div>
+							<div th:text="#{format.ymd.to}">～</div>
+						</td>
+						<td>
+							<input type="text" class="year" name="internshipEndDateYear" size="4"
+							 th:value="${form.internshipEndDate != null}? ${#strings.substring(form.internshipEndDate,0,4)} : ''"/>年
+							<input type="text" class="month" name="internshipEndDateMonth" size="4"
+							 th:value="${form.internshipEndDate != null}? ${#strings.substring(form.internshipEndDate,5,7)} : ''"/>月
+							<input type="text" class="day" name="internshipEndDateDay" size="4"
+							 th:value="${form.internshipEndDate != null}? ${#strings.substring(form.internshipEndDate,8,10)} : ''"/>日
+							<div class="input-group date">
+								<input type="text" class="datepicker" id="internshipEndDate" name="internshipEndDate" th:field="*{internshipEndDate}" style="display:none;" />
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-th"></i>
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.DateOfDelivery}">配信日：</th>
+						<td>
+							<input type="text" class="year" name="internshipSendDateYear" size="4"
+							 th:value="${form.internshipSendDate != null}? ${#strings.substring(form.internshipSendDate,0,4)} : ''"/>年
+							<input type="text" class="month" name="internshipSendDateMonth" size="4"
+							 th:value="${form.internshipSendDate != null}? ${#strings.substring(form.internshipSendDate,5,7)} : ''"/>月
+							<input type="text" class="day" name="internshipSendDateDay" size="4"
+							 th:value="${form.internshipSendDate != null}? ${#strings.substring(form.internshipSendDate,8,10)} : ''"/>日
+							<div class="input-group date">
+								<input type="text" class="datepicker" id="internshipSendDate" name="internshipSendDate" th:field="*{internshipSendDate}" style="display:none;"/>
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-th"></i>
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.title}"><font color="red">*</font>タイトル：</th>
+						<td><input type="text" name="internshipTitle" th:field="*{internshipTitle}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.openRange}">公開範囲：</th>
+						<td>
+							<input type="checkbox" id="chkUniversity" name="publicItemArray" value="2" th:checked="${publicKbnMap.get('2') == '2'}"/>
+							<label for="daigaku">大学</label>
+							<input type="checkbox" id="chkCorporation" name="publicItemArray" value="1" th:checked="${publicKbnMap.get('1') == '1'}"/>
+							<label for="kigyo">企業・研究所など</label>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<div id="publicDiv">
+								<table>
+									<tr>
+										<td th:text="#{internship.field.edit.open}" align="center">公開</td>
+										<td th:text="#{internship.field.edit.close}" align="center">非公開</td>
+									</tr>
+									<tr>
+										<td>
+											<select multiple="multiple" id="areaOpen" name="publicPartyList" style="width: 200px; height: 120px" size="5">
+												<option th:value="${item.partyCode}" th:each="item : ${listPartyOpen}" th:text="${item.partyName}" style="display: xnone;">xxx大学</option>
+											</select>
+										</td>
+										<td>
+											<button type="button" id="add">&gt;&gt;</button>
+											<br /><br />
+											<button type="button" id="remove">&lt;&lt;</button>
+										</td>
+										<td>
+											<select multiple="multiple" id="areaClose" style="width: 200px; height: 120px" size="5">
+												<option th:value="${item.partyCode}" th:each="item : ${listPartyClose}" th:text="${item.partyName}" style="display: xnone;">yyy大学</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.applicantsSubject}">応募対象者：</th>
+						<td><input type="text" th:field="*{internshipRange}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.recruiter}"><font color="red">*</font>募集者：</th>
+						<td><input type="text" th:field="*{internshipPartyName}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.contactInformation}">連絡先：</th>
+						<td>
+							<input type="text" th:field="*{internshipTelno}" />
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.document.application}">応募書類：</th>
+						<td><input type="text" id="rcFiles" th:field="*{internshipRcFile}" /></td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" name="loadRcFile" th:text="#{button.load}">読込</button>
+							<button type="button" name="removeRcFile" th:text="#{button.remove}">削除</button>
+						</td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.document.pass}">合格書類：</th>
+						<td><input type="text" id="gkFiles" th:field="*{internshipGkFile}" /></td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" name="loadGkFile" th:text="#{button.load}">読込</button>
+							<button type="button" name="removeGkFile" th:text="#{button.remove}">削除</button>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.trainingCapability}">養成能力：</th>
+						<td><a href="javascript:w=window.open('nouryoku_add_edit.html','','scrollbars=yes,Width=855,Height=600');w.focus();"
+							 th:text="${#messages.msg('button.capacityBuilding')}">能力養成紐付き設定画面を開く</a></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.unit}">単位：</th>
+						<td><input type="text" th:field="*{eventUnit}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.overview}">概要：</th>
+						<td><textarea class="textarea"  name="internshipMemo"
+						     placeholder="Enter text ..." style="width: 550px; height: 200px"
+						     th:field="*{internshipMemo}" required="required"></textarea>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</th:block>
+	</div>
+	<!-- #bace終了 -->
+
+</body>
+</html>

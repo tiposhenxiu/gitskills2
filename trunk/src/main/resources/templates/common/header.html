@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<body>
+	<header class="main-header" th:fragment="common_header">
+		<!-- Header Navbar -->
+		<nav class="navbar navbar-static-top" role="navigation">
+			<!-- Sidebar toggle button-->
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sr-only">Toggle navigation</span>
+			</a>
+			<h5 class="navbar-left">
+				<a href="/" th:href="#{system.public.party.url}">
+					<img src="/gfx/h_logo.png" class="h_logo" th:src="@{/gfx/h_logo.png}"/>
+				</a>
+				<span th:text="#{system.public.name}">タイトル</span>
+			</h5>
+			<!-- Navbar Right Menu -->
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+					<!-- Messages: style can be found in dropdown.less-->
+					<li class="messages-menu">
+						<a href="portal_month.html" th:href="@{/home}">
+							<i class="fa fa-home"></i>
+						</a>
+					</li>
+					<li class="messages-menu">
+						<a href="#" th:href="@{/help/xxx.pdf}">
+							<i class="fa fa-question-circle"></i>
+						</a>
+					</li>
+					<!-- User Account Menu -->
+					<li class="dropdown user user-menu">
+						<!-- Menu Toggle Button -->
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<!-- The user image in the navbar-->
+							<img src="/gfx/face.gif" class="user-image" alt="User Image" th:src="@{/gfx/face.gif}"/>
+							<!-- hidden-xs hides the username on small devices so only the image appears. -->
+							<span class="hidden-xs" th:inline="text" th:if="${#httpServletRequest.remoteUser != null}">[[${userInfo.targetUserName}]]!</span>
+							<span class="hidden-xs" th:inline="text" th:if="${#httpServletRequest.remoteUser == null}">ようこそ ゲスト さん。</span>
+						</a>
+						<ul class="dropdown-menu">
+							<!-- The user image in the menu -->
+							<li class="user-header"><img src="/gfx/face.gif" class="img-circle" alt="User Image" th:src="@{/gfx/face.gif}"/>
+								<p>
+									<div th:if="${#httpServletRequest.remoteUser != null}" th:text="${userInfo.targetUserName}">広島 太郎</div>
+									<div th:if="${#httpServletRequest.remoteUser == null}">ようこそ ゲスト さん。</div>
+								 	<small>
+										<span th:inline="text" th:if="${#httpServletRequest.remoteUser != null}">[[${userInfo.targetUserNameEn}]]!</span>
+										<span th:inline="text" th:if="${#httpServletRequest.remoteUser == null}">Guest</span>
+								 	</small>
+								</p>
+							</li>
+							<!-- Menu Footer-->
+							<li class="user-footer">
+								<div class="pull-right">
+									<a href="#" class="btn btn-default btn-flat" th:if="${#httpServletRequest.remoteUser != null}" th:href="@{/logout}">Sign out</a>
+									<a href="#" class="btn btn-default btn-flat" th:if="${#httpServletRequest.remoteUser == null}" th:href="@{/login}">Sign in</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+</body>
+</html>

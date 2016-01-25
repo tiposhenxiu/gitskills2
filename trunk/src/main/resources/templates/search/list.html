@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my"
+	layout:decorator="common/base"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!-- !title -->
+			<h1 th:terxt="#{search.title.list}">検索一覧</h1>
+
+			<h2>検索条件</h2>
+			<form th:action="@{/search/}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="formSearch" name="form">
+				<table>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="text" style="width: 300px;"
+							name="searchKeyword" placeholder="キーワード"
+							th:field="*{searchKeyword}" value="aaa" /> &nbsp;
+							<button type="button" class="search" name="search">検 索</button></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<br /> <br />
+			</form>
+
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">選択</th>
+					<th width="70">氏名</th>
+					<th width="120">所属</th>
+					<th>学年、職位</th>
+					<th>自己アピール</th>
+				</tr>
+				<tr th:each="item,iterStat : ${slist}">
+
+					<td><button type="button" class="btn btn-danger delete"
+							name="show" th:text="#{button.show}">削 除</button> </td>
+
+					<td th:text="${item.userFamilyName  + item.userName}">1</td>
+					<td th:text="${item.affiliationName}">1</td>
+					<td th:text="${item.degree}">1</td>
+					<td th:text="${item.degree}">1</td>
+				</tr>
+			</table>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

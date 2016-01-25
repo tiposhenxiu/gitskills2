@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/baseAccount"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current link -->
+<th:block layout:fragment="layout-link">
+
+</th:block>
+
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+<script th:inline="javascript">
+
+</script>
+</th:block>
+
+
+<body>
+
+<div layout:decorator="layout">
+	<th:block layout:fragment="layout-content">
+	<div>
+	<!-- Start -->
+
+		<!--/* アカウント登録メール送信完了 */-->
+		<span>メールを送信しました。</span>
+
+	<!-- End -->
+	</div>
+	</th:block>
+</div>
+
+</body>
+</html>

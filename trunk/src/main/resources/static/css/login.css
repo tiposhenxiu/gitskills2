@@ -1,0 +1,107 @@
+@charset "UTF-8";
+
+/* login only */
+
+/*! layout ============================================== */
+
+#login {
+	width: 1000px ;
+	margin: 0 auto ;
+	padding: 120px 0 20px ;
+	}
+
+#login main {
+	position: relative ;
+	float: none ;
+	box-sizing: border-box ;
+	width: 600px ;
+	height: 450px ;
+	margin: 0 auto 0 ;
+	padding: 50px ;
+	background: #ffffff url("../gfx/l_back01.png") no-repeat left top ;
+	}
+
+/*! title ============================================== */
+
+#login main h1 {
+	display: block ;
+	margin: 35px 0 0 ;
+	padding: 0 ;
+	background: none ;
+	border: none ;
+	font-size: 18px ;
+	line-height: 1.4 ;
+	text-shadow: 1px 1px 3px #4d4d4d ;
+	color: #f4c255 ;
+	}
+
+#login main h2 {
+	display: block ;
+	font-family: "Lucida Grande", sans-serif ;
+	margin: 2px 0 0 ;
+	padding: 0 0 60px ;
+	background: url("../gfx/l_back02.png") no-repeat left bottom ;
+	border: none ;
+	font-size: 7px ;
+	text-shadow: 1px 1px 2px #4d4d4d ;
+	color: #e5e5e5 ;
+	}
+
+#login main h3 {
+	display: block ;
+	font-family: "Lucida Grande", sans-serif ;
+	margin: 30px 60px 0 ;
+	padding: 0 0 60px ;
+	background: none ;
+	border: none ;
+	font-size: 12px ;
+	text-shadow: 1px 1px 2px #4d4d4d ;
+	color: #f4c255 ;
+	}
+
+
+/*! login（レイアウトのみ） ============================================== */
+
+#login .id {
+	position: absolute ;
+	box-sizing: border-box ;
+	top: 275px ;
+	width: calc( 100% - 100px ) ;
+	padding-left: 50px ;
+	background: #999999 url("../gfx/l_icon01.png") no-repeat 16px center ;
+	}
+
+#login .pw {
+	position: absolute ;
+	box-sizing: border-box ;
+	top: 330px ;
+	width: calc( 100% - 100px ) ;
+	padding-left: 50px ;
+	background: #999999 url("../gfx/l_icon02.png") no-repeat 16px center ;
+	}
+
+#login .selectbox {
+	display: inline-block ;
+	position: absolute ;
+	overflow: hidden ;
+	top: 210px ;
+	right: 160px ;
+	height: 28px ;
+	margin: 0 0 5px ;
+	background : linear-gradient(to bottom, #ffffff, #dbdbdb) ;
+	border: solid 1px #c0c0c0 ;
+	border-radius: 2px ;
+	vertical-align: middle ;
+	}
+
+#login input[type="button"].db {
+	position: absolute ;
+	top: 210px ;
+	right: 50px ;
+	}
+
+#login input[type="button"] {
+	position: absolute ;
+	top: 385px ;
+	right: 50px ;
+	}

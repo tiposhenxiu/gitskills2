@@ -1,0 +1,454 @@
+@charset "UTF-8";
+
+/* form */
+
+/*! bace ============================================== */
+
+form {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+input, textarea, select, option {
+	outline: none ;
+	font-size: 12px ;
+	line-height: 1.8 ;
+	color: #333333 ;
+	}
+
+/* placeholder */
+::-webkit-input-placeholder { color: #a6a6a6 ;}
+:-ms-input-placeholder { color: #a6a6a6 ;}
+:-moz-placeholder { color: #a6a6a6 ;}
+
+
+/*! inputs ============================================= */
+
+input[type=text],
+input[type=password] {
+	box-sizing: border-box ;
+	width: 100% ;
+	height: 30px ;
+	margin: 5px 0 ;
+	padding: 0 8px ;
+	background-color: #f7f7f7 ;
+	border: 1px solid #b2b2b2 ;
+	transition: all 0.3s ;
+	}
+
+input[type=text]:hover,
+input[type=password]:hover {
+	background-color: #fffaf5 ;
+	border: 1px solid #e7b562 ;
+	}
+
+input[type=text]:focus,
+input[type=password]:focus {
+	background-color: #ffffff ;
+	border: 1px solid #e7b562 ;
+	}
+
+/* layout */
+input[type=text].auto { width: auto ;}
+input[type=text].tx4 { width: 50px ;}
+input[type=text].tx2 { width: 35px ;}
+
+/* ul */
+main ul.fm_list li input[type=text] {
+	width:calc( 100% - 25px ) ;
+	margin-left: 25px ;
+	}
+
+/* login */
+#login input[type=text],
+#login input[type=password] {
+	height: 40px ;
+	margin: 0 ;
+	}
+
+
+/*! textarea ============================================= */
+
+textarea {
+	box-sizing: border-box ;
+	width: 100% ;
+	margin: 5px 0 ;
+	padding: 5px 8px ;
+	background-color: #f7f7f7 ;
+	border: 1px solid #b2b2b2 ;
+	line-height: 1.6 ;
+	resize: none ;
+	transition: all 0.4s ;
+	}
+textarea.size {
+	width: auto ;
+	}
+
+textarea:hover {
+	background-color: #fffaf5 ;
+	border: 1px solid #e7b562 ;
+	}
+
+textarea:focus {
+	background-color: #ffffff ;
+	border: 1px solid #e7b562 ;
+	}
+
+/* webkit */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+textarea {
+	margin: 5px 0 0 ;
+	}
+}
+
+
+/*! checkbox ============================================= */
+
+input[type="checkbox"] {
+	display: inline-block ;
+	display: none ;
+	}
+
+input[type="checkbox"] + label {
+	display: inline-block ;
+	position: relative ;
+	margin: 0 10px 0 0 ;
+	cursor: pointer ;
+	}
+
+/* default */
+input[type="checkbox"] + label::before {
+	display: inline-block ;
+	box-sizing: border-box ;
+	content: "" ;
+	width: 16px ;
+	height: 16px ;
+	margin: -2px 8px 0 0 ;
+	background-color: #f0f0f0 ;
+	border: 1px solid #cccccc ;
+	border-radius: 2px ;
+	vertical-align: middle ;
+	transition: 0.1s ;
+	}
+
+/* checked */
+input[type="checkbox"]:checked + label {
+	color: #ea7f00 ;
+	cursor: default ;
+	}         
+input[type="checkbox"]:checked + label::before {
+	background-color: #ffffff !important ;
+	border-color: #f39800 !important ;
+	transition: 0.2s ;
+	}
+input[type="checkbox"]:checked + label::after {
+	position: absolute ;
+	box-sizing: border-box ;
+	content: "";
+	display: block ;
+	width: 12px ;
+	height: 6px ;
+	margin: -15px 0 0 2px ;
+	border-left: 3px solid #f39800 ;
+	border-bottom: 3px solid #f39800 ;
+	-webkit-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	}
+
+/* disabled */
+input[type="checkbox"]:disabled + label {
+	color: #b3b3b3 ;
+	cursor: default ;
+	}         
+input[type="checkbox"]:disabled + label::before {
+	background-color: #f7f7f7 !important ;
+	border-color: #cccccc !important ;
+	transition: 0.2s ;
+	}
+input[type="checkbox"]:disabled + label::after {
+	position: absolute ;
+	box-sizing: border-box ;
+	content: "";
+	display: block ;
+	width: 12px ;
+	height: 6px ;
+	margin: -15px 0 0 2px ;
+	border-left: 3px solid #cccccc ;
+	border-bottom: 3px solid #cccccc ;
+	-webkit-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	}
+
+
+/*! radio ============================================= */
+
+input[type="radio"] {
+	display: none ;
+	}
+
+input[type="radio"] + label {
+	display: inline-block ;
+	position: relative ;
+	margin: 0 10px 0 0 ;
+	cursor: pointer ;
+	}
+
+/* default */
+input[type="radio"] + label::before {
+	display: inline-block ;
+	content: "";
+	width: 14px ;
+	height: 14px ;
+	margin: -2px 8px 0 0 ;
+	background-color: #f0f0f0 ;
+	border: 1px solid #cccccc ;
+	border-radius: 50% ;
+	vertical-align: middle ;
+	transition: 0.1s ;
+	}
+
+/* checked */
+input[type="radio"]:checked + label {
+	color: #ea7f00 ;
+	cursor: default ;
+	}
+input[type="radio"]:checked + label::before {
+	border-color: #f39800 !important ;
+	background-color: #f39800 !important ;
+	box-shadow: inset 0 0 0 3px #ffffff ;
+	}
+
+
+/*! select ============================================= */
+
+/* back */
+.selectbox {
+	display: inline-block ;
+	position: relative ;
+	overflow: hidden ;
+	height: 28px ;
+	margin: 0 0 5px ;
+	background : linear-gradient(to bottom, #ffffff, #dbdbdb) ;
+	border: solid 1px #c0c0c0 ;
+	border-radius: 2px ;
+	vertical-align: middle ;
+	}
+
+/* arrow */
+.selectbox:before, .selectbox:after {
+	content: '';
+	position: absolute ;
+	z-index: 2 ;
+	top: 9px ;
+	right: 10px ;
+	width: 0 ;
+	height: 0 ;
+	border: 4px dashed ;
+	border-color: #888 transparent ;
+	pointer-events: none ;
+	}
+.selectbox:before {
+	border-bottom-style: solid ;
+	border-top: none ;
+	}
+.selectbox:after {
+	margin-top: 7px ;
+	border-top-style: solid ;
+	border-bottom: none ;
+	}
+
+/* default */
+select {
+	position: relative ;
+	width: 200% ;
+	margin: 0 ;
+	padding: 2px 30px 0 10px ;
+	height: 28px ;
+	background: rgba(0, 0, 0, 0) !important ;
+	border: 0 ;
+	border-radius: 0 ;
+	-webkit-appearance: none ;
+	line-height: 1 ;
+	cursor: pointer ;
+	}
+
+select:focus {
+	z-index: 3 ;
+	width: 100% ;
+	outline: none ;
+	}
+
+select > option {
+	margin: 3px ;
+	padding: 2px 8px ;
+	border-radius: 2px ;
+	cursor: pointer ;
+	}
+
+/* IE 10 clear */
+select::-ms-expand {
+	display: none ;
+	}
+
+/* Firefox clear */
+select {
+	-moz-appearance: none ;
+	text-indent: 0.01px ;
+	text-overflow: '' ;
+	}
+
+/* Firefox hack */
+@-moz-document url-prefix() {
+	select {
+		padding-left: 6px ;
+	}
+}
+
+/* table */
+main table .selectbox {
+	margin: 5px 0 ;
+	}
+
+/* layout */
+.sct100 {
+	width: 100% ;
+	}
+
+
+/*! file up（fileup.js） ============================================= */
+
+.fileUploder {
+	position: relative ;
+	display: inline-block ;
+	height: 30px ;
+	margin: 0 ;
+	overflow: hidden ;
+	}
+
+.fileUploder .filetxt {
+	width: 180px ;
+	margin: 0 5px 0 0 ;
+	vertical-align: top ;
+	}
+
+.fileUploder input[type="button"].filebtn {
+	margin: 0 ;
+	}
+
+.fileUploder .uploader {
+	position: absolute ;
+	top: 0 ;
+	right: 0 ;
+	z-index: 99 ;
+	width: 100% ;
+	height: 100% ;
+	cursor: pointer ;
+	/*↓IE hack */
+	font-size:315px;
+	filter:alpha(opacity=0);
+	-moz-opacity: 0;
+	opacity: 0 ;
+	}
+
+/* webkit */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+.fileUploder {
+	margin: 5px 0 ;
+	}
+}
+
+
+/*! buttons ============================================= */
+
+/* default（white） */
+input[type="button"] {
+	box-sizing: border-box ;
+	height: 30px ;
+	margin: 0 ;
+	padding: 1px 15px 0 ;
+	background : linear-gradient(to bottom, #ffffff, #dbdbdb) ;
+	border: 1px solid #c0c0c0 ;
+	border-radius: 2px ;
+	color: #795c3a ;
+	cursor: pointer ;
+	transition: 0.2s ;
+	}
+
+input[type="button"]:hover {
+	background : linear-gradient(to bottom, #ffffff, #c7c7c7) ;
+	border: 1px solid #ea7f00 ;
+	color: #d57708 ;
+	}
+
+input[type="button"]:active {
+	background: #ffffff ;
+	color: #ea7f00 ;
+	}
+
+/* color（green）（menu - default） */
+input[type="button"].gre,
+main menu input[type="button"] {
+	background : linear-gradient(to bottom, #53c8bf, #28938b) ;
+	border: 1px solid #2c8780 ;
+	font-weight: bold ;
+	color: #ffffff ;
+	}
+
+input[type="button"].gre:hover,
+main menu input[type="button"]:hover {
+	background : linear-gradient(to bottom, #18b1a5, #0d726a) ;
+	border: 1px solid #1c5f5a ;
+	color: #ffffff ;
+	}
+
+input[type="button"].gre:active,
+main menu input[type="button"]:active {
+	background: #53c8bf ;
+	color: #ffffff ;
+	}
+
+/* color（orange） */
+input[type="button"].fix {
+	background : linear-gradient(to bottom, #f2b82c, #d6811d) ;
+	border: 1px solid #a58359 ;
+	font-weight: bold ;
+	color: #ffffff ;
+	}
+
+input[type="button"].fix:hover {
+	background : linear-gradient(to bottom, #ec9b28, #be6803) ;
+	border: 1px solid #8e6c43 ;
+	color: #ffffff ;
+	}
+
+input[type="button"].fix:active {
+	background: #f2b82c ;
+	color: #ffffff ;
+	}
+
+
+/* menu */
+main menu input[type="button"] {
+	min-width: 100px ;
+	}
+
+/* side ID */
+aside .id input[type="button"] {
+	width: 100% ;
+	margin: 10px 0 0 ;
+	}
+
+/* table */
+main table th input[type="button"] {
+	margin-top: -3px ;
+	}
+
+main table td input[type="button"] {
+	margin-top: -2px ;
+	}
+
+main table td.btn input[type="button"] {
+	margin-top: 10px ;
+	}

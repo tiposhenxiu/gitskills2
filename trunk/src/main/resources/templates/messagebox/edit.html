@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+				// validate signup form on keyup and submit
+				$("#messageboxForm").validate({
+					rules : {
+						messageTitle : {
+							required : true,
+							maxlength : 100
+						},
+						messageContents : {
+							required : true,
+							maxlength : 100
+						}
+					},
+				});
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<!-- Start -->
+			<form th:action="@{/messagebox/update}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="messageboxForm" name="form">
+								<input type="hidden" name="pageMode" th:value="${form.pageMode}" />
+<!-- 				<input type="hidden" name="messageKey" th:value="${form.messageKey}" /> -->
+<!-- 				<input type="hidden" name="userKey" th:value="${form.userKey}" /> -->
+<!-- 				<input type="hidden" name="makeUserKey" th:value="${form.makeUserKey}" /> -->
+				<input type="hidden" name="refMessageKey" th:value="${form.refMessageKey}" />
+				<input type="hidden" name="sendDate" th:value="${form.sendDate}" />
+				<input type="hidden" name="updDate" th:value="${form.updDate}" /> <input
+					type="hidden" name="messageContents" value="" />
+			<!-- !title -->
+			<h1>メール作成・送信</h1>
+			<!-- !menu -->
+
+			<menu>
+				<ul>
+					<li><button type="submit" class="btn btn-primary regist"
+							name="regist" th:text="#{button.sendmail}">送 信</button></li>
+					<li><button type="button" class="btn btn-primary" value="戻 る"
+							onclick="location.href='/messagebox/'">戻 る</button></li>
+				</ul>
+			</menu>
+
+			<h2>メール作成</h2>
+
+			<table class="box01 center stripe">
+				<tr>
+					<th><font color="red">*</font>宛先：</th>
+					<td><input type="text" name="makeUserKey"
+						th:value="${form.makeUserKey}" /></td>
+				</tr>
+				<tr>
+					<th><font color="red">*</font>件名：</th>
+					<td><input type="text" name="messageTitle"
+						th:value="${form.messageTitle}" /></td>
+				</tr>
+				<tr>
+						<th>本文：</th>
+						<td><textarea class="textarea" name="messageContents"
+								placeholder="Enter text ..." style="width: 550px; height: 200px"
+								th:text="${form.messageContents}" required="true"></textarea></td>
+					</tr>
+			</table>
+		</form>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

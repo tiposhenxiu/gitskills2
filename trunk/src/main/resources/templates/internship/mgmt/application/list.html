@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://www.sraw.co.jp/dialect/my"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready();
+	</script>
+</th:block>
+
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formDownload="@{/internship/download}"
+				formUpload="@{/internship/apply}">
+				<input type="file" name="uploadFile" style="display: none;"
+					multiple="multiple" />
+			</my:form>
+
+
+			<!-- !title -->
+			<h1>応募状況閲覧（一覧）</h1>
+
+			<div th:each="kbn : ${kbnList}">
+				<h2 th:text="${kbn.getValue()}">HIRAKUインターンシップ</h2>
+
+				<table class="box01 center stripe">
+					<tr class="line">
+						<th width="70" th:text="#{internship.field.list.applicant}">応募者</th>
+						<th width="70" th:text="#{internship.field.list.applicant}">削除</th>
+						<th>応募期間</th>
+						<th>タイトル</th>
+						<th>募集者</th>
+					</tr>
+					<tr th:each="item,iterStat : ${list.get(kbn.getCode())}">
+						<td><button type="button" class="btn"
+								name="edit" th:text="#{button.list}">一覧</button> <input
+							type="hidden" name="internshipKey" value="0"
+							th:value="${item.internshipKey}" /> <input type="hidden"
+							name="updDate" value="1" th:value="${item.updDate}" /></td>
+						<td><button type="button" class="btn "
+								name="delete" th:text="#{button.list}">一覧</button> <input
+							type="hidden" name="internshipKey" value="0"
+							th:value="${item.internshipKey}" /> <input type="hidden"
+							name="updDate" value="1" th:value="${item.updDate}" /></td>
+						<td><span
+							th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+							<span
+							th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></span><span
+							th:text="${item.internshipEndDate != null}? ${#dates.format(item.internshipEndDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+						</td>
+						<td th:text="${item.internshipTitle}">1</td>
+						<td th:text="${item.partyName}">1</td>
+					</tr>
+				</table>
+
+
+			</div>
+
+			<br />
+			<br />
+			<br />
+
+			<!-- End -->
+		</th:block>
+	</div>
+</body>
+</html>

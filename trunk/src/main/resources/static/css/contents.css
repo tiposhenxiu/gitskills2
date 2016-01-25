@@ -1,0 +1,248 @@
+@charset "UTF-8";
+
+/* 汎用性の無い専用css */
+
+
+/*! 成果物アップロード  ============================================== */
+
+/* box（ex_note） */
+main table dl.exc_split {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+main table dl.ex_split dt {
+	float: left ;
+	display: block ;
+	padding: 5px 5px 3px ;
+	border-radius: 2px ;
+	line-height: 1 ;
+	font-size: 11px ;
+	font-weight: bold ;
+	color: #ffffff ;	
+	}
+main table dl.ex_split dt:nth-child(1) { background-color: #bfbaa2 ;}
+main table dl.ex_split dt:nth-child(3) { background-color: #bfbfbf ;}
+
+main table dl.ex_split dd {
+	display: block ;
+	min-height: 21px ;
+	padding-left: 45px ;	
+	}
+
+main table dl.ex_split dd:nth-child(2) {
+	margin-bottom: 8px ;
+	padding-bottom: 5px ;
+	border-bottom: 1px dotted #c0c0c0 ;
+	}
+
+
+/*! 行動の記録（週）  ============================================== */
+
+/* control */
+main .cal_ctrl {
+	clear: both ;
+	margin-top: 30px ;
+	padding-bottom: 15px ;
+	}
+
+main .cal_ctrl .selectbox {
+	margin: 0 ;
+	}
+
+main .cal_ctrl ul.btn {
+	float: right ;
+	margin: 0 ;
+	}
+
+main .cal_ctrl ul.btn li {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+/* cal */
+main table.cal {
+	clear: both ;
+	width: 100% ;
+	border: 5px solid #ffffff ;
+	outline: 1px solid #c0c0c0 ;
+	}
+
+	/* 日付 */
+main table.cal th {
+	background: #cf8dd1 url("../gfx/m_table.png") ;
+	border-right: 1px solid #ffffff ;
+	line-height: 1.5 ;
+	white-space: nowrap ;
+	color: #ffffff ;
+	}
+
+main table.cal th a:link,
+main table.cal th a:visited {
+	display: block ;
+	padding: 12px 2px 9px ;
+	color: #ffffff ;
+	cursor: pointer ;
+	}
+main table.cal th a:before  {
+	content: "." ;
+	display: inline-block ;
+	width: 16px ;
+	height: 17px ;
+	margin-right: 3px ;
+	background: url("../gfx/m_iplus_off.png") no-repeat ;
+	vertical-align: -2px ;
+	text-indent: -9999px ;
+	transition: 0.3s ;
+	}
+
+	/* Firefox hack */
+@-moz-document url-prefix() {
+main table.cal th a:before  {
+	vertical-align: -6px ;
+	overflow: hidden;
+	}
+}
+
+main table.cal th a:hover {
+	color: #fdd456 ;
+	text-decoration: none ;	
+	}
+main table.cal th a:hover:before  {
+	background: url("../gfx/m_iplus_on.png") no-repeat ;
+	}
+
+	/* 曜日 */
+main table.cal th p {
+	display: block ;
+	padding: 5px 0 1px ;
+	background : linear-gradient(to bottom, #3c4d5c, #7c9cbf 14%, #7c9cbf);
+	font-size: 11px ;
+	color: #ffffff ;
+	}
+main table.cal th p.sat {
+	background : linear-gradient(to bottom, #3c4d5c, #7eb0e8 14%, #7eb0e8);
+	}
+main table.cal th p.sun {
+	background : linear-gradient(to bottom, #5c3c3c, #e88686 14%, #e88686);	
+	}
+
+main table.cal tr.line {
+	border-bottom: 5px solid #ffffff ;
+	}
+
+	/* 予定 */
+main table.cal td {
+	border-right: 1px dotted #b2b2b2 ;
+	vertical-align: top ;
+	}
+
+main table.cal td:first-child:before {
+  display: block ;
+  content: "" ;
+  float: left ;
+  //height: 400px ;
+	}
+
+main table.cal td a b {
+	display: block ;
+	box-sizing: border-box ;
+	min-height: 22px ;
+	padding: 7px 0 5px 11px ;
+	background-image: url("../gfx/m_iplan.png") ;
+	background-repeat: no-repeat ;
+	background-position: 5px 6px ;
+	box-shadow: 1px 1px 0 0 #d9d9d9 ;
+	font-size: 10px ;
+	line-height: 1 ;
+	text-align: center ;
+	}
+
+main table.cal td a p {
+	padding: 7px 5px 5px ;
+	box-shadow: 1px 1px 0 0 #d9d9d9 ;
+	font-size: 11px ;
+	}
+
+main table.cal td.calday { height: 20px; background-color: #F2F2F2 ;}
+main table.cal td.sunday { color: red ;}
+main table.cal td.satday { color: blue ;}
+
+main table.cal td.calev { height: 80px; }
+main table.cal td.today { background-color: #e0ffb4 ;}
+
+
+	/* 授業（sch01） */
+main table.cal td a.sch01 b { background-color: #7ab1cc ; color: #e8f4fa ;}
+main table.cal td a.sch01 p { background-color: #e8f4fa ; color: #466c80 ;}
+
+	/* 予習（sch02） */
+main table.cal td a.sch02 b { background-color: #b1cc7a ; color: #f4fae8 ;}
+main table.cal td a.sch02 p { background-color: #f4fae8 ; color: #6c8046 ;}
+
+	/* 復習（sch03） */
+main table.cal td a.sch03 b { background-color: #7acc7a ; color: #e8fae8 ;}
+main table.cal td a.sch03 p { background-color: #e8fae8 ; color: #468046 ;}
+
+	/* 部活（sch04） */
+main table.cal td a.sch04 b { background-color: #cca37a ; color: #faf1e8 ;}
+main table.cal td a.sch04 p { background-color: #faf1e8 ; color: #806346 ;}
+
+	/* アルバイト（out01） */
+main table.cal td a.out01 b { background-color: #cc7a7a ; color: #fae8e8 ;}
+main table.cal td a.out01 p { background-color: #fae8e8 ; color: #804646 ;}
+
+	/* 課外活動（out02） */
+main table.cal td a.out02 b { background-color: #7a7acc ; color: #e8e8fa ;}
+main table.cal td a.out02 p { background-color: #e8e8fa ; color: #464680 ;}
+
+	/* ボランティア（out03） */
+main table.cal td a.out03 b { background-color: #be7acc ; color: #f7e8fa ;}
+main table.cal td a.out03 p { background-color: #f7e8fa ; color: #764680 ;}
+
+	/* その他（etc01） */
+main table.cal td a.etc01 b { background-color: #b2b2b2 ; color: #f5f5f5 ;}
+main table.cal td a.etc01 p { background-color: #e5e5e5 ; color: #4d4d4d ;}
+
+main table.cal td a:link,
+main table.cal td a:visited {
+	display: block ;
+	margin: 4px ;
+	line-height: 1.5 ;
+	transition: 0.2s ;
+	}
+main table.cal td a:hover {
+	text-decoration: none ;
+	opacity: 0.7 ;
+	}
+main table.cal td a:hover b {
+	color: #ffffff ;
+	}
+
+/* color表 */
+main ul.color {
+	float: right ;
+	margin: 0 ;
+	padding: 10px 0 0 ;
+	}
+
+main ul.color li {
+	display: inline-block ;
+	margin: 0 0 0 7px ;
+	padding: 0 ;
+	}
+
+main ul.color li:before {
+	content: "■" ;
+	margin-right: 1px ;
+	font-size: 14px ;
+	vertical-align: -1px ;
+	}
+main ul.color li:nth-child(1):before { color: #FF3333 ;}
+main ul.color li:nth-child(2):before { color: #339900 ;}
+main ul.color li:nth-child(3):before { color: #CC33FF ;}
+main ul.color li:nth-child(4):before { color: #cca37a ;}
+main ul.color li:nth-child(5):before { color: #cc7a7a ;}
+main ul.color li:nth-child(6):before { color: #7a7acc ;}
+main ul.color li:nth-child(7):before { color: #be7acc ;}
+main ul.color li:nth-child(8):before { color: #b2b2b2 ;}

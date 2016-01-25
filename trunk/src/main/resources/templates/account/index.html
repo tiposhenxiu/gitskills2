@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/baseAccount"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current link -->
+<th:block layout:fragment="layout-link">
+
+</th:block>
+
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+<script th:inline="javascript">
+$().ready(function() {
+
+	$("#formProvisional").validationEngine();
+
+	// <!--/*  Registボタン押下イベント設定 */-->
+	$("button[name='provisional'][class~='provisional']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		var confirmMsg = /*[[#{message.confirm.regist}]]*/ '登録？';
+
+		if (window.confirm(confirmMsg)) {
+			$('#formProvisional').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+});
+</script>
+</th:block>
+
+
+<body>
+
+<div layout:decorator="layout">
+	<th:block layout:fragment="layout-content">
+	<div>
+	<!-- Start -->
+
+		<!--/* アカウント登録 */-->
+		<form th:action="@{/account/provisional}" method="post" role="form" autocomplete="off" th:object="${form}" id="formProvisional" name="form">
+		<div class="panel-group">
+			<div class="panel-body">
+			<div class="form-group col-xs-8" role="group" th:classappend="${#fields.hasErrors('mailAddress')}? 'has-error has-feedback'">
+				<label for="inputMailAddress" th:text="#{mailAddress}">Email</label>
+				<input type="text" class="form-control validate[required, custom[email]]" id="inputMailAddress" value="" name="mailAddress" th:placeholder="#{field.placeholder.input.email}" th:field="*{mailAddress}"/>
+				<span class="text-danger" th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}">is error</span>
+				<button type="button" class="btn btn-primary provisional" name="provisional" th:text="#{button.regist}">登録</button>
+			</div>
+			</div>
+		</div>
+		</form>
+
+	<!-- End -->
+	</div>
+	</th:block>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$(function() {
+			$('#add').bind('click', function(evt) {
+				evt.preventDefault();
+				$('#select1 option:selected').appendTo('#select2');
+				evt.stopPropagation();
+			});
+			$('#remove').bind('click', function() {
+				$('#select2 option:selected').appendTo('#select1');
+				evt.stopPropagation();
+			});
+
+			$('#chkUnivercity').change(function() {
+				if ($('#chkUnivercity').is(':checked')) {
+					$('#publicDiv :input').removeAttr('disabled');
+				} else {
+					$('#publicDiv :input').attr('disabled', true);
+				}
+			});
+
+		});
+
+		$()
+				.ready(
+
+						function() {
+							$('.input-group.date').datepicker({
+								format : "yyyy/mm/dd",
+								language : 'ja',
+								showOn : "button",
+								buttonImageOnly : true,
+								buttonImage : '/img/m_ical.png'
+							});
+							$('.datepicker').change(
+									function() {
+										//カレンダー確定時にフォームに反映
+										var dates = $(this).val().split('/');
+										$(this).parent().parent().find(".year")
+												.val(dates[0]);
+										$(this).parent().parent()
+												.find(".month").val(dates[1]);
+										$(this).parent().parent().find(".day")
+												.val(dates[2]);
+									});
+
+							$(
+									"input[class~='year'], input[class~='month'], input[class~='day']")
+									.change(
+											function() {
+												//カレンダー確定時にフォームに反映
+												var year = $(this).parent()
+														.find(".year").val();
+												var month = $(this).parent()
+														.find(".month").val();
+												var day = $(this).parent()
+														.find(".day").val();
+												$(this).parent().find(
+														".datepicker").val(
+														year + "/" + month
+																+ "/" + day);
+											});
+
+						});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+			<form th:action="@{/mgmt/event/update}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="eventForm" name="form">
+				<input type="hidden" name="pageMode" th:value="${form.pageMode}" />
+				<input type="hidden" name="eventKey" th:value="${form.eventKey}" />
+				<input type="hidden" name="publicFlag" th:field="*{publicFlag}" />
+				<div
+					th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<input type="hidden" name="updDate" th:field="*{updDate}" />
+				</div>
+				<!-- !title -->
+				<h1>イベント情報登録・編集</h1>
+
+				<!-- !menu -->
+
+				<menu>
+					<ul>
+						<li><button type="submit" class="btn btn-primary regist"
+								name="regist" th:text="#{button.regist}">登 録</button></li>
+						<li><button type="button" class="btn btn-primary" value="戻 る"
+								onclick="location.href='/mgmt/event/'">戻 る</button></li>
+					</ul>
+				</menu>
+
+				<!-- !登録 -->
+				<h2>イベント情報</h2>
+				<br />
+				<div th:if="${validationError}">
+					<span th:text="${validationError}">xxxxx</span>
+				</div>
+
+				<font color="red">*の項目は一覧に掲載されます</font>
+				<table class="boxf01">
+					<tr>
+						<th><font color="red">*</font>公開設定：</th>
+						<td><input type="radio" name="publicFlag"
+							th:each="item: ${list0024}" th:value="${item.code}"
+							th:checked="${item.code == form.publicFlag}"
+							th:text="${item.value}" th:disabled="${form.publicDisabled}" /><label
+							for="new1"></label></td>
+					</tr>
+					<tr>
+						<th>開催日：</th>
+						<td><input type="text" class="year" name="eventStartDateYear"
+							size="4"
+							th:value="${#strings.substring(form.eventStartDate,0,4)}" />年 <input
+							type="text" class="month" name="eventStartDateMonth" size="4"
+							th:value="${#strings.substring(form.eventStartDate,5,7)}" />月 <input
+							type="text" class="day" name="eventStartDateDay" size="4"
+							th:value="${#strings.substring(form.eventStartDate,8,10)}" />日 <input
+							type="text" class="datepicker" id="eventStartDate"
+							name="eventStartDate" th:field="*{eventStartDate}"
+							style="display: none;" /></td>
+					</tr>
+					<tr>
+						<th>配信日：</th>
+						<td><input type="text" class="year" name="eventSendDateYear"
+							size="4" th:value="${#strings.substring(form.eventSendDate,0,4)}" />年
+							<input type="text" class="month" name="eventSendDateMonth"
+							size="4" th:value="${#strings.substring(form.eventSendDate,5,7)}" />月
+							<input type="text" class="day" name="eventSendDateDay" size="4"
+							th:value="${#strings.substring(form.eventSendDate,8,10)}" />日 <input
+							type="text" class="datepicker" id="eventSendDate"
+							name="eventSendDate" th:field="*{eventSendDate}"
+							style="display: none;" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>タイトル：</th>
+						<td><input type="text" name="eventTitle"
+							th:value="${form.eventTitle}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>公開範囲：</th>
+						<td><th:block>
+								<input type="checkbox" name="publicItemArray" th:value="2"
+									id="chkUnivercity" th:checked="${publicKbnMap.get('1') == '1'}" />
+								<label th:for="chkUnivercity" th:text="大学"></label>
+							</th:block>
+							<th:block>
+								<input type="checkbox" name="publicItemArray" th:value="1"
+									th:id="chk2" th:checked="${publicKbnMap.get('2') == '2'}" />
+								<label th:for="chk2" th:text="企業・研究所など"></label>
+							</th:block></td>
+					</tr>
+					<tr>
+						<!-- <div class="wrapper"> -->
+						<td></td>
+						<td><div id="publicDiv">
+								<table>
+									<tr>
+										<td><select multiple="multiple" id="select1"
+											style="width: 200px; height: 120px" size="5">
+												<option th:value="${item.partyCode}"
+													th:each="item : ${listParty}" th:text="${item.partyName}"
+													style="display: xnone;">xxx大学</option>
+										</select></td>
+										<td>
+											<div class="btn">
+												<button id="add">&gt;&gt;</button>
+												<br /> <br />
+												<button id="remove">&lt;&lt;</button>
+											</div>
+										</td>
+										<td><select multiple="multiple" id="select2"
+											name="publicPartyList" style="width: 200px; height: 120px"
+											size="5">
+												<option th:value="${item.partyCode}"
+													th:each="item : ${publicList}" th:text="${item.partyName}">xxx大学</option>
+										</select></td>
+									</tr>
+								</table>
+							</div></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>応募対象者：</th>
+						<td><input type="text" name="eventRecruit"
+							th:value="${form.eventRecruit}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>開催場所：</th>
+						<td><input type="text" name="eventPlace"
+							th:value="${form.eventPlace}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>募集者：</th>
+						<td><input type="text" name="partyName"
+							th:value="${form.partyName}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>連絡先：</th>
+						<td><input type="text" name="eventTelno"
+							th:value="${form.eventTelno}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>添付書類：</th>
+						<td><input type="file" name="fileupload" /></td>
+					</tr>
+					<tr>
+						<th>概要：</th>
+						<td><textarea class="textarea" name="eventMemo"
+								placeholder="Enter text ..." style="width: 550px; height: 200px"
+								th:text="${form.eventMemo}" required="true"></textarea></td>
+					</tr>
+				</table>
+
+			</form>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

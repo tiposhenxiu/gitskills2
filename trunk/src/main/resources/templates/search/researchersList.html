@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!-- !title -->
+			<h1 th:terxt="#{search.title.list}">検索一覧</h1>
+			<h2>検索条件</h2>
+			<form th:action="@{/search/}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="formSearch" name="form">
+				<table>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="text" style="width: 300px;"
+							name="searchKeyword" placeholder="キーワード"
+							th:field="*{searchKeyword}" value="aaa" /> &nbsp;
+							<button type="button" class="search" name="search">検 索</button>
+							</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<br /> <br />
+
+
+			<div class="panel-group" id="SearchAccordion">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="panel-title row">
+							<a data-toggle="collapse" data-parent="#SearchAccordion"
+								href="#collapse" th:href="'#SearchCollapse'"> <span
+								class="glyphicon glyphicon-collapse-down pull-right"></span>
+							</a>
+						</div>
+					</div>
+
+					<div id="SearchCollapse" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div class="row">
+								<table>
+									<tr>
+										<td>&nbsp;
+											<table>
+												<tr>
+													<th><font color="red">*</font>所属機関：</th>
+													<th><select name="searchPartyCode">
+															<option value=""></option>
+															<option th:each="item : ${listParty}"
+																th:value="${item.partyCode}" th:text="${item.partyName}"></option>
+													</select></th>
+													<th><font color="red">*</font>研究分野（大分類）：</th>
+													<th><select name="searchBigField">
+															<option value=""></option>
+															<option th:each="item : ${list0221}"
+																th:value="${item.code}" th:text="${item.value}"></option>
+													</select></th>
+												</tr>
+												<tr>
+													<th><font color="red">*</font>研究分野（中分類）：</th>
+													<th><select name="searchMiddleField">
+															<option value=""></option>
+															<option th:each="item : ${list0222}"
+																th:value="${item.code}" th:text="${item.value}"></option>
+													</select></th>
+													<th><font color="red">*</font>研究分野（小分類）：</th>
+													<th><select name="searchSmallField">
+															<option value=""></option>
+															<option th:each="item : ${list0023}"
+																th:value="${item.code}" th:text="${item.value}"></option>
+													</select></th>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+
+						<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">選択</th>
+					<th width="70">氏名</th>
+					<th width="120">所属</th>
+					<th>学年、職位</th>
+					<th>自己アピール</th>
+				</tr>
+				<tr th:each="item,iterStat : ${slist}">
+
+					<td><button type="button" class="btn btn-danger delete"
+							name="show" th:text="#{button.show}">削 除</button> </td>
+
+					<td th:text="${item.userFamilyName  + item.userName}">1</td>
+					<td th:text="${item.affiliationName}">1</td>
+					<td th:text="${item.degree}">1</td>
+					<td th:text="${item.degree}">1</td>
+				</tr>
+			</table>
+
+
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

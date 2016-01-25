@@ -1,0 +1,632 @@
+@charset "UTF-8";
+
+/* main */
+
+/*! layout ============================================== */
+
+/* 段落 */
+main div.section {
+	padding-left: 35px ;
+	}
+
+main div.section h3 {
+	margin-left: -35px ;
+	}
+
+main div.section h4 {
+	margin-left: -19px ;
+	}
+
+main div.section .area01,
+main div.section .area02,
+main div.section ul.board {
+	width: calc( 100% + 35px ) ;
+	margin-left: -35px ;
+	}
+
+main .inp p,
+main p.inp {
+	padding-left: 12px ;
+	}
+
+/* 左右分割 */
+main div.half {
+	display: table ;
+	width: 100% ;
+	}
+
+main div.half .hleft {
+	display: table-cell ;
+	box-sizing: border-box ;
+	width: 50% ;
+	padding-right: 15px ;
+	}
+
+main div.half .hright {
+	display: table-cell ;
+	box-sizing: border-box ;
+	width: 50% ;
+	padding-left: 15px ;
+	}
+
+/* align */
+main .center {
+	text-align: center ;
+	}
+
+main .right {
+	text-align: right ;
+	}
+
+main .left {
+	text-align: left ;
+	}
+
+
+/*! title ============================================== */
+
+main h1 {
+	margin: -15px -15px 30px ;
+	padding: 13px 15px 10px 40px ;	
+	background: #395173 url("../gfx/m_h1.png") no-repeat 15px 17px ;
+	border-bottom: 5px solid #d9d9d9 ;
+	border-radius: 4px 4px 0 0 ;
+	font-size: 18px ;
+	color: #f2f2f2 ;
+	}
+
+main h2 {
+	margin: 0 0 20px ;
+	padding-left: 8px ;
+	border-left: 5px solid #6d8fbe ;
+	font-size: 18px ;
+	color: #4a6b99 ;
+	}
+main h2.put:after  {
+	content: "確定済" ;
+	margin-left: 8px ;
+	padding: 4px 8px 3px ;
+	background-color: #e86c76 ;
+	border-radius: 2px ;
+	font-size: 11px ;
+	vertical-align: 3px ;
+	color: #ffffff ;
+	}
+
+main h3 {
+	margin: 35px 0 20px ;
+	padding: 10px 10px 7px 25px ;
+	background-color: #e8ecf3 ;
+	border: 1px solid #b2bccc ;
+	border-radius: 2px ;
+	font-size: 14px ;
+	text-indent: -1em ;
+	color: #4a6b99 ;
+	}
+main h3:before  {
+	content: "." ;
+	display: inline-block ;
+	width: 15px ;
+	height: 15px ;
+	margin-right: 6px ;
+	background: url("../gfx/m_h3.png") no-repeat left center ;
+	font-size: 12px ;
+	text-indent: -9999px ;
+	color: #6d8fbe ;
+	}
+
+	/* area h3 */
+main .area01 h3,
+main .area02 h3 {
+	margin-top: 0 ;
+	background-color: #ffffff ;
+	border: 1px solid #c0c0c0 ;
+	color: #4a6b99 ;
+	}
+
+main h4 {
+	margin: 15px 0 ;
+	padding-left: 17px ;
+	font-size: 13px ;
+	text-indent: -1em ;
+	color: #6b96cf ;
+	}
+main h4:before  {
+	content: "●" ;
+	margin-right: 3px ;
+	font-size: 10px ;
+	vertical-align: 1px ;
+	}
+main h4.ink:after  {
+	content: "必須" ;
+	margin-left: 5px ;
+	padding: 1px 5px 0 ;
+	background-color: #fff5f5 ;
+	border: 1px solid #db848b ;
+	border-radius: 2px ;
+	font-size: 11px ;
+	vertical-align: 1px ;
+	color: #d95b5b ;
+	}
+
+main h5 {
+	margin: 15px 0 5px ;
+	font-size: 12px ;
+	color: #40a29a ;
+	}
+
+
+/*! guide ============================================== */
+
+main ul.guide {
+	margin: -15px 0 30px ;
+	padding: 0 0 15px 25px ;
+	font-size: 11px ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	}
+
+main ul.guide li {
+	margin: 0 ;
+	padding: 1px 0 ;
+	}
+
+
+/*! menu ============================================== */
+
+main menu {
+	text-align: right ;
+	}
+
+main menu ul {
+	display: inline-block ;
+	margin: -15px 0 30px ;
+	padding: 5px ;
+	background-color: #ebebeb ;
+	border-radius: 2px ;
+	box-shadow: 1px 1px 2px 0px #a6a6a6 inset ;
+	}
+
+main menu ul li {
+	display: inline-block ;
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+
+/*! list（ul）  ============================================== */
+
+/* default */
+main ul {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+main ul li {
+	padding: 2px 0 ;
+	}
+
+/* h5 段落 */
+h5 + ul {
+	padding-left: 17px ;
+	}
+
+/* board */
+main ul.board {
+	box-sizing: border-box ;
+	padding: 20px 32px ;
+	background-color: #fafafa ;
+	border: 3px double #c0c0c0 ;
+	border-radius: 4px ;
+	}
+
+main ul.board li {
+	clear: both ;
+	padding: 12px 0 9px 5px ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	}
+main ul.board li:last-child { border-bottom: none ;}
+
+main ul.board li input[type="button"] {
+	float: right ;
+	margin-top: -6px ;
+	}
+
+
+/*! list（dl）  ============================================== */
+
+main dl.list {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+main dl.list dt {
+	margin: 0 0 8px ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	font-weight: bold ;
+	color: #40a29a ;
+	}
+
+main dl.list dd {
+	margin-bottom: 15px ;
+	padding-left: 20px ;
+	}
+
+
+/*! tab  ============================================== */
+
+main ul.tab {
+	text-align: right ;
+	letter-spacing: -.40em ;
+	padding: 0 ;
+	z-index: 99 ;
+	}
+
+main ul.tab li {
+	display: inline-block ;
+	letter-spacing: normal ;
+	margin: 0 0 0 1px ;
+	padding: 0 ;
+	}
+main ul.tab li:first-child { margin-left: 0 ;}
+
+main ul.tab li a {
+	display: block ;
+	box-sizing: border-box ;
+	min-width: 120px ;
+	padding: 9px 15px 5px ;
+	background : linear-gradient(to bottom, #ffffff, #dbdbdb) ;
+	border: 1px solid #c0c0c0 ;
+	border-radius: 3px 3px 0 0 ;
+	font-weight: bold ;
+	line-height: 1.6 ;
+	text-align: center ;
+	color: #656565 ;
+	}
+
+main ul.tab li.act a {
+	background: #ffffff ;
+	border-bottom: 1px solid #ffffff ;
+	color: #6b96cf ;
+	}
+
+main ul.tab li a:hover {
+	text-decoration: none ;
+	color: #ea7f00 ;
+	}
+
+main .tabbox {
+	margin-top: -1px ;
+	padding: 30px ;
+	border: 1px solid #c0c0c0 ;
+	border-radius: 4px 0 4px 4px ;
+	}
+
+
+/*! area  ============================================== */
+
+main .area01,
+main .area02 {
+	box-sizing: border-box ;
+	padding: 30px 32px ;
+	background-color: #f5f4ee ;
+	border: 1px solid #c0c0c0 ;
+	border-radius: 4px ;
+	box-shadow: 0 0 0 2px #ffffff inset ;
+	}
+
+main .area01 {
+	background-color: #f5f4ee ;
+	}
+
+main .area02 {
+	background-color: #f7f7f7 ;
+	}
+
+
+/*! table（design）  ============================================== */
+
+/* box 01 */
+main table.box01 {
+	width: 100% ;
+	margin-top: 15px ;
+	border-top: 3px solid #4d647a ;
+	}
+
+main table.box01 th {
+	padding: 9px 5px 7px ;
+	background: #6482a1 url("../gfx/m_table.png") ;
+	border: 1px solid #4d647a ;
+	font-size: 12px ;
+	line-height: 1.5 ;
+	color: #ffffff ;
+	}
+
+main table.box01 td {
+	padding: 7px 10px 5px ;
+	border: 1px solid #c0c0c0 ;
+	}
+
+main table.box01 tr.line {
+	border-bottom: 3px solid #d9d9d9 ;
+	}
+
+	/* box 01（hsb） */
+main table.box01 th.hsb {
+	padding: 7px 5px 5px ;
+	background : linear-gradient(to bottom, #536a7f, #7c9cbf 7%, #7c9cbf);
+	font-size: 11px ;
+	line-height: 1.4 ;
+	color: #def3f8 ;
+	}	
+
+	/* box 01（sb） */
+main table.box01 td.sb {
+	background-color: #f7f6f0 ;
+	border-right: 3px double #c0c0c0 ;
+	font-weight: bold ;
+	text-align: center ;
+	color: #6482a1 ;
+	}
+
+
+/* box 02 */
+main table.box02 {
+	width: 100% ;
+	margin-top: 15px ;
+	}
+
+main table.box02 th {
+	padding: 8px 10px 4px ;
+	border-bottom: 3px double #a3b1c7 ;
+	font-size: 13px ;
+	color: #6b96cf ;
+	}
+
+main table.box02 td {
+	padding: 7px 10px 5px ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	}
+
+main table.box02 tr:last-child {
+	border-bottom: 1px solid #c0c0c0 ;
+	}
+
+/* color */
+main table .gray {
+	background-color: #f2f2f2 ;
+	}
+
+main table .cream {
+	background-color: #f7f6f0 ;
+	}
+
+main table.stripe tr:nth-child(odd) {
+	background-color: #f5f5f5 ;
+	}
+
+
+/*! table（form layout）  ============================================== */
+
+/* boxf01 */
+main table.boxf01 {
+	margin-top: 15px ;
+	}
+
+main table.boxf01 th {
+	padding: 10px 15px 2px 10px ;
+	font-weight: normal ;
+	text-align: right ;
+	vertical-align: top ;
+	}
+
+main table.boxf01 td {
+	padding: 1px 0 ;
+	}
+
+/* 2015.07.01 add sraw start */
+/* boxf02 */
+main table.boxf02 {
+	margin-top: 2px ;
+	}
+
+main table.boxf02 th {
+	padding: 10px 5px 2px 10px ;
+	font-weight: normal ;
+	text-align: right ;
+	vertical-align: top ;
+	}
+
+main table.boxf02 td {
+	padding: 1px 0 ;
+	}
+/* 2015.07.01 add sraw end */
+
+/*! accordion  ============================================== */
+
+main .acordion {
+	width : 100% ;
+	margin: 30px 0 0 ;
+	}
+
+main .acordion .menu,
+main .acordion .active-menu {
+	display: block ;
+	margin-top: -1px ;
+	background-repeat: no-repeat ;
+	background-position: 710px center ;
+	border: 1px solid #c0c0c0 ;
+	box-shadow: 0 0 0 1px #ffffff inset ;
+	padding: 12px 70px 8px 15px ;
+	border-radius: 2px ;
+	font-size: 13px ;
+	font-weight: bold ;
+	cursor: pointer ;
+	}
+
+main .acordion .menu {
+	background-image: url("../gfx/m_aco_on_org.png") ;
+	background-color: #f7f6f0 ;
+	color: #4a6b99 ;
+	}
+
+main .acordion .active-menu {
+	background-image: url("../gfx/m_aco_off.png") ;
+	background-color: #bfbfbf ;
+	color: #ffffff ;
+	}
+
+main .acordion .menu:hover,
+main .acordion .active-menu:hover {
+	background-color: #eeece2 ;
+	color: #40a29a ;
+	}
+
+main .acordion .sub {
+	padding: 20px 20px 40px 55px ;
+	}
+
+
+/*! info  ============================================== */
+
+main dl.info {
+	height: 400px ;
+	margin-top: -15px ;
+	padding: 15px 20px 0 15px ;
+	overflow-y: scroll ;
+	}
+
+main dl.info dt {
+	clear: both ;
+	float: left ;
+	padding-left: 20px ;
+	font-size: 11px ;
+	font-weight: bold ;
+	color: #9d9a88 ;
+	}
+
+main dl.info dd {
+	padding: 0 0 15px 150px ;
+	margin-bottom: 15px ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	}
+
+main dl.info dd b {
+	display: block ;
+	margin-bottom: 5px ;
+	color: #6b96cf ;
+	}
+
+/* new */
+main dl.info b.new:after  {
+	content: "NEW" ;
+	font-family: "Arial", "Helvetica", sans-serif ;
+	margin-left: 5px ;
+	padding: 1px 5px ;
+	background-color: #e86c76 ;
+	border-radius: 2px ;
+	font-size: 11px ;
+	vertical-align: 1px ;
+	color: #ffffff ;
+	}
+
+
+/*! gakusei name ============================================== */
+/*!  modify  dt-background-color bfbfbf -> ffaf2c */
+main dl.gname {
+	display: table ;
+	box-sizing: border-box ;
+	width: 100% ;
+	margin-bottom: 30px ;
+	padding: 8px ;
+	background-color: #fafafa ;
+	border: 3px double #c0c0c0 ;
+	border-radius: 4px ;	
+	font-weight: bold ;
+	}
+
+main dl.gname dt {
+	display: table-cell ;
+	width: 8% ;
+	padding: 2px 0 0 ;
+	background-color: #ffaf2c ;
+	border-radius: 2px ;
+	text-align: center ;
+	color: #ffffff ;
+	}
+
+main dl.gname dd {
+	box-sizing: border-box ;
+	display: table-cell ;
+	width: 42% ;
+	padding: 0 10px ;
+	color: #90896b ;
+	}
+
+
+/*! button  ============================================== */
+
+main ul.btn {
+	margin-top: 10px ;
+	text-align: right ;
+	}
+
+main ul.btn li {
+	display: inline-block ;
+	margin: 0 1px ;
+	}
+
+
+/*! icon  ============================================== */
+
+main .ical a {
+	display: inline-block ;
+	width: 25px ;
+	height: 25px ;
+	margin: 0 10px ;
+	background: url("../gfx/m_ical.png") no-repeat ;
+	vertical-align: 2px ;
+	text-indent: -9999px ;	
+	transition: 0.4s ;
+	}
+
+main .ical a:hover {
+	opacity: 0.65;
+	}
+
+
+/*! font  ============================================== */
+
+/* size */
+.fs { font-size: 11px ;}
+.fb { font-weight: bold ;  color: #656565 ;}
+.fn { font-weight: normal ;}
+
+b { color: #656565 ;}
+
+/* color */
+.f_red { color: #d95b5b ;}
+.f_green { color: #40a29a ;}
+.f_blue { color: #6b96cf ;}
+.f_brown { color: #9a8866 ;}
+
+/*! margin 調整  ============================================== */
+
+main h2 + *,
+main h2 + .section > *:first-child,
+main h3 + *,
+main h4 + * { margin-top: 0 ;}
+main h5 + h4 { margin-top: 30px ;}
+
+main .tabbox > *:first-child,
+main .tabbox .section > *:first-child { margin-top: 0 ;}
+
+main .acordion .sub > *:first-child { margin-top: 0 ;}
+
+main .half .hleft > *:first-child,
+main .half .hright > *:first-child { margin-top: 0 ;}
+
+main dl.gname + *:first-child,
+main dl.gname + .section > *:first-child { margin-top: 0 ;}
+
+/* table内 */
+main table td h5:first-child { margin: 0 0 5px ;}

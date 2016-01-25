@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$(function() {
+			$(document).on("click", "button[name=pastAnswers]", function() {
+				var loc = /*[[@{/skill/diag/pastIndex}]]*/'url';
+				window.location = loc;
+			});
+		});
+	</script>
+</th:block>
+
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<h1 th:text="#{skill.build.title.index}">たいとる</h1>
+			<div th:text="#{skill.build.field.summary.index}">Vitae養成能力…（このページの説明</div>
+			<button type="button" class="btn btn-primary" name="selfEvalTarget" th:text="#{skill.build.field.build.list}">一覧に遷移</button>
+			円グラフ
+			<br><br>
+
+			<table style="border:1px solid #888888;" border=1>
+				<thead>
+					<tr>
+				    <th th:text="#{skill.field.maincontent}">だい項目</th>
+				    <th th:text="#{skill.field.subcontent}">サブ項目</th>
+				    <th th:text="#{skill.field.subsubcontent}">サブサブ項目</th>
+				    <th th:text="#{skill.field.recommendsubject}">HIRAKU推奨科目</th>
+					</tr>
+				</thead>
+				<tbody th:remove="all-but-first">
+					<div th:each="item : ${categoryList}">
+						<div th:each="child : ${item.childList}">
+							<tr th:each="grand : ${child.childList}">
+						    <td rowspan="6" th:rowspan="${item.size}" th:if="${item.index} == 0" th:text="${item.abilityCode} + ':' + ${item.name}" >
+						      A:知識と知的能力
+						    </td>
+						    <td class="bgcolor_A" rowspan="2" th:rowspan="${child.size}" th:if="child.index == 0" th:text="${child.abilityCode} + ' ' + ${child.name}">
+									A1 知識基盤
+								</td>
+						    <td class="bgcolor_A" th:text="${grand.abilityCode} + ' ' + ${grand.name}">A1.1 専門分野の知識</td>
+						    <td>
+									<div th:each="subject: grand.subhectList" th:remove="all-but-first">
+										<span th:text="">xxxxxx(広島大学)<br></span>
+										<span>Xxxxxxx(岡山大学)<br></span>
+									</div>
+
+						    </td>
+						  </tr>
+					  </div>
+					</div>
+			  <tr>
+			    <td class="bgcolor_A">A1.3 研究技法（応用力）</td>
+			    <td>
+			      Xxxxxxx(山口大学)<br>
+			      Xxxxxxx(徳島大学)<br>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_A" rowspan="3">A2 認知的能力</td>
+			    <td class="bgcolor_A">A2.1 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_A">A2.4 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_A">A2.5 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_A" rowspan="1">A3 創造性</td>
+			    <td class="bgcolor_A">A3.3 </td>
+			    <td></td>
+			  </tr>
+
+			  <tr>
+			    <td class="bgcolor_B category1" rowspan="6">
+			      <div>B:個人の能力</div>
+			    </td>
+			    <td class="bgcolor_B" rowspan="2">B1 知識基盤</td>
+			    <td class="bgcolor_B">B1.1 専門分野の知識</td>
+			    <td>
+			      Xxxxxxx(広島大学)<br>
+			      Xxxxxxx(岡山大学)<br>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_B">B1.3 研究技法（応用力）</td>
+			    <td>
+			      Xxxxxxx(山口大学)<br>
+			      Xxxxxxx(徳島大学)<br>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_B" rowspan="3">B2 認知的能力</td>
+			    <td class="bgcolor_B">B2.1 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_B">B2.4 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_B">B2.5 </td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td class="bgcolor_B" rowspan="1">B3 創造性</td>
+			    <td class="bgcolor_B">B3.3 </td>
+			    <td></td>
+			  </tr>
+				</tbody>
+			</table>
+		</th:block>
+	</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			// validate signup form on keyup and submit
+			$("#othersForm").validate({
+				rules : {
+					title : {
+						required : true,
+						maxlength : 100
+					}
+				},
+			});
+		});
+	</script>
+</th:block>
+<body>
+	<!-- Content Header (Page header) -->
+	<div layout:decorator="layout">
+	<section class="content-header" layout:fragment="layout-content">
+		<h1>eポートフォリオ(編集)</h1>
+	</section>
+	<!-- Main content -->
+	<section class="content" layout:fragment="layout-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="margin-b-20">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<div class="tab-content">
+							<h2 class="page-header">
+								<i class="fa fa-globe"></i> その他
+							</h2>
+							<form class="box-body type2 form-horizontal" th:action="@{/portfolio/others/update}" method="post" role="form" autocomplete="off" th:object="${form}" id="othersForm" name="form">
+								<input type="hidden" name="pageMode" th:value="${form.pageMode}" />
+								<input type="hidden" name="gyosekiKey" th:value="${form.gyosekiKey}" />
+								<input type="hidden" name="updDate" th:value="${form.updDate}" />
+								<div th:if="${validationError}">
+									<span th:text="${validationError}">xxxxx</span>
+								</div>
+								<div class="col-md-7">
+									<div class="form-group">
+										<label class="col-sm-4 control-label">公開設定：</label>
+										<div class="radio col-sm-7">
+											<th:block th:each="item: ${list0024}">
+												<label th:for="publicFlag+${item.code}">
+													<input type="radio" name="publicFlag" th:id="publicFlag+${item.code}" th:value="${item.code}" th:text="${item.value}" th:checked="${item.code == form.publicFlag}" />
+												</label>
+											</th:block>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">言語：</label>
+										<div class="radio col-sm-7">
+											<select class="form-control" name="language" th:field="*{language}">
+												<option th:each="item : ${list0041}" th:value="${item.code}" th:text="${item.value}"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">実施年月：</label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" placeholder="" name="publicationdate" th:field="*{publicationdate}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">内容：</label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" placeholder="" name="summary" th:field="*{summary}" />
+										</div>
+									</div>
+									<div class="margin-t-20">
+										<button type="button" class="btn btn-default" value="戻 る" onclick="location.href='/portfolio/others/'">戻 る</button>
+										<button type="submit" class="btn btn-primary regist" name="regist" th:text="#{button.regist}">登 録</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+	</section>
+	</div>
+	<!-- /.content -->
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/event/detail}" />
+			<!-- !title -->
+			<h1>イベント情報</h1>
+
+			<div class="panel-group" id="MsCodeAccordion">
+				<div class="panel panel-default"
+					th:each="item,iterStat : ${eventPresentList}">
+					<div class="panel-heading">
+						<div class="panel-title row">
+							<span class="col-md-1" th:text="${iterStat.count}+'.'">0</span>
+							<span class="col-md-3" th:text="${item.eventSendDate != null}? ${#dates.format(item.eventSendDate,#messages.msg('format.ymd'))} : '-'">0</span>
+							 <a data-toggle="collapse" data-parent="#MsCodeAccordion"
+								href="#collapse"
+								th:href="'#MsCodeCollapse'+ ${item.eventKey}"> <span
+								class="col-md-3"
+								th:text="${item.eventMemo != null}? ${item.eventMemo}">【概要】#1</span>
+								<span class="col-md-3" th:text="${item.partyCode}">1</span>
+								<span class="glyphicon glyphicon-collapse-down pull-right"></span>
+							</a>
+						</div>
+					</div>
+
+					<div id="MsCodeCollapse" class="panel-collapse collapse"
+						th:id="'MsCodeCollapse'+ ${item.eventKey}">
+						<div class="panel-body">
+							<div class="row">
+								<h3>イベントのお知らせ</h3>
+								【開催日】<div class="col-md-7" th:text="${item.eventStartDate}">【開催日】#1</div>
+								【配信日】<div class="col-md-12" th:text="${item.eventSendDate}">【配信日】#1</div>
+								【タイトル】<div class="col-md-12" th:text="${item.eventTitle}">【タイトル】#1</div>
+								【公開範囲】<div class="col-md-12" th:text="${item.publicFlag}">【公開範囲】#1</div>
+								【応募対象者】<div class="col-md-12" th:text="${item.eventRecruit}">【応募対象者】#1</div>
+								【開催場所】<div class="col-md-12" th:text="${item.eventPlace}">【開催場所】#1</div>
+								【募集者】<div class="col-md-12" th:text="${item.partyName}">【募集者】#1</div>
+								【連絡先】<div class="col-md-12" th:text="${item.eventTelno}">【連絡先】#1</div>
+								【養成能力】<div class="col-md-12" th:text="${item.subjectInsKbn}">【養成能力】#1</div>
+								【単位】<div class="col-md-12" th:text="${item.eventUnit}">【単位】#1</div>
+								【概要】<div class="col-md-12" th:text="${item.eventMemo}">【概要】#1</div>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

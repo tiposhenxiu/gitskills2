@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var SkillG = {};
+		/*]]>*/
+	</script>
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<section class="content-header">
+				<h1 th:text="#{menu.name.skill} + ' ' + #{skill.field.pastanswers}">かこ</h1>
+			</section>
+
+			<section class="invoice">
+				<div class="margin-b-20">
+
+					<!--/*/ <th:block th:each="lens: ${lensNames}"> /*/-->
+					<h2 class="lead with-border ex margin-t-30" th:text="${lens}">能力診断結果</h2>
+
+					<div class="table-ex">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr class="line">
+									<th></th>
+									<th th:text="#{skill.field.saveddate}">見出し2</th>
+									<th th:text="#{skill.field.achievement}">見出し3</th>
+								</tr>
+							</thead>
+							<tbody th:remove="all-but-first">
+								<tr th:each="ans: ${pastAnswers[lensStat.index]}">
+									<td th:text="${ansStat.index}+1">1</td>
+									<td><a href="./nouryoku03.html"
+										th:href="@{/skill/diag/viewList/{rkey}/{lensId}/{savedDate}(rkey=${rkey},lensId=${lensIds[lensStat.index]},savedDate=${#dates.format(ans.savedDate, 'YYYYMMDD')})}"
+										th:text="${#dates.format(ans.savedDate, 'YYYY/MM/DD')}">2015/12/07 13:51</a></td>
+									<td class="center" th:text="${ans.ratio} + '% (' + ${ans.nume} + '/' + ${ans.denom} + ')'">75% (15/20)</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="./nouryoku03.html">2015/12/01 06:00</a></td>
+									<td class="center">50% (10/20)</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><a href="./nouryoku03.html">2015/11/01 06:00</a></td>
+									<td class="center">25% (5/20)</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!--/*/ </th:block> /*/-->
+
+				</div>
+			</section>
+
+		</th:block>
+	</div>
+</body>
+</html>

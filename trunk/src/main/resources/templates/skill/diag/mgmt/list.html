@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$(function() {
+			$("#rubricList")
+					.on(
+							'click',
+							"input[type=checkbox][name=keyToDelete]",
+							function() {
+								$("input[name=delete]")
+										.attr(
+												"disabled",
+												$("#rubricList input[type=checkbox][name=keyToDelete]:checked").length == 0);
+							});
+		});
+	</script>
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<!--/* 定番操作用のフォーム */-->
+			<my:form formEdit="@{/mgmt/skill/diag/edit}" formDelete="@{/mgmt/skill/diag/delete}"
+				formCreate="@{/mgmt/skill/diag/edit}">
+			</my:form>
+
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1 th:text="#{skill.diag.title.mgmt.list}">能診管</h1>
+			</section>
+
+			<!-- Main content -->
+			<section class="invoice">
+				<div class="margin-b-20">
+
+					<div class="">
+						<input value="しんき" class="btn btn-warning cboxElement create" id="excel_import" type="button" name="create"
+							th:value="#{button.create}"> <input value="さくじょ" class="btn btn-danger multi-delete" id="excel_import"
+							type="button" name="delete" data-target="rubricList" disabled="disabled" th:value="#{button.delete}">
+					</div>
+
+					<div class="table-ex margin-t-30">
+						<table class="table table-bordered table-striped" id="rubricList">
+							<thead>
+								<tr>
+									<th></th>
+									<th th:text="#{skill.field.rubricname}">るぶ</th>
+									<th th:text="#{skill.field.summary}">がいよ</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="r: ${rubrics}">
+									<td><input type="checkbox" name="keyToDelete" value="9999" th:value="${r.rubricKey}" /></td>
+									<td><a href="javascript:void(0)" data-name="edit" class="edit" th:text="${r.rubricName}">yeah</a><input
+										type="hidden" name="keyToEdit" value="9999" th:value="${r.rubricKey}" /></td>
+									<td th:text="${r.rubricMemo}">happy?</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+		</th:block>
+	</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <cm_file_upload_tbl/>
+  <cr_consul_rel_user_tbl/>
+  <cr_consul_tbl/>
+  <ev_event_rel_college_tbl/>
+  <ev_event_tbl/>
+  <gy_academic_tbl/>
+  <gy_biblio_tbl/>
+  <gy_career_tbl/>
+  <gy_committee_tbl/>
+  <gy_competition_tbl/>
+  <gy_conference_tbl/>
+  <gy_degree_tbl/>
+  <gy_misc_tbl/>
+  <gy_other_affiliation_tbl/>
+  <gy_others_tbl/>
+  <gy_paper_tbl/>
+  <gy_patent_tbl/>
+  <gy_prize_tbl/>
+  <gy_research_area_tbl/>
+  <gy_research_keyword_tbl/>
+  <gy_society_tbl/>
+  <gy_teaching_tbl/>
+  <gy_works_tbl/>
+  <if_info_public_tbl/>
+  <if_info_tbl/>
+  <if_info_upload_tbl/>
+  <it_intern_public_tbl/>
+  <it_intern_recruit_tbl/>
+  <it_intern_recruit_upload_tbl/>
+  <it_intern_tbl/>
+  <it_intern_upload_tbl/>
+  <kj_board_group_tbl/>
+  <kj_board_rel_user/>
+  <kj_thred_read_tbl/>
+  <kj_thred_reply_tbl/>
+  <kj_thred_reply_upload_tbl/>
+  <kj_thred_tbl/>
+  <kj_thred_upload_tbl/>
+  <sp_facility_syubetsu_tbl/>
+  <sp_facility_tbl/>
+  <sp_support_syubetsu_tbl/>
+  <sp_support_tbl support_key="2727" support_kbn="2727" support_keyword="2727" support_start_date="2015-12-03 00:00:00.0" support_end_date="2015-12-03 00:00:00.0" support_title="2727" support_content="2727" url="www.baidu.com" party_code="2727" support_ins_date="2015-12-03 00:00:00.0" public_flag="1" upd_date="2015-12-03 00:00:00.0" upd_user_key="2727"/>
+  <us_login_history_tbl/>
+</dataset>

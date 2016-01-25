@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+	<!-- UsUserRelRoleTbl START -->
+	<named-query name="UsUserRelRoleTbl.findAllUserRole">
+		<query>SELECT new jp.co.sraw.dto.UserRoleDto( u.id.roleCode, r.role, r.roleName, r.roleNameEn ) FROM UsUserRelRoleTbl u, MsRoleTbl r WHERE u.id.roleCode = r.roleCode AND u.id.userKey = :userKey  ORDER BY u.id.roleCode</query>
+	</named-query>
+	<named-query name="UsUserRelRoleTbl.findUserRole">
+		<query>SELECT new jp.co.sraw.dto.UserRoleDto( u.id.roleCode, r.role, r.roleName, r.roleNameEn ) FROM UsUserRelRoleTbl u, MsRoleTbl r WHERE u.id.roleCode = r.roleCode AND u.id.userKey = :userKey AND u.id.roleCode = :roleCode</query>
+	</named-query>
+	<named-query name="UsUserRelRoleTbl.findAllUserMenu">
+		<query>SELECT new jp.co.sraw.dto.UserMenuDto( u.id.roleCode, r.id.menuId, r.permission, m.menuName, m.menuNameEn, m.actionUrl ) FROM UsUserRelRoleTbl u, MsRoleRelMenuTbl r, MsMenuTbl m WHERE u.id.roleCode = r.id.roleCode AND m.menuId = r.id.menuId AND u.id.userKey = :userKey AND u.id.roleCode = :roleCode ORDER BY m.menuId</query>
+	</named-query>
+	<!-- UsUserRelRoleTbl END -->
+
+
+	<!-- MsCodeTbl START -->
+	<named-query name="MsCodeTbl.delete">
+		<query>DELETE FROM MsCodeTbl m WHERE m.id.josuKbn=:josuKbn AND m.id.josuCode=:josuCode AND m.updDate=:updDate</query>
+	</named-query>
+	<!-- MsCodeTbl END -->
+
+
+	<!-- MsMenuTbl START -->
+	<named-query name="MsMenuTbl.findAllMenu">
+		<query><![CDATA[
+			SELECT new jp.co.sraw.dto.MenuDto( m.menuId, m.menuName, m.menuNameEn, m.menuNameAbbr, m.menuNameAbbrEn, m.menuLevel, m.actionUrl, m.menuDispOrder, o.menuId, o.menuName, o.menuNameEn, o.menuNameAbbr, o.menuNameAbbrEn, o.menuLevel, o.menuDispOrder ) FROM MsMenuTbl o LEFT JOIN o.msMenuTbls m WHERE o.msMenuTbl = 0 and o.menuId <> 1 ORDER BY o.menuDispOrder, m.menuDispOrder
+		]]></query>
+	</named-query>
+	<named-query name="MsMenuTbl.findAllRoleMenu">
+		<query><![CDATA[
+			SELECT new jp.co.sraw.dto.MenuDto( m.menuId, m.menuName, m.menuNameEn, m.menuNameAbbr, m.menuNameAbbrEn, m.menuLevel, m.actionUrl, m.menuDispOrder, o.menuId, o.menuName, o.menuNameEn, o.menuNameAbbr, o.menuNameAbbrEn, o.menuLevel, o.menuDispOrder ) FROM MsMenuTbl o LEFT JOIN o.msMenuTbls m WHERE o.msMenuTbl = 0 and o.menuId <> 1 AND EXISTS (SELECT r.id.menuId FROM MsRoleRelMenuTbl r WHERE r.id.menuId IN (m.menuId) AND r.id.roleCode = :roleCode ) ORDER BY o.menuDispOrder, m.menuDispOrder
+		]]></query>
+	</named-query>
+	<!-- MsMenuTbl END -->
+
+
+	<!-- SpSupportTbl START -->
+	<named-query name="SpSupportTbl.delete">
+		<query>DELETE FROM SpSupportTbl u WHERE u.supportKey=:supportKey AND u.updDate=:updDate</query>
+	</named-query>
+	<!-- SpSupportTbl END -->
+
+	<!-- UsMessageBoxTbl START -->
+	<named-query name="UsMessageBoxTbl.delete">
+		<query>DELETE FROM UsMessageBoxTbl u WHERE u.messageKey=:messageKey AND u.updDate=:updDate</query>
+	</named-query>
+	<!-- UsMessageBoxTbl END -->
+
+	<!-- EvEventTbl START -->
+	<named-query name="EvEventTbl.delete">
+		<query>DELETE FROM EvEventTbl u WHERE u.eventKey=:eventKey AND u.updDate=:updDate</query>
+	</named-query>
+	<!-- EvEventTbl END -->
+
+	<!-- ItInternUploadTbl START -->
+	<named-query name="ItInternUploadTbl.delete">
+		<query>DELETE FROM ItInternUploadTbl u WHERE u.id.internshipKey=:internshipKey</query>
+	</named-query>
+	<named-query name="ItInternUploadTbl.findAllFileName">
+		<query>SELECT new jp.co.sraw.dto.ItInternUploadDto( a.uploadKey, a.fileName, b.uploadKbn ) FROM CmFileUploadTbl a, ItInternUploadTbl b WHERE a.uploadKey = b.id.uploadKey AND b.id.internshipKey = :internshipKey</query>
+	</named-query>
+	<!-- ItInternUploadTbl END -->
+
+	<!-- ItInternPublicTbl START -->
+	<named-query name="ItInternPublicTbl.delete">
+		<query>DELETE FROM ItInternPublicTbl u WHERE u.id.internshipKey=:internshipKey</query>
+	</named-query>
+	<!-- ItInternPublicTbl END -->
+
+	<!-- ItInternTbl START -->
+	<named-query name="ItInternTbl.delete">
+		<query>DELETE FROM ItInternTbl u WHERE u.internshipKey=:internshipKey AND u.updDate=:updDate</query>
+	</named-query>
+	<!-- ItInternTbl END -->
+
+	<!-- ItInternView START -->
+	<named-query name="ItInternView.findAllInternshipForApplication">
+		<query>
+SELECT new jp.co.sraw.dto.InternshipApplicantDto(
+	a.internshipKey,
+	a.internshipKbn,
+	a.internshipStartDate,
+	a.internshipEndDate,
+	a.internshipTitle,
+	a.internshipSendDate,
+	a.internshipRange,
+	a.internshipPartyName,
+	a.internshipTelno,
+	a.internshipRcFileNeedKbn,
+	a.internshipGkFileNeedKbn,
+	a.internshipMemo,
+	a.publicFlag,
+	a.eventUnit,
+	a.subjectInsKbn,
+	a.updDate,
+	a.updUserKey,
+	b.decisionKbn,
+	'',
+	a.partyCode,
+	a.partyName,
+	a.partyNameEn)
+FROM
+	ItInternView a,
+	ItInternRecruitTbl b
+WHERE
+	a.internshipKey = b.id.internshipKey
+	AND b.id.userKey = :userKey
+ORDER BY a.internshipSendDate DESC
+		</query>
+	</named-query>
+	<!-- ItInternView END -->
+
+	<!-- CmInfoTbl START -->
+	<named-query name="CmInfoTbl.findAllByPartyOrRoll">
+		<query>SELECT a FROM CmInfoTbl a, CmInfoPublicTbl b WHERE
+		       a.infoKey = b.id.infoKey AND
+		       b.publicKbn = '1' AND b.role = :role OR
+		       b.publicKbn = '2' AND b.partyCode = :partyCode OR
+		       b.publicKbn = '3' AND b.role = :role AND b.partyCode = :partyCode
+		       ORDER BY a.sendDate DESC
+		</query>
+	</named-query>
+	<!-- CmInfoTbl END -->
+
+	<!-- CmScheduleTbl START -->
+	<named-query name="CmScheduleTbl.findAllByPartyOrRoll">
+		<query>SELECT a FROM CmScheduleTbl a, CmSchedulePublicTbl b WHERE
+		       a.suhduleKey = b.id.suhduleKey AND
+		       a.suhduleDate BETWEEN :startDate AND :endDate AND
+		       (b.publicKbn = '1' AND b.role = :role OR
+		        b.publicKbn = '2' AND b.partyCode = :partyCode OR
+		        b.publicKbn = '3' AND b.role = :role AND b.partyCode = :partyCode
+		       )
+		       ORDER BY a.suhduleDate, a.startTime, a.endTime DESC
+		</query>
+	</named-query>
+	<named-query name="CmScheduleTbl.delete">
+		<query>
+			<![CDATA[
+DELETE
+FROM
+CmScheduleTbl u
+WHERE
+u.suhduleKey=:refKey
+AND
+u.dataKbn=:dataKbn
+			]]>
+		</query>
+	</named-query>
+	<!-- CmScheduleTbl END -->
+
+	<!-- CmSchedulePublicTbl START -->
+	<named-query name="CmSchedulePublicTbl.delete">
+		<query>
+			<![CDATA[
+DELETE
+FROM
+CmSchedulePublicTbl u
+WHERE
+u.id.suhduleKey=:refKey
+			]]>
+		</query>
+	</named-query>
+	<!-- CmSchedulePublicTbl END -->
+
+	<!-- UsOperationHistoryTbl START -->
+	<named-query name="UsOperationHistoryTbl.findAllByUserKey">
+		<query>SELECT new jp.co.sraw.dto.UsOperationHistoryDto(
+					a.id.operationUserKey,
+					a.id.operationDate,
+					a.id.operationFuncId,
+					a.id.operationActionId,
+					a.updUserKey,
+					b.userFamilyName,
+					b.userFamilyNameEn,
+					b.userMiddleName,
+					b.userMiddleNameEn,
+					b.userName,
+					b.userNameEn
+		       ) FROM UsOperationHistoryTbl a, UsUserTbl b WHERE
+		       a.updUserKey = b.userKey AND
+		       a.id.operationUserKey = :operationUserKey
+		       ORDER BY a.id.operationDate DESC
+		</query>
+	</named-query>
+	<!-- UsOperationHistoryTbl END -->
+
+	<!-- NrSubjectAnswerBkupTbl START -->
+	<named-native-query name="NrSubjectAnswerBkupTbl.backup">
+		<query>
+			<![CDATA[
+INSERT INTO nr_subject_answer_bkup_tbl
+            (user_key, rubric_key, subject_code, save_date, parent_subject_code, 
+             depth, answer, achieve_phase, action_plan, evidence, evidence_file_key, 
+             upd_date, upd_user_key)
+      SELECT user_key, rubric_key, subject_code, :savedDate, parent_subject_code,
+             depth, answer, achieve_phase, action_plan, evidence, evidence_file_key, 
+             upd_date, upd_user_key
+        FROM nr_subject_answer_tbl
+			]]>
+		</query>
+	</named-native-query>
+	<!-- NrSubjectAnswerBkupTbl END -->
+
+	<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.searchAllUserName">
+		<query>
+			<![CDATA[
+			SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_VIEW A
+WHERE
+A.SEARCH_USER_NAME  LIKE  :searchKeyword
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND  A.DEGREE  LIKE  :searchKeyword
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND  A.AFFILIATION_NAME  LIKE  :searchKeyword
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_RESEARCH_KEYWORD_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND  A.GYOSEKI_KEY  LIKE  :searchKeyword
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+
+FROM
+GY_RESEARCH_AREA_TBL_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+OR  A.FIELDID  LIKE  :searchKeyword
+OR  A.SUBJECTID  LIKE  :searchKeyword
+OR  A.SUMMARYID  LIKE  :searchKeyword
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_SOCIETY_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND  A.AFFILIATION_NAME  LIKE  :searchKeyword
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND  A.PARTY_CODE = :searchPartyCode
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_RESEARCH_AREA_TBL_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+AND  A.FIELDID  LIKE  :searchBigField
+AND  A.SUBJECTID  LIKE  :searchMiddleField
+AND  A.SUMMARYID  LIKE  :searchSmallField
+
+			]]>
+		</query>
+	</named-native-query>
+		<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.searchAllUserNameNull">
+		<query>
+			<![CDATA[
+			SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_VIEW A
+WHERE
+1 = 1
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_RESEARCH_KEYWORD_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_RESEARCH_AREA_TBL_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_SOCIETY_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+US_USER_TBL A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+UNION
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, A.AFFILIATION_NAME
+, A.DEGREE
+, A.FREE_INPUT1
+FROM
+GY_RESEARCH_AREA_TBL_VIEW A
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '11'
+OR A.USER_KBN = '12'
+OR A.USER_KBN = '13'  )
+AND ( A.PUBLIC_FLAG = '1'
+OR A.PUBLIC_FLAG = '2'  )
+
+			]]>
+		</query>
+	</named-native-query>
+	<!-- UsUserTbl END -->
+
+		<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.searchAllFacultyMember">
+		<query>
+			<![CDATA[
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, B.PARTY_NAME
+, B.PARTY_NAME_EN
+FROM
+US_USER_TBL A
+INNER JOIN MS_PARTY_TBL B
+ON A.PARTY_CODE = B.PARTY_CODE
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND  A.USER_KBN = :userKbn
+			]]>
+		</query>
+	</named-native-query>
+	<!-- UsUserTbl END -->
+
+
+	<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.searchAllCompany">
+		<query>
+			<![CDATA[
+SELECT
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, B.PARTY_NAME
+, B.PARTY_NAME_EN
+FROM
+US_USER_TBL A
+INNER JOIN MS_PARTY_TBL B
+ON A.PARTY_CODE = B.PARTY_CODE
+WHERE
+(A.USER_PUBLIC_FLAG = '1'
+OR A.USER_PUBLIC_FLAG = '2'  )
+AND ( A.USER_KBN = '60'
+OR A.USER_KBN = '70'  )
+AND  B.PARTY_KBN = :partyKbn
+ GROUP BY
+A.USER_KEY
+, A.USER_FAMILY_NAME
+, A.USER_FAMILY_NAME_EN
+, A.USER_MIDDLE_NAME
+, A.USER_MIDDLE_NAME_EN
+, A.USER_NAME
+, A.USER_NAME_EN
+, B.PARTY_NAME
+, B.PARTY_NAME_EN
+ ORDER BY
+A.PARTY_CODE , A.USER_FAMILY_NAME DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- UsUserTbl END -->
+
+
+			<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.nativeFindAllEmailBatchCase1">
+		<query>
+			<![CDATA[
+SELECT
+A.MAIL_ADDRESS
+FROM
+US_USER_TBL A
+WHERE
+A.MAIL_SETTING LIKE :infoKey
+ GROUP BY
+A.MAIL_ADDRESS
+ ORDER BY
+A.MAIL_ADDRESS DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- UsUserTbl END -->
+
+		<!-- UsUserTbl START -->
+	<named-native-query name="UsUserTbl.nativeFindAllEmailBatchCase2">
+		<query>
+			<![CDATA[
+SELECT
+A.MAIL_ADDRESS
+, A.PARTY_CODE
+, C.ROLE
+FROM
+US_USER_TBL A
+INNER JOIN US_USER_REL_ROLE_TBL B
+ON A.USER_KEY = B.USER_KEY
+INNER JOIN MS_ROLE_TBL C
+ON B.ROLE_CODE = C.ROLE_CODE
+WHERE
+A.MAIL_SETTING LIKE :infoKey
+ GROUP BY
+A.MAIL_ADDRESS
+, A.PARTY_CODE
+, C.ROLE
+ ORDER BY
+A.MAIL_ADDRESS DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- UsUserTbl END -->
+
+	<!-- CmInfoTbl START -->
+	<named-native-query name="CmInfoTbl.nativeFindAllNewsBatch">
+		<query>
+			<![CDATA[
+SELECT
+A.INFO_KEY
+FROM
+CM_INFO_TBL A
+WHERE
+A.INFO_REF_KEY = :infoRefKey
+AND (A.DATA_KBN = '5' OR A.DATA_KBN = '6')
+
+			]]>
+		</query>
+	</named-native-query>
+	<!-- CmInfoTbl END -->
+
+	<!-- SpSupportTbl START -->
+	<named-native-query name="SpSupportTbl.nativeFindAllBatchSupport">
+		<query>
+			<![CDATA[
+SELECT
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.SUPPORT_TITLE
+, B.SUPPORT_START_DATE
+, B.SUPPORT_CONTENT
+, B.URL
+FROM
+CM_BATCH_TARGET_TBL A
+INNER JOIN SP_SUPPORT_TBL B
+ON A.REF_DATA_KEY = B.SUPPORT_KEY
+WHERE
+A.INFO_MAKE_FLAG = '0'
+AND (A.DATA_KBN = '5' OR A.DATA_KBN = '6')
+ GROUP BY
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.SUPPORT_TITLE
+, B.SUPPORT_START_DATE
+, B.SUPPORT_CONTENT
+, B.URL
+ ORDER BY
+B.SUPPORT_START_DATE DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- SpSupportTbl END -->
+
+	<!-- EvEventPublicTbl START -->
+	<named-native-query name="EvEventPublicTbl.nativeFindAllEventPublicBatch">
+		<query>
+			<![CDATA[
+SELECT
+A.EVENT_KEY
+, A.SEQ_NO
+, A.PUBLIC_KBN
+, A.ROLE
+, A.PARTY_CODE
+FROM
+EV_EVENT_PUBLIC_TBL A
+WHERE
+A.EVENT_KEY = :infoRefKey
+ GROUP BY
+A.EVENT_KEY
+, A.SEQ_NO
+, A.PUBLIC_KBN
+, A.ROLE
+, A.PARTY_CODE
+ ORDER BY
+A.EVENT_KEY DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- EvEventPublicTbl END -->
+
+	<!-- EvEventTbl START -->
+	<named-native-query name="EvEventTbl.nativeFindAllBatchEvent">
+		<query>
+			<![CDATA[
+SELECT
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.EVENT_TITLE
+, B.EVENT_SEND_DATE
+, B.EVENT_START_DATE
+, B.EVENT_TELNO
+, B.EVENT_PLACE
+, B.PARTY_NAME
+, B.EVENT_MEMO
+FROM
+CM_BATCH_TARGET_TBL A
+INNER JOIN EV_EVENT_TBL B
+ON A.REF_DATA_KEY = B.EVENT_KEY
+WHERE
+A.INFO_MAKE_FLAG = '0'
+AND A.DATA_KBN = '1'
+ GROUP BY
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.EVENT_TITLE
+, B.EVENT_SEND_DATE
+, B.EVENT_START_DATE
+, B.EVENT_TELNO
+, B.EVENT_PLACE
+, B.PARTY_NAME
+, B.EVENT_MEMO
+ ORDER BY
+B.EVENT_START_DATE DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- EvEventTbl END -->
+
+	<!-- ItInternPublicTbl START -->
+	<named-native-query name="ItInternPublicTbl.nativeFindAllInternshipPublicBatch">
+		<query>
+			<![CDATA[
+SELECT
+A.INTERNSHIP_KEY
+, A.SEQ_NO
+, A.PUBLIC_KBN
+, A.ROLE
+, A.PARTY_CODE
+FROM
+IT_INTERN_PUBLIC_TBL A
+WHERE
+A.INTERNSHIP_KEY = :infoRefKey
+ GROUP BY
+A.INTERNSHIP_KEY
+, A.SEQ_NO
+, A.PUBLIC_KBN
+, A.ROLE
+, A.PARTY_CODE
+ ORDER BY
+A.INTERNSHIP_KEY DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- ItInternPublicTbl END -->
+
+
+	<!-- ItInternTbl START -->
+	<named-native-query name="ItInternTbl.nativeFindAllBatchInternship">
+		<query>
+			<![CDATA[
+SELECT
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.INTERNSHIP_TITLE
+, B.INTERNSHIP_SEND_DATE
+, B.INTERNSHIP_PARTY_NAME
+, B.INTERNSHIP_TELNO
+, B.INTERNSHIP_RANGE
+, B.INTERNSHIP_START_DATE
+, B.INTERNSHIP_END_DATE
+, B.INTERNSHIP_MEMO
+FROM
+CM_BATCH_TARGET_TBL A
+INNER JOIN IT_INTERN_TBL B
+ON A.REF_DATA_KEY = B.INTERNSHIP_KEY
+WHERE
+A.MAIL_MAKE_FLAG = '0'
+AND A.DATA_KBN = '2'
+ GROUP BY
+A.DATA_KBN
+, A.REF_DATA_KEY
+, B.INTERNSHIP_TITLE
+, B.INTERNSHIP_SEND_DATE
+, B.INTERNSHIP_PARTY_NAME
+, B.INTERNSHIP_TELNO
+, B.INTERNSHIP_RANGE
+, B.INTERNSHIP_START_DATE
+, B.INTERNSHIP_END_DATE
+, B.INTERNSHIP_MEMO
+ ORDER BY
+B.INTERNSHIP_START_DATE DESC
+			]]>
+		</query>
+	</named-native-query>
+	<!-- ItInternTbl END -->
+
+</entity-mappings>

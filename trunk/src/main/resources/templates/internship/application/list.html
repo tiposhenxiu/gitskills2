@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://www.sraw.co.jp/dialect/my"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+<script th:inline="javascript">
+$().ready(function() {
+	// <!--/*  refuseボタン押下イベント設定 */-->
+	$("button[name='refuse']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+
+		var confirmMsg = /*[[#{message.confirm.refuse}]]*/ '辞退？';
+
+		if (window.confirm(confirmMsg)) {
+			//
+			$(this).parent().children('input[type=hidden]').each(function() {
+				var n = $(this).attr('name');
+				var v = $(this).val();
+				$('<input />').attr({
+					type: 'hidden',
+					name: n,
+					value: v
+				}).appendTo('#formRefuse');
+			});
+			$('#formRefuse').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/*  Downloadボタン押下イベント設定 */-->
+	$("button[name='download']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		button.attr('disabled', true);
+		//
+		$(this).parent().children('input[type=hidden]').each(function() {
+			var n = $(this).attr('name');
+			var v = $(this).val();
+			$('<input />').attr({
+				type: 'hidden',
+				name: n,
+				value: v
+			}).appendTo('#formDownload');
+		});
+		$('#formDownload').submit();
+		//
+		button.attr("disabled", false);
+	});
+
+
+	// <!--/*  Uploadボタン押下したタグ設定 */-->
+	var uploadFileTag;
+	$("button[name='upload']").click(function() {
+		// <!--/* 多重送信を防ぐため通信完了までボタンをdisableにする */-->
+		var button = $(this);
+		uploadFileTag = button;
+		button.attr('disabled', true);
+		var fileNeed = $(this).parent().children('input[type=hidden][name=internshipGkFileNeedKbn]').val();
+
+		var confirmMsg = /*[[#{message.confirm.submit}]]*/ '書類？';
+
+		if (window.confirm(confirmMsg)) {
+			// <!--/* ファイル必須判定 */-->
+			$('#formUpload').children('input[type=file][name=uploadFile]').click();
+
+			$(this).parent().children('input[type=hidden]').each(function() {
+				var n = $(this).attr('name');
+				var v = $(this).val();
+				$('<input />').attr({
+					type: 'hidden',
+					name: n,
+					value: v
+				}).appendTo('#formUpload');
+			});
+			$('#formUpload').submit();
+		}
+		//
+		button.attr("disabled", false);
+	});
+
+	// <!--/* ファイル選択されたらsumbit */-->
+	$('#formUpload').children('input[type=file][name=uploadFile]').change(function () {
+
+		var confirmMsg = /*[[#{message.confirm.fileupload}]]*/ 'ファイルOK？';
+
+		if (window.confirm(confirmMsg)) {
+			uploadFileTag.parent().children('input[type=hidden]').each(function() {
+				var n = $(this).attr('name');
+				var v = $(this).val();
+				$('<input />').attr({
+					type: 'hidden',
+					name: n,
+					value: v
+				}).appendTo('#formUpload');
+			});
+			$('#formUpload').submit();
+		}
+
+	});
+});
+</script>
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+		<div>
+
+			<!--/* Postするための隠しform */-->
+			<my:form formDownload="@{/internship/application/download}" formFefuse="@{/internship/application/refuse}"/>
+			<my:form formUpload="@{/internship/application/upload}">
+				<input type="file" name="uploadFile" style="display: none;" multiple="multiple"/>
+			</my:form>
+
+		<!-- !title -->
+		<h1>インターンシップ合否結果</h1>
+
+<div th:each="kbn : ${kbnList}">
+			<h2 th:text="${kbn.getValue()}">HIRAKUインターンシップ</h2>
+			<div class="panel-group" id="InternshipAccordion">
+				<div class="panel panel-default"
+					th:each="item,iterStat : ${mapList.get(kbn.getCode())}">
+					<div class="panel-heading">
+						<div class="panel-title row">
+							<span class="col-md-1" th:text="${iterStat.count}+'.'">0</span> <a
+								data-toggle="collapse" data-parent="#InternshipAccordion"
+								href="#collapse"
+								th:href="'#InternshipCollapse'+${kbn.getCode()}+'_'+${item.internshipKey}">
+								<span
+									th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+								<span th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></span>
+								<span
+									th:text="${item.internshipEndDate != null}? ${#dates.format(item.internshipEndDate,#messages.msg('format.ymd.option'))} : ' '"></span>
+								<span th:text="${item.internshipTitle}"></span>
+
+								<span class="glyphicon glyphicon-collapse-down pull-right"></span>
+							</a>
+						</div>
+					</div>
+
+					<div id="InternshipCollapse" class="panel-collapse collapse"
+						th:id="'InternshipCollapse'+${kbn.getCode()}+'_'+${item.internshipKey}">
+						<div class="panel-body">
+							<div class="row">
+
+								<!--/* 辞退 */-->
+								<div>
+									<input type="hidden" name="internshipKey" value="1" th:value="${item.internshipKey}"/>
+									<button type="button" name="refuse" th:text="#{internship.button.refuse}"  th:disabled="${item.decisionKbn != '1'}">辞退</button>
+								</div>
+
+								<!--/* 書類 */-->
+								<div>
+									<input type="hidden" name="internshipKey" value="1" th:value="${item.internshipKey}"/>
+									<button type="button" name="download" th:text="#{internship.button.download}"  th:disabled="${item.decisionKbn != '1'} or ${item.internshipGkFileNeedKbn != '1'}">書類DL</button>
+								</div>
+
+								<!--/* 書類提出 */-->
+								<div>
+									<input type="hidden" name="internshipKey" th:value="${item.internshipKey}"/>
+									<input type="hidden" name="internshipGkFileNeedKbn" th:value="${item.internshipGkFileNeedKbn}"/>
+									<button type="button" name="upload" th:text="#{internship.button.upload}" th:disabled="${item.decisionKbn != '1'} or ${item.internshipGkFileNeedKbn != '1'}">書類提出</button>
+								</div>
+
+								<div class="col-md-4">【合否】</div>
+								<div class="col-md-6" th:text="${item.decisionKbnName}"></div>
+
+								<h3>詳細</h3>
+
+								<div class="col-md-4">【概要】</div>
+								<div class="col-md-6" th:text="${item.internshipMemo}"></div>
+								<div class="col-md-4">【応募期間】</div>
+								<div class="col-md-6"
+									th:text="${item.internshipStartDate != null}? ${#dates.format(item.internshipStartDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+								<div class="col-md-6" th:text="${item.internshipStartDate != null}? #{format.ymd.to} : ''"></div>
+								<div class="col-md-6" th:text="${item.internshipEndDate != null}? ${#dates.format(item.internshipEndDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+
+								<div class="col-md-4">【配信日】</div>
+								<div class="col-md-6" th:text="${item.internshipSendDate != null}? ${#dates.format(item.internshipSendDate,#messages.msg('format.ymd.option'))} : ' '">2015</div>
+
+								<div class="col-md-4">【タイトル】</div>
+								<div class="col-md-6" th:text="${item.internshipTitle}">aaaa</div>
+								<div class="col-md-4">【公開範囲】</div>
+								<div class="col-md-6" th:text="${item.partyName}">aaaa</div>
+								<div class="col-md-4">【応募対象者】</div>
+								<div class="col-md-6" th:text="${item.internshipRange}">aaaa</div>
+								<div class="col-md-4">【募集者】</div>
+								<div class="col-md-6" th:text="${item.internshipPartyName}">aaaa</div>
+								<div class="col-md-4">【連絡先】</div>
+								<div class="col-md-6" th:text="${item.internshipTelno}">aaaa</div>
+								<div class="col-md-4">【養成能力】</div>
+								<div class="col-md-6"><a
+									href="javascript:w=window.open('nouryoku_add.html','','scrollbars=yes,Width=855,Height=600');w.focus();"
+									th:text="${#messages.msg('button.capacityBuilding')}">aaaa</a></div>
+								<div class="col-md-4">【単位】</div>
+								<div class="col-md-6" th:text="${item.eventUnit}">aaaa</div>
+							<!-- #sub終了 -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+</div>
+
+		<br /> <br /> <br />
+		</div>
+		</th:block>
+	</div>
+	<!-- #bace終了 -->
+</body>
+</html>

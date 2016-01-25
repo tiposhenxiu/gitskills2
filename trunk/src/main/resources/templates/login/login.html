@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+<title th:text="#{system.public.name}">Login page</title>
+
+
+<script>
+$().ready(function() {
+	$("#loginForm").validationEngine();
+	$('select[name="lang"]').change(function() {
+		$('#langForm').submit();
+	});
+});
+</script>
+</head>
+
+<body onload='document.f.username.focus();'>
+	<div>
+		<div>
+			<h1>WebApp</h1>
+		</div>
+		<p>Click <a th:href="@{/}">here</a> index.</p>
+		<br />
+		<div th:if="${param.error}">Invalid username and password.</div>
+		<div th:if="${validationError}"><span th:text="${validationError}">xxxxx</span></div>
+		<div th:if="${param.logout}">You have been logged out.</div>
+
+		<br />
+		<form th:action="@{/login}" method="post" role="form" autocomplete="off" th:object="${loginForm}" id="loginForm" name="f">
+			<div>
+				<label for="username">Username</label> <input type="text" name="username" class="validate[required, minSize[4]]"
+					id="username" th:value="${username}" th:placeholder="#{field.placeholder.username}" required="required"/>
+			</div>
+			<div>
+				<label for="password">Password</label> <input type="password" class="validate[required, minSize[4]]"
+					name="password" id="password" th:placeholder="#{field.placeholder.password}" required="required"/>
+			</div>
+			<br />
+			<input name="remember-me" type="checkbox" id="rememberme" value="yes"/><label for="rememberme">Remember Me</label>
+			<br />
+			<input type="submit" value="Sign In" th:value="#{button.login}"/>
+		</form>
+		<!--/* lang */-->
+		<form method="get" role="form" id="langForm" name="l">
+			<select name="lang">
+				<option value="ja" th:selected="${lang=='ja'}" th:text="#{lang.ja}">日本語test</option>
+				<option value="en" th:selected="${lang=='en'}" th:text="#{lang.en}">English</option>
+			</select>
+		</form>
+	</div>
+</body>
+</html>

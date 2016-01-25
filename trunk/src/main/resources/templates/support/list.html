@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my"
+	layout:decorator="common/base"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<div>
+			<!-- Start -->
+
+			<!-- !title -->
+			<h1 th:terxt="#{support.title.list}">支援制度</h1>
+
+			<h2>検索条件</h2>
+			<form th:action="@{/support/}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="formSearch" name="form">
+				<table>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="text" style="width: 300px;"
+							name="searchKeyword" placeholder="キーワード"
+							th:field="*{searchKeyword}" value="aaa" /> &nbsp;
+							<button type="button" class="search" name="search">検 索</button></td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>種別：</th>
+						<td><th:block th:each="sybItem: ${sybList}"><input type="checkbox"
+							th:field="*{searchSybCodeArray}"
+							th:value="${sybItem.code}" th:id="sybCode+${sybItem.code}" name="searchSybCodeArray"/><label
+							th:for="sybCode+${sybItem.code}" th:text="${sybItem.value}"></label></th:block></td>
+					</tr>
+				</table>
+				<br /> <br />
+			</form>
+
+<div th:each="sby : ${sybList}">
+			<h2 th:text="${sby.getValue()}">研究</h2>
+			<div class="panel-group" id="SupportAccordion">
+				<div class="panel panel-default"
+					th:each="item,iterStat : ${mapList.get(sby.getCode())}">
+					<div class="panel-heading">
+						<div class="panel-title row">
+							<span class="col-md-1" th:text="${iterStat.count}+'.'">0</span> <a
+								data-toggle="collapse" data-parent="#SupportAccordion"
+								href="#collapse"
+								th:href="'#SupportCollapse'+${sby.getCode()}+'_'+${item.supportKey}"> <span
+								class="col-md-6"
+								my:textRemoveTags="${item.supportContent}">【概要】#1</span>
+								<span class="glyphicon glyphicon-collapse-down pull-right"></span>
+							</a>
+						</div>
+					</div>
+
+					<div id="SupportCollapse" class="panel-collapse collapse"
+						th:id="'SupportCollapse'+${sby.getCode()}+'_'+${item.supportKey}">
+						<div class="panel-body">
+							<div class="row">
+								<h3>詳細</h3>
+								<div class="col-md-8" th:utext="${item.supportContent}">【概要】#1</div>
+								<div class="col-md-8" th:text="${item.supportSybCodeName}">【種別】#1</div>
+								<div class="col-md-8" th:text="${item.supportKeyword}">【キーワード】#1</div>
+								<div class="col-md-8" th:text="${item.supportStartDate}">【公開日】#1</div>
+								<div class="col-md-8" th:text="${item.supportEndDate}">【配信停止日】#1</div>
+								<div class="col-md-8" th:text="${item.supportTitle}">【タイトル】#1</div>
+								<div class="col-md-8" th:text="${item.url}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+</div>
+
+			<!-- End -->
+			</div>
+		</th:block>
+	</div>
+
+</body>
+</html>

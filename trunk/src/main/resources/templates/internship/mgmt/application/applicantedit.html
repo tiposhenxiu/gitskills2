@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$()
+				.ready(
+						function() {
+							// validate signup form on keyup and submit
+							$("#formRegist").validate({
+								rules : {
+									supportKeyword : {
+										required : true,
+										maxlength : 100
+									},
+									supportTitle : {
+										required : true,
+										maxlength : 100
+									},
+									supportSybCodeArray : {
+										required : true,
+										minlength : 1,
+									},
+									url : {
+										required : true,
+									},
+									supportContext : {
+										required : true,
+									},
+									supportStartDate : {
+										required : true,
+									},
+									supportEndDate : {
+										required : true,
+									},
+								},
+							});
+
+							$('.input-group.date').datepicker({
+								format : "yyyy/mm/dd",
+								language : 'ja',
+								showOn : "button",
+								buttonImageOnly : true,
+								buttonImage : '/img/m_ical.png'
+							});
+							$('.datepicker').change(
+									function() {
+										//カレンダー確定時にフォームに反映
+										var dates = $(this).val().split('/');
+										$(this).parent().parent().find(".year")
+												.val(dates[0]);
+										$(this).parent().parent()
+												.find(".month").val(dates[1]);
+										$(this).parent().parent().find(".day")
+												.val(dates[2]);
+									});
+
+							$(
+									"input[class*='year'], input[class*='month'], input[class*='day']")
+									.change(
+											function() {
+												//カレンダー確定時にフォームに反映
+												var year = $(this).parent()
+														.find(".year").val();
+												var month = $(this).parent()
+														.find(".month").val();
+												var day = $(this).parent()
+														.find(".day").val();
+												$(this).parent().find(
+														".datepicker").val(
+														year + "/" + month
+																+ "/" + day);
+											});
+
+						});
+	</script>
+</th:block>
+
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<!-- Start -->
+			<form
+				th:action="@{|/mgmt/internship/application/__${form.pageActionUrl}__|}"
+				method="post" role="form" autocomplete="off" th:object="${form}"
+				id="formRegist" name="form">
+				<input type="hidden" name="pageMode" th:field="*{pageMode}" />
+				<div
+					th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<input type="hidden" name="internshipKey"
+						th:field="*{internshipKey}" /> <input type="hidden" name="userKey"
+						th:field="*{userKey}" /> <input type="hidden" name="updDate"
+						th:field="*{updDate}" />
+				</div>
+				<!-- !title -->
+				<h1 th:text="#{internship.subtitle.applicantlist.name02}">インターンシップ応募者情報</h1>
+
+				<!-- !menu -->
+
+				<menu>
+					<ul>
+						<li><button type="button" class="btn btn-primary regist"
+								name="regist" th:text="#{button.regist}">登 録</button></li>
+						<li><button type="button" class="btn btn-default back"
+								name="back" th:text="#{button.back}">戻る</button></li>
+					</ul>
+				</menu>
+
+
+				<!-- !登録 -->
+				<br /> <font color="red">*の項目は一覧に掲載されます</font>
+				<table class="boxf01">
+					<tr>
+						<th th:text="#{internship.field.edit.schoolYear}"><font
+							color="red">*</font>応募者学年：</th>
+						<td><input type="text" name="recruitGrade"
+							th:field="*{recruitGrade}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.staff}"><font
+							color="red">*</font>応募者指導教員：</th>
+						<td><input type="text" name="recruitTeacher"
+							th:field="*{recruitTeacher}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.dispatch.destination}"><font
+							color="red">*</font>応募者派遣先：</th>
+						<td><input type="text" name="recruitPartyName"
+							th:field="*{recruitPartyName}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.dispatch.period}">企業派遣期間：</th>
+						<td><input type="text" class="year"
+							name="supportStartDateYear" size="4"
+							th:value="${#strings.substring(form.recruitStartDate,0,4)}" />年
+							<input type="text" class="month" name="supportStartDateMonth"
+							size="4"
+							th:value="${#strings.substring(form.recruitStartDate,5,7)}" />月
+							<input type="text" class="day" name="supportStartDateDay"
+							size="4"
+							th:value="${#strings.substring(form.recruitStartDate,8,10)}" />日
+							<div class="input-group date">
+								<input type="text" class="datepicker" id="recruitStartDate"
+									name="recruitStartDate" th:field="*{recruitStartDate}"
+									style="display: none;" /> <span class="input-group-addon"><i
+									class="glyphicon glyphicon-th"></i></span>
+							</div> <input type="text" class="year" name="supportEndDateYear"
+							size="4"
+							th:value="${#strings.substring(form.recruitEndDate,0,4)}" />年 <input
+							type="text" class="month" name="supportEndDateMonth" size="4"
+							th:value="${#strings.substring(form.recruitEndDate,5,7)}" />月 <input
+							type="text" class="day" name="supportEndDateDay" size="4"
+							th:value="${#strings.substring(form.recruitEndDate,8,10)}" />日
+							<div class="input-group date">
+								<input type="text" class="datepicker" id="recruitEndDate"
+									name="recruitEndDate" th:field="*{recruitEndDate}"
+									style="display: none;" /> <span class="input-group-addon"><i
+									class="glyphicon glyphicon-th"></i></span>
+							</div></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.employment}"><font
+							color="red">*</font>就職状況：</th>
+						<td><input type="text" name="recruitStatus"
+							th:field="*{recruitStatus}" /></td>
+					</tr>
+					<tr>
+						<th th:text="#{internship.field.edit.remarks}">備考：</th>
+						<td><textarea class="textarea" name="recruitMemo"
+								placeholder="Enter text ..." style="width: 550px; height: 200px"
+								th:field="*{recruitMemo}" required="required"></textarea></td>
+					</tr>
+				</table>
+
+			</form>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+	<form th:action="@{/messagebox/edit}" name="form" method="post">
+			<!-- !title -->
+			<h1>メッセージ内容</h1>
+			<!-- !menu -->
+
+			<menu>
+				<ul>
+				<li>					<button type="submit" class="btn btn-info edit"
+							name="edit" th:text="#{button.reply}">返信</button>
+							</li>
+
+					<li><button type="button" class="btn btn-primary" value="戻 る"
+							onclick="location.href='/messagebox/'">戻 る</button></li>
+				</ul>
+			</menu>
+
+			<table class="box01 center stripe">
+
+				<tr>
+					<th><font color="red">*</font>件名：</th>
+					<td><input type="text" name="messageTitle"
+						th:value="${form.messageTitle}" /></td>
+				</tr>
+				<tr>
+					<th><font color="red">*</font>差出人：</th>
+					<td><input type="text" name="makeUserKey"
+						th:value="${form.makeUserKey}" /></td>
+				</tr>
+				<tr>
+					<th><font color="red">*</font>受信日時：</th>
+					<td><input type="text" name="sendDate"
+						th:value="${form.sendDate}" /></td>
+				</tr>
+				<tr>
+						<th>本文：</th>
+						<td><input type="text" name="messageContents"
+						th:value="${form.messageContents}" /></td>
+					</tr>
+			</table></form>
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

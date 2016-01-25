@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/mgmt/event/edit}"
+				formCopy="@{/mgmt/event/copy}" formDelete="@{/mgmt/event/delete}">
+				<!-- 				<input type="hidden" name="supportSybCode" th:value="${form.supportSybCode}" /> -->
+			</my:form>
+			<!-- !title -->
+			<h1>イベント情報登録・編集</h1>
+
+			<!-- !menu -->
+			<form th:action="@{/mgmt/event/edit}" method="post" role="form" autocomplete="off" th:object="${form}" id="formCreate" name="form">
+					<button type="button" class="btn btn-primary create" name="create">新規登録</button>
+					<input type="hidden" name="1" value="1" th:name="${T(jp.co.sraw.common.CommonConst).PAGE_MODE}" th:value="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD}"/>
+			</form>
+
+			<h2>イベント情報</h2>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">編集</th>
+					<th width="70">コピー</th>
+					<th width="70">削除</th>
+					<th width="120">開催日</th>
+					<th width="120">タイトル</th>
+					<th>公開設定</th>
+				</tr>
+				<tr th:each="item,iterStat : ${eventPresentList}">
+					<td><button type="button" class="btn btn-info edit"
+							name="edit" th:text="#{button.update}">編 集</button>
+							<input type="hidden" name="eventKey" value="0" th:value="${item.eventKey}" />
+							<input type="hidden" name="eventStartDate" value="0" th:value="${item.eventStartDate}" />
+							<input type="hidden" name="eventSendDate" value="0" th:value="${item.eventSendDate}" />
+							<input type="hidden" name="eventTitle" value="0" th:value="${item.eventTitle}" />
+							<input type="hidden" name="eventRecruit" value="0" th:value="${item.eventRecruit}" />
+							<input type="hidden" name="eventPlace" value="0" th:value="${item.eventPlace}" />
+							<input type="hidden" name="partyName" value="0" th:value="${item.partyName}" />
+							<input type="hidden" name="eventTelno" value="0" th:value="${item.eventTelno}" />
+							<input type="hidden" name="eventMemo" value="0" th:value="${item.eventMemo}" />
+							 <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-success copy"
+							name="copy" th:text="#{button.copy}">コピー</button> <input
+						type="hidden" name="eventKey" value="0"
+						th:value="${item.eventKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="eventKey" value="0"
+						th:value="${item.eventKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td
+						th:text="${item.eventStartDate != null}? ${#dates.format(item.eventStartDate,#messages.msg('format.ymd'))} : '-'">1</td>
+					<td th:text="${item.eventTitle}">1</td>
+					<td th:text="${item.publicFlag}">1</td>
+				</tr>
+			</table>
+
+
+			<br />
+
+			<h2>過去イベント情報</h2>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">編集</th>
+					<th width="70">コピー</th>
+					<th width="70">削除</th>
+					<th width="120">開催日</th>
+					<th width="120">タイトル</th>
+					<th>公開設定</th>
+				</tr>
+				<tr th:each="item,iterStat : ${eventPastList}">
+					<td><button type="button" class="btn btn-info edit"
+							name="edit" th:text="#{button.update}">編 集</button>
+							<input type="hidden" name="eventKey" value="0" th:value="${item.eventKey}" />
+							<input type="hidden" name="eventStartDate" value="0" th:value="${item.eventStartDate}" />
+							<input type="hidden" name="eventSendDate" value="0" th:value="${item.eventSendDate}" />
+							<input type="hidden" name="eventTitle" value="0" th:value="${item.eventTitle}" />
+							<input type="hidden" name="eventRecruit" value="0" th:value="${item.eventRecruit}" />
+							<input type="hidden" name="eventPlace" value="0" th:value="${item.eventPlace}" />
+							<input type="hidden" name="partyName" value="0" th:value="${item.partyName}" />
+							<input type="hidden" name="eventTelno" value="0" th:value="${item.eventTelno}" />
+							<input type="hidden" name="eventMemo" value="0" th:value="${item.eventMemo}" />
+							 <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-success copy"
+							name="copy" th:text="#{button.copy}">コピー</button> <input
+						type="hidden" name="eventKey" value="0"
+						th:value="${item.eventKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="eventKey" value="0"
+						th:value="${item.eventKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td
+						th:text="${item.eventStartDate != null}? ${#dates.format(item.eventStartDate,#messages.msg('format.ymd'))} : '-'">1</td>
+					<td th:text="${item.eventTitle}">1</td>
+					<td th:text="${item.publicFlag}">1</td>
+				</tr>
+			</table>
+
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

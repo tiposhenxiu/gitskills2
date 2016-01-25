@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Start -->
+
+			<!--/* Postするための隠しform */-->
+			<my:form formEdit="@{/portfolio/society/edit}"
+				formCopy="@{/portfolio/society/copy}"
+				formDelete="@{/portfolio/society/delete}">
+			</my:form>
+			<!-- !title -->
+			<h1>所属学協会（一覧）</h1>
+
+			<!-- !menu -->
+			<form th:action="@{/portfolio/society/create}" method="post"
+				role="form" autocomplete="off" th:object="${form}" id="formCreate"
+				name="form">
+				<menu>
+					<ul>
+						<li><button type="button" class="btn btn-primary create"
+								name="create">新規登録</button></li>
+					</ul>
+				</menu>
+			</form>
+
+			<form th:action="@{/portfolio/society/}" method="post" role="form"
+				autocomplete="off" th:object="${form}" id="formQuery" name="form">
+				<table>
+					<tr>
+						<th><font color="red"></font>全体公開設定：</th>
+						<td><input type="checkbox" th:each="publicFlagItem: ${publicFlagList}"
+							th:value="${publicFlagItem.code}" th:text="${publicFlagItem.value}" /><label
+							for="new1"></label></td>
+					</tr>
+				</table>
+				<br /> <br />
+			</form>
+
+			<table class="box01 center stripe">
+				<tr class="line">
+					<th width="70">編集</th>
+					<th width="70">削除</th>
+					<th>所属学協会名称</th>
+					<th>公開設定</th>
+				</tr>
+				<tr th:each="item,iterStat : ${list}">
+					<td><button type="button" class="btn btn-info edit"
+							name="edit" th:text="#{button.update}">編 集</button> <input
+						type="hidden" name="gyosekiKey" value="0"
+						th:value="${item.gyosekiKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td><button type="button" class="btn btn-danger delete"
+							name="delete" th:text="#{button.delete}">削 除</button> <input
+						type="hidden" name="gyosekiKey" value="0"
+						th:value="${item.gyosekiKey}" /> <input type="hidden"
+						name="updDate" value="1" th:value="${item.updDate}" /></td>
+					<td th:text="${item.title}">1</td>
+					<td th:text="${item.publicFlag != null}? ${Map0024.get(item.publicFlag).getValue()}">1</td>
+				</tr>
+			</table>
+
+			<!-- End -->
+		</th:block>
+	</div>
+
+</body>
+</html>

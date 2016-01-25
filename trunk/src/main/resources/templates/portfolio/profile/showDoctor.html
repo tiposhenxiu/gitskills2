@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://my" layout:decorator="common/base"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$().ready(function() {
+			//current index
+		});
+	</script>
+</th:block>
+<body>
+	<!-- Content Header (Page header) -->
+	<div layout:decorator="layout">
+		<section class="content" layout:fragment="layout-content">
+			<section class="content-header">
+				<h1>eポートフォリオ</h1>
+			</section>
+			<!-- Main content -->
+
+			<div class="row">
+				<div class="col-md-3">
+					<div class="margin-b-20">
+						<div class="form-group text-muted well well-sm no-shadow">
+							<label>表示内容切替</label>
+							<form th:action="@{/portfolio/profile/showDoctor}" method="post"
+								role="form" autocomplete="off" th:object="${form}" name="form">
+								<select name="publicFlag" onchange="this.form.submit()">
+									<option th:each="item : ${list0042}" th:value="${item.code} "
+										th:selected="${item.code == form.publicFlag}"
+										th:text="${item.value}"></option>
+								</select>
+							</form>
+						</div>
+						<a href="" class="btn btn-block btn-primary"
+							th:if="${form.buttonFlag=='0'}">メッセージ送信</a> <a href=""
+							class="btn btn-block btn-primary" th:if="${form.buttonFlag=='0'}">戻る</a>
+						<a href="" class="btn btn-block btn-primary"
+							th:if="${form.buttonFlag=='1'}">履歴書作成</a> <a href=""
+							class="btn btn-block btn-primary" th:if="${form.buttonFlag=='1'}">業績書作成</a>
+					</div>
+					<!-- /.box -->
+				</div>
+				<div class="col-md-9">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title">
+								基本情報<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+							</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body box-profile">
+							<div class="col-md-3">
+								<img class="profile-user-img img-responsive img-circle"
+									src="../../gfx/face.gif" alt="User profile picture" />
+								<h3 class="profile-username text-center">広島 太郎</h3>
+								<p class="text-muted text-center">Hiroshima Tarou</p>
+							</div>
+							<div class="col-md-9">
+								<strong><i class="fa fa-book margin-r-5"></i> 氏名</strong>
+								<p class="text-muted" th:text=" ${usUserTbl.userFamilyName + usUserTbl.userName}">文学研究科博士課程
+									人文学専攻</p>
+								<hr />
+								<strong><i class="fa fa-book margin-r-5"></i> 所属</strong>
+								<p class="text-muted" th:text=" ${usUserTbl.affiliationName}">文学研究科博士課程
+									人文学専攻</p>
+								<hr />
+								<strong><i class="fa fa-book margin-r-5"></i> 学年、職位</strong>
+								<p class="text-muted" th:text=" ${usUserTbl.degree}">4年</p>
+								<hr />
+								<strong><i class="fa fa-book margin-r-5"></i> 自己アピール</strong>
+								<p class="text-muted" th:text=" ${usUserTbl.freeInput1}">ＸＸＸＸＸＸＸＸＸＸＸ</p>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title">研究活動</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<dl  th:if="${#lists.size(gyPaperTblList)} &gt; 0">
+								<dt>
+									論文<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyPaperTblList}"
+											th:text="${item.title}">論文Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl  th:if="${#lists.size(gyConferenceTblList)} &gt; 0">
+								<dt>
+									講演・口頭発表等<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyConferenceTblList}"
+											th:text="${item.title}">講演・口頭発表等Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyBiblioTblList)} &gt; 0">
+								<dt>
+									書籍<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyBiblioTblList}"
+											th:text="${item.title}">書籍Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl  th:if="${#lists.size(gyResearchKeywordTblList)} &gt; 0">
+								<dt>
+									研究キーワード<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyResearchKeywordTblList}"
+											th:text="${item.title}">研究キーワードＡ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyResearchAreaTblList)} &gt; 0">
+								<dt>
+									研究分野<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyResearchAreaTblList}"
+											th:text="${item.fieldname}">研究分野Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gySocietyTblList)} &gt; 0">
+								<dt>
+									所属学協会<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gySocietyTblList}"
+											th:text="${item.title}">所属学協会Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyWorksTblList)} &gt; 0">
+								<dt>
+									Works<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyWorksTblList}"
+											th:text="${item.title}">WorksＡ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyPatentTblList)} &gt; 0">
+								<dt>
+									特許<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyPatentTblList}"
+											th:text="${item.title}">特許Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyPatentTblList)} &gt; 0">
+								<dt>
+									学歴<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyPatentTblList}"
+											th:text="${item.title}">学歴Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyCareerTblList)} &gt; 0">
+								<dt>
+									経歴<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyCareerTblList}"
+											th:text="${item.division}">経歴Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyPrizeTblList)} &gt; 0">
+								<dt>
+									受賞<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyPrizeTblList}"
+											th:text="${item.title}">受賞Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyOthersTblList)} &gt; 0">
+								<dt>
+									その他<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyOthersTblList}"
+											th:text="${item.summary}">その他Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(gyDegreeTblList)} &gt; 0">
+								<dt>
+									学位<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${gyDegreeTblList}"
+											th:text="${item.degreename}">学位Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(GyCompetitionTblList)} &gt; 0">
+								<dt>
+									競争的資金等の研究課題<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${GyCompetitionTblList}"
+											th:text="${item.title}">競争的資金等の研究課題Ａ</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl th:if="${#lists.size(usCompetitionTblList)} &gt; 0">
+								<dt>
+									コンペティションファイル<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${usCompetitionTblList}"
+											th:text="${item.title}">コンペティションファイルＡ</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title">
+								3分間コンペティション<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+							</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<video id="video" type="video/mp4" src="../sample.mp4"
+								width="320" height="280">
+								<p>動画を再生するにはvideoタグをサポートしたブラウザが必要です。</p>
+							</video>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title">
+								その他成果物
+								<a href="#" class="icon"><i class="fa fa-cog">
+								</i></a>
+							</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<dl th:if="${#lists.size(usResultUploadTblList)} &gt; 0">
+								<dt>
+									成果物ファイル<a href="#" class="icon"><i class="fa fa-cog"></i></a>
+								</dt>
+								<dd>
+									<ul>
+										<li th:each="item,iterStat : ${usResultUploadTblList}"
+											th:text="${item.title}">成果物ファイルＡ</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- /.content -->
+</body>
+</html>

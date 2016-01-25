@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		$(function() {
+			$(document).on("click", "button[name=pastAnswers]", function() {
+				var loc = /*[[@{/skill/diag/pastIndex}]]*/'url';
+				window.location = loc;
+			});
+		});
+	</script>
+</th:block>
+
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+<!-- ▼ content-wrapper ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 th:text="#{skill.build.title.list}">中・小項目別 養成科目一覧 / 参加・履修記録</h1>
+	</section>
+	<!-- Main content -->
+	<section class="invoice">
+		<div class="margin-b-20">
+
+			<link type="text/css" rel="stylesheet" href="../../css/pankuzu.css" />
+			<ul id="breadcrumbs-two">
+				<li><a href="./nouryoku01.html">能力診断/更新</a></li>
+				<li><a href="./nouryoku03.html">診断結果</a></li>
+				<li><a href="./nouryoku05_add.html" class="current">能力養成推奨科目 更新</a></li>
+				<li><a href="./nouryoku01.html">アクションプラン 入力・更新</a></li>
+			</ul>
+
+			<div class="margin-t-50">
+				<!--<input type="button" value="参加予定記録" class="btn btn-primary" onclick="location.href='./nouryoku05_add.html'">-->
+				<input type="button" value="全能力養成科目一覧" class="btn btn-primary" onclick="location.href='./nouryoku04_2.html'">
+			</div>
+
+			<!-- Custom Tabs -->
+			<div class="nav-tabs-custom margin-t-50">
+				<ul class="nav nav-tabs" th:remove="all-but-first" th:each="main : categoryList">
+					<li class="active"><a href="#tab_domain_A" data-toggle="tab" th:text="main.subjectCd + ':' + main.name">A：知識と知的能力</a></li>
+					<li><a href="#tab_domain_B" data-toggle="tab">B：個人の能力</a></li>
+					<li><a href="#tab_domain_C" data-toggle="tab">C：研究の管理運営</a></li>
+					<li><a href="#tab_domain_D" data-toggle="tab">D：影響とインパクト</a></li>
+				</ul>
+				<div class="tab-content" th:remove="all-but-first" th:each="main : categoryList">
+					<div id="tab_domain_A" class="tab-pane active">
+						<div class="nav-tabs-custom margin-t-20">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab_domain_A1" data-toggle="tab">A1：知識基盤</a></li>
+								<li><a href="#tab_domain_A2" data-toggle="tab">A2：認知的能力</a></li>
+								<li><a href="#tab_domain_A3" data-toggle="tab">A3：創造性</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="tab_domain_A1" class="tab-pane active">
+
+									<div class="text-muted well well-sm no-shadow margin-t-20">
+										<div class="row">
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_1">A1.1:専門分野の知識</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_2">A1.2:研究方法（理論的知識）</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_3">A1.3:研究方法（応用力）</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_4">A1.4:情報探索力</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_5">A1.5:情報リテラシーと情報管理力</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_6">A1.6:言語力</a></div>
+										  <div class="col-sm-3 col-xs-6"><a href="#tab_domain_A1_7">A1.7:学術リテラシーと計算能力</a></div>
+										</div>
+									</div>
+
+									<div class="box-body">
+										<p class="col-sm-2"><span class="label label-warning">RDF No.</span> <strong>A1.1</strong></p>
+										<p class="col-sm-4"><span class="label label-warning">能力</span> <strong>専門分野の知識</strong></p>
+										<p class="pull-right"><input type="button" value="履修済記録" class="btn btn-primary"></p>
+									</div>
+
+
+									<div class="table-ex margin-t-10">
+										<table class="table table-bordered table-striped">
+										<thead>
+										<tr>
+										  <th class="center" width="20px">&nbsp;</th>
+										  <th class="center" width="70px">状況</th>
+										  <th class="center" width="120px">科目名</th>
+										  <th class="center" width="80px">開講大学</th>
+										  <th class="center" width="60px">受講対象者</th>
+										  <th class="center" width="60px">開講期</th>
+										  <th class="center" width="40px">曜日<br>時限</th>
+										  <th class="center" width="60px">授業形態</th>
+										  <th class="center" width="30px">単位</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l1"><label for="l1"></label></td>
+										  <td class="center">予約済</td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">ストレスマネジメント</a></td>
+										  <td class="left">広島大学</td>
+										  <td class="left">P、PD</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">月３</td>
+										  <td class="left">講義・演習</td>
+										  <td class="center">2</td>
+										</tr>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l2"><label for="l2"></label></td>
+										  <td class="center">履修確定済</td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">理工系キャリアデザイン１</a></td>
+										  <td class="left">広島大学</td>
+										  <td class="left">PD</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">火５</td>
+										  <td class="left">講義・演習</td>
+										  <td class="center">1</td>
+										</tr>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l3"><label for="l3"></label></td>
+										  <td class="center"></td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">・・・・・・・・・・</a></td>
+										  <td class="left">XXX大学</td>
+										  <td class="left">D</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">木５</td>
+										  <td class="left">eラーニング</td>
+										  <td class="center">1</td>
+										</tr>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l4"><label for="l4"></label></td>
+										  <td class="center"></td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">・・・・・・・・・・</a></td>
+										  <td class="left">XXX大学</td>
+										  <td class="left">D</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">水４</td>
+										  <td class="left">eラーニング</td>
+										  <td class="center">１</td>
+										</tr>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l5"><label for="l5"></label></td>
+										  <td class="center"></td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">・・・・・・・・・・</a></td>
+										  <td class="left">XXX大学</td>
+										  <td class="left">D</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">水４</td>
+										  <td class="left">eラーニング</td>
+										  <td class="center">１</td>
+										</tr>
+										<tr>
+										  <td class="center"><input type="checkbox" id="l6"><label for="l6"></label></td>
+										  <td class="center"></td>
+										  <td class="left"><a class="detail" href="./nouryoku06.html">・・・・・・・・・・</a></td>
+										  <td class="left">XXX大学</td>
+										  <td class="left">D</td>
+										  <td class="center">2015/X/Y</td>
+										  <td class="center">水４</td>
+										  <td class="left">eラーニング</td>
+										  <td class="center">１</td>
+										</tr>
+										</tbody>
+									  </table>
+									</div>
+								</div>
+								<div id="tab_domain_A2" class="tab-pane">
+									A2：認知的能力
+								</div>
+								<div id="tab_domain_A3" class="tab-pane">
+									A3：創造性
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab_domain_B" class="tab-pane">
+						<h3 class="page-header margin-t-20 ex">
+							B：個人の能力
+						</h3>
+						<div class="nav-tabs-custom margin-t-20">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab_domain_B1" data-toggle="tab">B1：個人の資質</a></li>
+								<li><a href="#tab_domain_B2" data-toggle="tab">B2：自己管理</a></li>
+								<li><a href="#tab_domain_B3" data-toggle="tab">B3：能力開発・キャリア開発</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="tab_domain_B1" class="tab-pane active">
+									B1：個人の資質
+								</div>
+								<div id="tab_domain_B2" class="tab-pane">
+									B2：自己管理
+								</div>
+								<div id="tab_domain_B3" class="tab-pane">
+									B3：能力開発・キャリア開発
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab_domain_C" class="tab-pane">
+						<h3 class="page-header margin-t-20 ex">
+							C：研究の管理運営
+						</h3>
+						<div class="nav-tabs-custom margin-t-20">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab_domain_C1" data-toggle="tab">C1：専門家としての行動</a></li>
+								<li><a href="#tab_domain_C2" data-toggle="tab">C2：研究マネジメント</a></li>
+								<li><a href="#tab_domain_C3" data-toggle="tab">C3：財政・資金調達・研究資源</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="tab_domain_C1" class="tab-pane active">
+									C1：専門家としての行動
+								</div>
+								<div id="tab_domain_C2" class="tab-pane">
+									C2：研究マネジメント
+								</div>
+								<div id="tab_domain_C3" class="tab-pane">
+									C3：財政・資金調達・研究資源
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab_domain_D" class="tab-pane">
+						<h3 class="page-header margin-t-20 ex">
+							D：影響とインパクト
+						</h3>
+						<div class="nav-tabs-custom margin-t-20">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab_domain_D1" data-toggle="tab">D1：他者とともに働く</a></li>
+								<li><a href="#tab_domain_D2" data-toggle="tab">D2：コミュニケーションと普及</a></li>
+								<li><a href="#tab_domain_D3" data-toggle="tab">D3：一般社会との関わりとインパクト</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="tab_domain_D1" class="tab-pane active">
+									D1：他者とともに働く
+								</div>
+								<div id="tab_domain_D2" class="tab-pane">
+									D2：コミュニケーションと普及
+								</div>
+								<div id="tab_domain_D3" class="tab-pane">
+									D3：一般社会との関わりとインパクト
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.box -->
+	</section>
+	<!-- /.content -->
+</div>
+<!-- ▲ content-wrapper ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
+</th:block>
+</div>
+</body>
+</html>

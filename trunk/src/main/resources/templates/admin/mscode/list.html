@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:my="http://www.sraw.co.jp/dialect/my"
+	layout:decorator="common/base"
+	th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<!--/* current link */-->
+<th:block layout:fragment="layout-link">
+
+</th:block>
+
+<!--/* current script */-->
+<th:block layout:fragment="layout-script">
+<script>
+$().ready(function() {
+	<!--/* 定数区分選択 */-->
+	$('select[name="selectedJosuKbn"]').change(function() {
+		$('#formList').submit();
+	});
+
+	$('[id^=MsCodeCollapse]').on('show.bs.collapse', function() {
+		$('a[href="#' + this.id + '"]')
+		.find('span.glyphicon-collapse-down')
+		.removeClass('glyphicon-collapse-down')
+		.addClass('glyphicon-collapse-up');
+	})
+	.on('hide.bs.collapse', function() {
+		$('a[href="#' + this.id + '"]')
+		.find('span.glyphicon-collapse-up')
+		.removeClass('glyphicon-collapse-up')
+		.addClass('glyphicon-collapse-down');
+	});
+
+});
+</script>
+</th:block>
+
+
+<body>
+
+<div layout:decorator="layout">
+	<th:block layout:fragment="layout-content">
+	<div>
+	<!--/* Start */-->
+
+		<!--/* Postするための隠しform */-->
+		<my:form formEdit="@{/admin/mscode/edit}" formCopy="@{/admin/mscode/copy}" formDelete="@{/admin/mscode/delete}" />
+
+		<!--/* 定数区分選択 */-->
+		<form th:action="@{/admin/mscode/list}" method="post" role="form" autocomplete="off" id="formList" name="form">
+			<div class="alert text-danger" th:if="${emptyMessageKbn}" th:text="#{${emptyMessageKbn}}">empty message</div>
+			<div class="form-group">
+			<label class="control-label" for="inputKbn" th:text="#{field.josuKbn}">josuKbn</label>
+			<select name="selectedJosuKbn" id="inputKbn">
+				<option value="001" th:each="kbnItem,iterStat : ${kbnList}" th:selected="${selectedJosuKbn}==${kbnItem.id.josuCode}" th:value="${kbnItem.id.josuCode}" th:text="${kbnItem.id.josuCode} +' : '+ ${kbnItem.josuName}">テスト1</option>
+			</select>
+			</div>
+		</form>
+
+		<!--/* 新規作成ボタン */-->
+		<form th:action="@{/admin/mscode/edit}" method="post" role="form" autocomplete="off" th:object="${form}" id="formCreate" name="form">
+			<div class="btn-group btn-group-sm" role="group">
+				<button type="button" class="btn btn-primary create" name="create" th:text="#{button.create}">新規</button>
+				<input type="hidden" name="1" value="1" th:name="${T(jp.co.sraw.common.CommonConst).PAGE_MODE}" th:value="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD}"/>
+				<input type="hidden" name="josuKbn" value="0" th:value="${selectedJosuKbn}" />
+				<input type="hidden" name="josuCode" value="" />
+			</div>
+		</form>
+
+		<br/>
+		<!--/* 件数表示 */-->
+		<div th:text="#{field.count(__${#lists.size(codeList)}__)}"></div>
+		<hr/>
+
+		<!--/* 一覧表示 */-->
+		<div class="panel-group" id="MsCodeAccordion">
+			<!--/* 一覧ヘッダー表示 */-->
+			<div class="panel-heading">
+				<div class="panel-title row">
+					<span class="col-md-1" th:text="#{field.No}">No.</span>
+					<div class="col-md-3 btn-group btn-group-sm" th:text="#{field.operation}">Ope</div>
+					<span class="col-md-1" th:text="#{field.code}">1</span>
+					<span class="col-md-4" th:text="#{field.title}">アイテム#1</span>
+					<span class="col-md-1" th:text="#{field.status}">useFlag</span>
+					<span class="col-md-2" th:text="#{field.displayOrder}">hyojiSrt</span>
+				</div>
+			</div>
+			<!--/* 一覧データ */-->
+			<div class="panel panel-default"
+				th:each="item,iterStat : ${codeList}">
+				<div class="panel-heading">
+					<div class="panel-title row">
+						<span class="col-md-1" th:text="${iterStat.count}+'.'">0</span>
+						<div class="col-md-3 btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-info edit" name="edit" th:text="#{button.update}">編集</button>
+							<button type="button" class="btn btn-success copy" name="copy" th:text="#{button.copy}">コピー</button>
+							<button type="button" class="btn btn-danger delete" name="delete" th:text="#{button.delete}" th:disabled="${item.useFlag ==  T(jp.co.sraw.common.CommonConst).USE_FALG_ACTIVE ? 'true' : 'false'}">削除</button>
+							<input type="hidden" name="josuKbn" value="0" th:value="${item.id.josuKbn}" />
+							<input type="hidden" name="josuCode" value="1" th:value="${item.id.josuCode}" />
+							<input type="hidden" name="updDate" value="1" th:value="${item.updDate}" />
+						</div>
+						<a data-toggle="collapse" data-parent="#MsCodeAccordion"
+							href="#collapse1" th:href="'#MsCodeCollapse'+ ${iterStat.count}">
+						<span class="col-md-1" th:text="${item.id.josuCode}">1</span>
+						<span class="col-md-4"
+							th:text="${item.josuName != null}? ${item.josuName}">アイテム#1</span>
+						<span class="col-md-1" th:text="${useFlagMap.get(item.useFlag).getValue()}">useFlag</span>
+						<span class="col-md-1" th:text="${item.hyojiSrt}">hyojiSrt</span>
+						<span class="glyphicon glyphicon-collapse-down pull-right"></span></a>
+					</div>
+				</div>
+				<!--/* 詳細表示 */-->
+				<div id="MsCodeCollapse1" class="panel-collapse collapse"
+					th:id="'MsCodeCollapse'+ ${iterStat.count}">
+					<div class="panel-body">
+
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuKbn}">josuKbn</div>
+						<div class="col-md-6" th:text="${item.id.josuKbn}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuCode}">josuCode</div>
+						<div class="col-md-6" th:text="${item.id.josuCode}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuName}">josuName</div>
+						<div class="col-md-6" th:text="${item.josuName != null}? ${item.josuName}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuNameEn}">josuNameEn</div>
+						<div class="col-md-6" th:text="${item.josuNameEn != null}? ${item.josuNameEn}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuNameAbbr}">josuNameAbbr</div>
+						<div class="col-md-6" th:text="${item.josuNameAbbr != null}? ${item.josuNameAbbr}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{josuNameAbbrEn}">josuNameAbbrEn</div>
+						<div class="col-md-6" th:text="${item.josuNameAbbrEn != null}? ${item.josuNameAbbrEn}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei1Txt}">sntaZksei1Txt</div>
+						<div class="col-md-6" th:text="${item.sntaZksei1Txt != null}? ${item.sntaZksei1Txt}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei2Txt}">sntaZksei2Txt</div>
+						<div class="col-md-6" th:text="${item.sntaZksei2Txt != null}? ${item.sntaZksei2Txt}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei3Txt}">sntaZksei3Txt</div>
+						<div class="col-md-6" th:text="${item.sntaZksei3Txt != null}? ${item.sntaZksei3Txt}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei1Num}">sntaZksei1Num</div>
+						<div class="col-md-6" th:text="${item.sntaZksei1Num != null}? ${item.sntaZksei1Num}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei2Num}">sntaZksei2Num</div>
+						<div class="col-md-6" th:text="${item.sntaZksei2Num != null}? ${item.sntaZksei2Num}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{sntaZksei3Num}">sntaZksei3Num</div>
+						<div class="col-md-6" th:text="${item.sntaZksei3Num != null}? ${item.sntaZksei3Num}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{commentProperty}">commentProperty</div>
+						<div class="col-md-6" th:text="${item.commentProperty != null}? ${item.commentProperty}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{useFlag}">useFlag</div>
+						<div class="col-md-6" th:text="${item.useFlag != null}? ${useFlagMap.get(item.useFlag).getValue()}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{hyojiSrt}">hyojiSrt</div>
+						<div class="col-md-6" th:text="${item.hyojiSrt != null}? ${item.hyojiSrt}">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{updDate}">updDate</div>
+						<div class="col-md-6" th:text="${item.updDate != null}? ${#dates.format(item.updDate,#messages.msg('format.ymd'))} : '-'">1</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3" th:text="#{updUserKey}">updUserKey</div>
+						<div class="col-md-6" th:text="${item.updUserKey != null}? ${item.updUserKey}">1</div>
+					</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<!--/* End */-->
+	</div>
+	</th:block>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+/* pop cal（スケジュールの登録） */
+
+/*! layout ============================================== */
+
+#popcal {
+	width: 100% ;
+	margin: 0 ;
+	padding: 20px 0 0 ;
+	background-color: #f1efe5 ;
+	}
+
+#popcal main {
+	float: none ;
+	box-sizing: border-box ;
+	width: 350px ;
+	margin: 0 auto ;
+	padding: 15px 30px 25px ;
+	background-color: #ffffff ;
+	border: 1px solid #c0c0c0 ;
+	border-radius: 4px ;
+	box-shadow: none ;
+	}
+
+
+/*! title ============================================== */
+
+#popcal main h1 {
+	margin: -15px -30px 15px ;
+	padding: 10px 15px 5px 40px ;	
+	background-position: 15px 12px ;
+	border-radius: 3px 3px 0 0 ;
+	font-size: 16px ;
+	}
+
+#popcal main h2 {
+	margin: 0 -15px 15px ;
+	padding: 0 0 0 8px ;
+	font-size: 15px ;
+	}
+
+
+/*! table ============================================== */
+
+#popcal main table.boxf01 {
+	width: 100% ;
+	margin-top: 10px ;
+	border-top: 1px dotted #b2b2b2 ;
+	}
+
+#popcal main table.boxf01 tr:first-child th {
+	padding-top: 20px ;
+	}
+
+#popcal main table.boxf01 tr:first-child td {
+	padding-top: 10px ;
+	}
+
+#popcal main table.boxf01 th {
+	padding: 10px 15px 2px 0 ;
+	font-weight: bold ;
+	white-space: nowrap ;
+	color: #40a29a ;
+	}

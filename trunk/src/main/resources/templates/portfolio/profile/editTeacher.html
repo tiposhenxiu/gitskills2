@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+<title>eポートフォリオシステム｜eポートフォリオ(編集)</title>
+</head>
+<th:block layout:fragment="layout-script">
+	<!-- current script -->
+	<link rel="stylesheet" href="/js/colorbox/colorbox.css" th:href="@{/js/colorbox/colorbox.css}" />
+	<link rel="stylesheet" href="/css/dropzone.css" th:href="@{/css/dropzone.css}" />
+	<script src="/js/colorbox/jquery.colorbox-min.js" th:src="@{/js/colorbox/jquery.colorbox-min.js}"></script>
+	<script src="/js/dropzone.js" th:src="@{/js/dropzone.js}"></script>
+	<script th:inline="javascript">
+	$(function() {
+        $("#formRegist").validationEngine();
+		$(".inline").colorbox({
+			inline : true,
+			width : "80%",
+			positioning : true
+		});
+        // postする値
+        var param = "";
+
+        // おまじない
+        Dropzone.autoDiscover = false;
+
+        Dropzone.options.myAwesomeDropzone = {
+            paramName : "file",         // input fileの名前
+            parallelUploads: 1,            // 1度に何ファイルずつアップロードするか
+            acceptedFiles: 'image/*',   // 画像だけアップロードしたい場合
+            maxFiles: 10,                      // 1度にアップロード出来るファイルの数
+            maxFilesize: 0.5,                // 1つのファイルの最大サイズ(1=1M)
+            dictFileTooBig: "ファイルが大きすぎます。 ({{filesize}}MiB). 最大サイズ: {{maxFilesize}}MiB.",
+            dictInvalidFileType: "画像ファイル以外です。",
+            dictMaxFilesExceeded: "一度にアップロード出来るのは10ファイルまでです。",
+        };
+        // urlは実際に画像をアップロードさせるURLパスを入れる
+        var myDropzone = new Dropzone("div#my-awesome-dropzone",{url:"sample.php"});
+        // 値をpostしたい場合
+        myDropzone.on("sending", function(file,xhr,formData) {
+            formData.append("param", param);
+        });
+	});
+	</script>
+</th:block>
+<body class="hold-transition skin-purple sidebar-mini">
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1 th:text="#{portfolio.title.edit}">eポートフォリオ(編集)</h1>
+			</section>
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="margin-b-20">
+							<!-- Custom Tabs -->
+							<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a href="epfolio_edit.html" th:href="@{/portfolio/detail/}">基本情報</a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">研究活動 <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li role="presentation">
+										<a href="epfolio_edit_kenkyu.html" role="menuitem" tabindex="-1" th:href="@{/portfolio/paper/}">論文</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/conference/}">講演・口頭発表等</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/biblio/}">書籍</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/keyword/}">研究キーワード</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/researchArea/}">研究分野</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/society/}">所属学協会</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/works/}">Works</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/patent/}">特許</a>
+									</li>
+									<li class="active" role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/academic/}">学歴</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/career/}">経歴</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/prize/}">受賞</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/others/}">その他</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/degree/}">学位</a>
+									</li>
+									<li role="presentation">
+										<a href="#" role="menuitem" tabindex="-1" th:href="@{/portfolio/competition/}">競争的資金等の研究課題</a>
+									</li>
+								</ul></li>
+							<li>
+								<a href="epfolio_edit_3m.html" th:href="@{/portfolio/competitionMove/}">PR動画</a>
+							</li>
+							<li>
+								<a href="epfolio_edit_other.html" th:href="@{/portfolio/????/}">その他成果物</a>
+							</li>
+						</ul>
+								<div class="tab-content">
+
+									<h2 class="page-header">
+										<i class="fa fa-globe" th:text="#{portfolio.title.base}">基本情報</i>
+									</h2>
+
+									<form th:action="@{/portfolio/profile/update}" class="box-body type2 form-horizontal" method="post" role="form"
+										 autocomplete="off" th:object="${form}" id="formRegist" name="formRegist">
+										<div class="col-md-7">
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">全体公開設定：</label>
+												<div class="radio col-sm-7">
+													<label for="q1-1" th:each="item: ${listUserPublicFlag}">
+														<input type="radio" name="userPublicFlag" th:value="${item.code}"
+															th:checked="${item.code == form.userPublicFlag}" th:text="${item.value}" th:field="*{userPublicFlag}" />
+													</label>
+													<span class="sp-none clickToolTip" target="#tip1">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip1" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">学年／職位：</label>
+												<div class="col-sm-8">
+													<label for="q1-2" th:each="item: ${listDegree}">
+														<input type="radio" name="degree" th:value="${item.code}" class="validate[required]"
+															th:checked="${item.code == form.degree}" th:text="${item.value}" th:field="*{degree}" />
+													</label>
+													<span class="sp-none clickToolTip" target="#tip2">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip6" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">姓：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userFamilyName" class="form-control validate[required, maxSize[100]]" th:placeholder="#{field.placeholder.input.text}" th:field="*{userFamilyName}"/>
+													<span class="sp-none clickToolTip" target="#tip3">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip2" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">ミドルネーム：</label>
+												<div class="col-sm-8">
+													<input type="text" name ="userMiddleName" class="form-control validate[maxSize[100]]" th:field="*{userMiddleName}"/>
+													<span class="sp-none clickToolTip" target="#tip4">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip3" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">名：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userName" class="form-control validate[required, maxSize[100]]" th:placeholder="#{field.placeholder.input.text}" th:field="*{userName}"/>
+													<span class="sp-none clickToolTip" target="#tip5">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip4" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">姓（ふりカナ）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userFamilyNameKn" class="form-control validate[required, maxSize[100], custom[katakana]]"
+														th:placeholder="#{field.placeholder.input.text}" th:field="*{userFamilyNameKn}" />
+													<span class="sp-none clickToolTip" target="#tip6">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip2" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">ミドルネーム（ふりカナ）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userMiddleNameKn"
+														class="form-control validate[maxSize[100], custom[katakana]" th:field="*{userMiddleNameKn}"/>
+													<span class="sp-none clickToolTip" target="#tip7">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip3" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">名（ふりカナ）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userNameKn"
+														class="form-control validate[required, maxSize[100], custom[katakana]" th:placeholder="#{field.placeholder.input.text}" th:field="*{userNameKn}" />
+													<span class="sp-none clickToolTip" target="#tip8">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip4" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">姓（英字表記）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userFamilyNameEn"
+														class="form-control validate[required, maxSize[100], custom[onlyLetterNumber]]"
+														th:placeholder="#{field.placeholder.input.text}" th:field="*{userFamilyNameEn}" />
+													<span class="sp-none clickToolTip" target="#tip9">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip2" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">ミドルネーム（英字表記）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userMiddleNameEn"
+														class="form-control validate[maxSize[100], custom[onlyLetterNumber]]" th:field="*{userMiddleNameEn}"/>
+													<span class="sp-none clickToolTip" target="#tip10">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip3" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">名（英字表記）：</label>
+												<div class="col-sm-8">
+													<input type="text" name="userNameEn"
+														class="form-control validate[required, maxSize[100], custom[onlyLetterNumber]]"
+														th:placeholder="#{field.placeholder.input.text}" th:field="*{userNameEn}"/>
+													<span class="sp-none clickToolTip" target="#tip11">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip4" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">性別：</label>
+												<div class="col-sm-8">
+													<input type="radio" class="validate[required]" name="sex" th:each="item: ${listSex}" th:value="${item.code}"
+														th:checked="${item.code == form.sex}" th:text="${item.value}" th:field="*{sex}" />
+													<span class="sp-none clickToolTip" target="#tip12">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip6" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">所属機関：</label>
+												<div class="col-sm-8">
+													<input type="text" name="affiliationName" class="form-control" readonly="readonly" th:field="*{affiliationName}"/>
+													<span class="sp-none clickToolTip" target="#tip13">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip5" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">研究科：</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control validate[maxSize[100]]" name="researchSubject" th:field="*{researchSubject}" />
+													<span class="sp-none clickToolTip" target="#tip14">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip5" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">学籍ID：</label>
+												<div class="col-sm-8">
+													<input type="text" name="studentId" class="form-control validate[custom[onlyLetterNumber]]" th:field="*{studentId}" />
+													<span class="sp-none clickToolTip" target="#tip15">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip7" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="parent form-group">
+												<label class="col-sm-4 control-label">国籍／生誕国：</label>
+												<div class="col-sm-8">
+													<input type="text" name="country" class="form-control" th:field="*{country}" />
+													<span class="sp-none clickToolTip" target="#tip16">
+													<i class="fa fa-question-circle"></i></span>
+													<p id="tip7" class="tips invisible">ここに説明文</p>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-4 control-label">自由記載欄：</label>
+												<div class="col-sm-8">
+													<textarea class="form-control validate[maxSize[10000]]" name="freeInput1" th:field="*{freeInput1}" ></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-4 control-label">顔写真・イメージ：</label>
+												<div class="col-sm-8">
+													<img src="../../img/face.gif" />
+													<div class="input-group">
+														<input type="text" name="imageFileName" class="form-control" th:field="*{imageFileName}" />
+														<span class="input-group-btn">
+														<a href="#inline_content" class="btn btn-default inline">読込</a>
+														<a href="" class="btn btn-default">削 除</a></span>
+													</div>
+												</div>
+											</div>
+											<div style="display: none;">
+												<div id="inline_content"
+													style="padding: 10px; background-color: #F1F1F1;">
+													<div id="my-awesome-dropzone" class="dropzone"></div>
+												</div>
+											</div>
+
+											<button type="button" class="btn btn-primary regist" name="regist" th:text="#{button.refresh}">登 録</button>
+											<input type="hidden" name="updDate" value="0" th:value="${form.updDate}" />
+										</div>
+
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- /.box -->
+					</div>
+				</div>
+			</section>
+			<!-- /.content -->
+		</th:block>
+	</div>
+</body>
+</html>

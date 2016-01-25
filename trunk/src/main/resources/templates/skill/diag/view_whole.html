@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/base" xmlns:my="http://my"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+<meta charset="UTF-8" />
+</head>
+
+<th:block layout:fragment="layout-style">
+	<style type="text/css">
+div.tooltip {
+	position: absolute;
+	text-align: left;
+	padding: 5px;
+	margin: 20px;
+	font: 12px sans-serif;
+	background: lightsteelblue;
+	border: solid 1px #000000;
+	border-radius: 8px;
+}
+
+table.data_result {
+	border: none;
+}
+
+table.data_result td {
+	padding-left: 5px;
+	padding-right: 5px;
+	white-space: nowrap;
+}
+
+.category1 {
+	width: 30px;
+	height: 100%;
+}
+
+.category1 div {
+	font-size: 16px;
+	word-wrap: break-word;
+	text-align: center;
+}
+
+.bgcolor_A {
+	background-color: #9DDCF9;
+}
+
+.bgcolor_B {
+	background-color: #BAC9E7;
+}
+
+.bgcolor_C {
+	background-color: #a5d4da;
+}
+
+.bgcolor_D {
+	background-color: #d3bfdd;
+}
+</style>
+</th:block>
+
+<th:block layout:fragment="layout-script">
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var SkillG = {};
+		SkillG.updateOpacity = function() {
+			var answers = /*[[${answers}]]*/null;
+			var opa = function(i) {
+				$('#path' + i.subjectCode).css('opacity',
+						i.achievementLevel / 100);
+			};
+			answers.categoryList.forEach(function(cat) {
+				opa(cat);
+				cat.childList.forEach(function(subc) {
+					opa(subc);
+				});
+			});
+		};
+
+		$(function() {
+			var savedDate = /*[[${savedDate}]]*/'';
+			$(document).on(
+					"click",
+					"input[name=viewList]",
+					function() {
+						window.location = $(this).attr('data-url')
+								+ (savedDate ? '/' + savedDate : '');
+					});
+			SkillG.updateOpacity();
+		});
+		/*]]>*/
+	</script>
+</th:block>
+
+<body>
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1 th:text="#{skill.field.wholediag}">全体診断結果</h1>
+			</section>
+			<!-- Main content -->
+			<section class="invoice">
+				<div class="margin-b-20">
+
+					<link type="text/css" rel="stylesheet" th:href="@{/css/pankuzu.css}">
+					<ul id="breadcrumbs-two">
+						<li><a th:href="@{/skill/diag/edit/{rkey}/{lensId}(rkey=${rkey},lensId=${lensId})}"
+							th:text="#{skill.field.editdiag}">nav1</a></li>
+						<li><a class="current" th:href="@{/skill/diag/viewList/{rkey}/{lensId}(rkey=${rkey},lensId=${lensId})}"
+							th:text="#{skill.field.viewdiag}">nav2</a></li>
+						<li><a th:href="@{/skill/build/edit}" th:text="#{skill.field.editlesson}">nav3</a></li>
+						<li><a th:href="@{/skill/diag/edit/{rkey}/{lensId}(rkey=${rkey},lensId=${lensId})}"
+							th:text="#{skill.field.editplan}">nav4</a></li>
+					</ul>
+
+					<h2 class="lead with-border ex margin-t-30" th:text="#{skill.field.skilldiagresult}">能力診断結果</h2>
+
+					<div class="margin-t-20">
+						<input value="診断結果一覧" class="btn btn-primary" type="button" name="viewList"
+							th:attr="data-url=@{/skill/diag/viewList/{rkey}/{lensId}(rkey=${rkey},lensId=${lensId})}"
+							th:value="#{skill.field.diaglist}"> <input value="養成科目履修" class="btn btn-primary" type="button"
+							name="takeSubject" th:attr="data-url=@{/skill/build/takeSubject}" th:value="#{skill.field.lessontaking}">
+					</div>
+
+					<div class="row">
+						<p class="pull-right">
+							<img src="../../img/vitae_chart_small.png" th:src="@{/img/vitae_chart_small.png}"><span
+								th:text="${lensName}">研究者基礎能力診断</span>
+						</p>
+					</div>
+
+					<h3 class="page-header ex" th:text="#{skill.field.skilldiagresult}">能力診断結果</h3>
+					<div id="edit-area" class="text-center">
+						<svg height="400" width="750">
+					<g transform="translate(375,200)">
+					<g class="arc">
+					<path id="pathA" style="fill: rgb(157, 220, 249); opacity: 0;"
+								d="M8.103079654358322e-15,-132.33333333333334A132.33333333333334,132.33333333333334 0 0,1 132.31844611247186,-1.9849255633374046L0,0Z"></path>
+					<text style="text-anchor: middle; font-size: 11px; font-weight: bold;" dy=".35em"
+								transform="translate(46.434684362683214,-47.136481263621725)">
+					<tspan dy=".35em" y="-0.7em" x="0">知識と</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">知的能力</tspan></text></g>
+					<g class="arc">
+					<path id="pathA1" style="fill: rgb(157, 220, 249); opacity: 0;"
+								d="M1.2185235651516165e-14,-199A199,199 0 0,1 98.20467077802513,-173.08045134381783L65.79877439063661,-115.96680157039722A133.33333333333334,133.33333333333334 0 0,0 8.164311994315689e-15,-133.33333333333334Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(42.4049044814104,-160.6648224940157)">
+					<tspan dy=".35em" y="-0.7em" x="0">知識基盤</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(A1)</tspan></text></g>
+					<g class="arc">
+					<path id="pathA2" style="fill: rgb(157, 220, 249); opacity: 0;"
+								d="M99.49999999999997,-172.3390553531033A199,199 0 0,1 171.58796533596598,-100.7897323732102L114.96681094537085,-67.53080896027485A133.33333333333334,133.33333333333334 0 0,0 66.66666666666666,-115.47005383792516Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(117.05613577296182,-117.93736553362994)">
+					<tspan dy=".35em" y="-0.7em" x="0">認知的能力</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(A2)</tspan></text></g>
+					<g class="arc">
+					<path id="pathA3" style="fill: rgb(157, 220, 249); opacity: 0;"
+								d="M172.33905535310328,-99.5A199,199 0 0,1 198.9944031512353,-1.4924860078518654L133.32958335091143,-0.9999906250263756A133.33333333333334,133.33333333333334 0 0,0 115.47005383792515,-66.66666666666667Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(160.34227001504033,-43.60868672105389)">
+					<tspan dy=".35em" y="-0.7em" x="0">創造性</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(A3)</tspan></text></g>
+					<g class="arc">
+					<path id="pathB" style="fill: rgb(186, 201, 231); opacity: 0;"
+								d="M132.33333333333334,0A132.33333333333334,132.33333333333334 0 0,1 1.984925563337442,132.31844611247186L0,0Z"></path>
+					<text style="text-anchor: middle; font-size: 11px; font-weight: bold;" dy=".35em"
+								transform="translate(47.13648126362174,46.43468436268319)">
+					<tspan dy=".35em" y="-0.7em" x="0">個人の</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">能力</tspan></text></g>
+					<g class="arc">
+					<path id="pathB1" style="fill: rgb(186, 201, 231); opacity: 0;"
+								d="M199,0A199,199 0 0,1 173.08045134381786,98.20467077802513L115.96680157039724,65.79877439063661A133.33333333333334,133.33333333333334 0 0,0 133.33333333333334,0Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(160.6648224940157,42.40490448141038)">
+					<tspan dy=".35em" y="-0.7em" x="0">個人の資質</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(B1)</tspan></text></g>
+					<g class="arc">
+					<path id="pathB2" style="fill: rgb(186, 201, 231); opacity: 0;"
+								d="M172.3390553531033,99.49999999999997A199,199 0 0,1 100.7897323732102,171.58796533596598L67.53080896027485,114.96681094537085A133.33333333333334,133.33333333333334 0 0,0 115.47005383792516,66.66666666666664Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(117.93736553362994,117.05613577296182)">
+					<tspan dy=".35em" y="-0.7em" x="0">自己管理</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(B2)</tspan></text></g>
+					<g class="arc">
+					<path id="pathB3" style="fill: rgb(186, 201, 231); opacity: 0;"
+								d="M99.50000000000007,172.33905535310325A199,199 0 0,1 1.4924860078519218,198.9944031512353L0.9999906250264132,133.32958335091143A133.33333333333334,133.33333333333334 0 0,0 66.66666666666671,115.47005383792514Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(43.608686721053935,160.3422700150403)">
+					<tspan dy=".35em" y="-1.4em" x="0">能力開発・</tspan>
+					<tspan dy=".35em" y="0" x="0">キャリア開発</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(B3)</tspan></text></g>
+					<g class="arc">
+					<path id="pathC" style="fill: rgb(165, 212, 218); opacity: 0;"
+								d="M8.103079654358322e-15,132.33333333333334A132.33333333333334,132.33333333333334 0 0,1 -132.31844611247186,1.9849255633373915L0,0Z"></path>
+					<text style="text-anchor: middle; font-size: 11px; font-weight: bold;" dy=".35em"
+								transform="translate(-46.43468436268321,47.136481263621725)">
+					<tspan dy=".35em" y="-0.7em" x="0">研究の</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">管理運営</tspan></text></g>
+					<g class="arc">
+					<path id="pathC3" style="fill: rgb(165, 212, 218); opacity: 0;"
+								d="M1.2185235651516165e-14,199A199,199 0 0,1 -98.20467077802512,173.08045134381786L-65.7987743906366,115.96680157039724A133.33333333333334,133.33333333333334 0 0,0 8.164311994315689e-15,133.33333333333334Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-42.40490448141037,160.6648224940157)">
+					<tspan dy=".35em" y="-1.4em" x="0">財務・資金調達</tspan>
+					<tspan dy=".35em" y="0" x="0">リソース</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(C3)</tspan></text></g>
+					<g class="arc">
+					<path id="pathC2" style="fill: rgb(165, 212, 218); opacity: 0;"
+								d="M-99.49999999999996,172.3390553531033A199,199 0 0,1 -171.58796533596592,100.78973237321028L-114.96681094537081,67.53080896027491A133.33333333333334,133.33333333333334 0 0,0 -66.66666666666664,115.47005383792516Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-117.05613577296181,117.93736553362996)">
+					<tspan dy=".35em" y="-1.4em" x="0">研究</tspan>
+					<tspan dy=".35em" y="0" x="0">マネジメント</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(C2)</tspan></text></g>
+					<g class="arc">
+					<path id="pathC1" style="fill: rgb(165, 212, 218); opacity: 0;"
+								d="M-172.33905535310325,99.50000000000007A199,199 0 0,1 -198.9944031512353,1.492486007851934L-133.32958335091143,0.9999906250264214A133.33333333333334,133.33333333333334 0 0,0 -115.47005383792514,66.66666666666671Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-160.34227001504033,43.60868672105387)">
+					<tspan dy=".35em" y="-1.4em" x="0">専門家と</tspan>
+					<tspan dy=".35em" y="0" x="0">しての行動</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(C1)</tspan></text></g>
+					<g class="arc">
+					<path id="pathD" style="fill: rgb(211, 191, 221); opacity: 0;"
+								d="M-132.33333333333334,1.6206159308716643e-14A132.33333333333334,132.33333333333334 0 0,1 -1.9849255633373994,-132.31844611247186L0,0Z"></path>
+					<text style="text-anchor: middle; font-size: 11px; font-weight: bold;" dy=".35em"
+								transform="translate(-47.136481263621704,-46.43468436268323)">
+					<tspan dy=".35em" y="-0.7em" x="0">影響と</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">インパクト</tspan></text></g>
+					<g class="arc">
+					<path id="pathD3" style="fill: rgb(211, 191, 221); opacity: 0;"
+								d="M-199,2.437047130303233e-14A199,199 0 0,1 -173.08045134381786,-98.2046707780251L-115.96680157039724,-65.7987743906366A133.33333333333334,133.33333333333334 0 0,0 -133.33333333333334,1.6328623988631378e-14Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-160.66482249401574,-42.40490448141029)">
+					<tspan dy=".35em" y="-1.4em" x="0">エンゲージメントと</tspan>
+					<tspan dy=".35em" y="0" x="0">インパクト</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(D3)</tspan></text></g>
+					<g class="arc">
+					<path id="pathD2" style="fill: rgb(211, 191, 221); opacity: 0;"
+								d="M-172.33905535310328,-99.50000000000003A199,199 0 0,1 -100.78973237321016,-171.587965335966L-67.53080896027481,-114.96681094537087A133.33333333333334,133.33333333333334 0 0,0 -115.47005383792515,-66.66666666666669Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-117.93736553362986,-117.0561357729619)">
+					<tspan dy=".35em" y="-1.4em" x="0">コミュニケー</tspan>
+					<tspan dy=".35em" y="0" x="0">ションと普及</tspan>
+					<tspan dy=".35em" y="1.4em" x="0">(D2)</tspan></text></g>
+					<g class="arc">
+					<path id="pathD1" style="fill: rgb(211, 191, 221); opacity: 0;"
+								d="M-99.49999999999993,-172.33905535310333A199,199 0 0,1 -1.4924860078517694,-198.9944031512353L-0.9999906250263112,-133.32958335091143A133.33333333333334,133.33333333333334 0 0,0 -66.66666666666661,-115.47005383792518Z"></path>
+					<text style="text-anchor: middle; font-size: 11px;" dy=".35em"
+								transform="translate(-43.60868672105388,-160.34227001504033)">
+					<tspan dy=".35em" y="-0.7em" x="0">他との協働</tspan>
+					<tspan dy=".35em" y="0.7em" x="0">(D1)</tspan></text></g></g></svg>
+					</div>
+
+					<div class="table-ex margin-t-30">
+						<table class="table table-bordered domain vc min">
+							<thead>
+								<tr>
+									<th th:text="#{skill.field.domain}">ドメ</th>
+									<th colspan="5" th:text="#{skill.field.achievementlevel}">度合い（0〜100%）</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="sb" th:text="#{skill.field.domaina}">知能</td>
+									<td><span class="bl" style="background-color: #fafdfe;"></span> <span class="bl"
+										style="background-color: #caecfb;"></span> <span class="bl" style="background-color: #9ddcf9;"></span> <span
+										class="bl" style="background-color: #6acbf5;"></span> <span class="bl" style="background-color: #3abbf2;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td class="sb" th:text="#{skill.field.domainb}">個人</td>
+									<td><span class="bl" style="background-color: #ffffff;"></span> <span class="bl"
+										style="background-color: #dde4f3;"></span> <span class="bl" style="background-color: #bac9e7;"></span> <span
+										class="bl" style="background-color: #91a9d8;"></span> <span class="bl" style="background-color: #6b8bcb;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td class="sb" th:text="#{skill.field.domainc}">研究</td>
+									<td><span class="bl" style="background-color: #edf6f7;"></span> <span class="bl"
+										style="background-color: #c9e5e8;"></span> <span class="bl" style="background-color: #a5d4da;"></span> <span
+										class="bl" style="background-color: #81c3ca;"></span> <span class="bl" style="background-color: #5db1bb;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td class="sb" th:text="#{skill.field.domaind}">影響</td>
+									<td><span class="bl" style="background-color: #ffffff;"></span> <span class="bl"
+										style="background-color: #e8dded;"></span> <span class="bl" style="background-color: #d3bfdd;"></span> <span
+										class="bl" style="background-color: #ba9bc9;"></span> <span class="bl" style="background-color: #a37ab7;"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<h3 class="page-header ex margin-t-50" th:text="#{skill.field.skilldiagresultdetails}">能力診断結果詳細</h3>
+					<div class="table-ex">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr class="line">
+									<th th:text="#{skill.field.category}">見出し1</th>
+									<th th:text="#{skill.field.subcat}">見出し2</th>
+									<th th:text="#{skill.field.item}">見出し3</th>
+									<th th:text="#{skill.field.selfeval}">見出し4</th>
+									<th th:utext="#{skill.field.actionplanhalf}">見出し5</th>
+									<th th:text="#{skill.field.recommendedlesson}">見出し6</th>
+								</tr>
+							</thead>
+							<tbody th:remove="all-but-first">
+								<!--/*/ <th:block th:each="cat : ${rubric.categoryList}" th:with="catAns=${answers.categoryList[__${catStat.index}__]}"> /*/-->
+								<!--/*/ <th:block th:each="subc : ${cat.childList}" th:with="subcAns=${catAns.childList[__${subcStat.index}__]}"> /*/-->
+								<tr th:each="item: ${subc.childList}" th:with="itemAns=${subcAns.childList[__${itemStat.index}__]}">
+									<td class="category1" th:classappend="'bgcolor_'+${cat.abilityCode}"
+										th:if="${subcStat.index}==0 and ${itemStat.index}==0" th:rowspan="${catAns.numGrandchildren}"
+										th:text="${cat.abilityCode}+': '+${cat.name}"></td>
+									<td th:classappend="'bgcolor_'+${cat.abilityCode}" th:if="${itemStat.index}==0"
+										th:rowspan="${subcAns.numChildren}" th:text="${subc.abilityCode}+' '+${subc.name}"></td>
+									<td th:classappend="'bgcolor_'+${cat.abilityCode}" th:text="${item.abilityCode}+' '+${item.name}"></td>
+									<td th:with="done=${itemAns.done}"><span th:if="${done}" th:text="#{skill.value.done}">done</span> <span
+										th:if="${done==false}" th:text="#{skill.value.notyet}">mada</span> <span th:if="${done}==null"
+										th:text="#{skill.value.unknown}">はて?</span></td>
+									<td><span th:if="!${#strings.isEmpty(itemAns.actionPlan)}" th:text="#{skill.value.yes}">YES</span></td>
+									<td><span th:if="${lessons.containsKey('__${item.abilityCode}__')}"
+										th:utext="${lessons.get('__${item.abilityCode}__')}"></span></td>
+								</tr>
+								<!--/*/ </th:block> /*/-->
+								<!--/*/ </th:block> /*/-->
+								<tr>
+									<td class="bgcolor_A">A1.3 研究技法（応用力）</td>
+									<td>未達成</td>
+									<td>有</td>
+									<td>Xxxxxxx(山口大学)<br> Xxxxxxx(徳島大学)<br>
+									</td>
+								</tr>
+								<tr>
+									<td class="bgcolor_A" rowspan="3">A2 認知的能力</td>
+									<td class="bgcolor_A">A2.1</td>
+									<td>達成済</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_A">A2.4</td>
+									<td>未達成</td>
+									<td>有</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_A">A2.5</td>
+									<td>未達成</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_A" rowspan="1">A3 創造性</td>
+									<td class="bgcolor_A">A3.3</td>
+									<td>達成済</td>
+									<td></td>
+									<td></td>
+								</tr>
+
+								<tr>
+									<td class="bgcolor_B category1" rowspan="6">
+										<div>B:個人の能力</div>
+									</td>
+									<td class="bgcolor_B" rowspan="2">B1 知識基盤</td>
+									<td class="bgcolor_B">B1.1 専門分野の知識</td>
+									<td>達成済</td>
+									<td></td>
+									<td>Xxxxxxx(広島大学)<br> Xxxxxxx(岡山大学)<br>
+									</td>
+								</tr>
+								<tr>
+									<td class="bgcolor_B">B1.3 研究技法（応用力）</td>
+									<td>未達成</td>
+									<td>有</td>
+									<td>Xxxxxxx(山口大学)<br> Xxxxxxx(徳島大学)<br>
+									</td>
+								</tr>
+								<tr>
+									<td class="bgcolor_B" rowspan="3">B2 認知的能力</td>
+									<td class="bgcolor_B">B2.1</td>
+									<td>達成済</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_B">B2.4</td>
+									<td>未達成</td>
+									<td>有</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_B">B2.5</td>
+									<td>未達成</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="bgcolor_B" rowspan="1">B3 創造性</td>
+									<td class="bgcolor_B">B3.3</td>
+									<td>達成済</td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+				<!-- /.box -->
+			</section>
+			<!-- /.content -->
+
+		</th:block>
+	</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+@charset "UTF-8";
+
+/* pop（base） */
+
+/*! layout ============================================== */
+
+#pop {
+	width: 1000px ;
+	margin: 0 auto ;
+	padding: 0 0 10px ;
+	}
+
+#pop header {
+	margin-top: -20px ;
+	}
+
+#pop main {
+	float: none ;
+	box-sizing: border-box ;
+	width: 100% ;
+	padding: 25px 25px 35px ;
+	}
+
+
+/*! head ============================================== */
+
+/* logo */
+#pop header .logo {
+	padding-top: 33px ;
+	font-size: 16px ;
+	}
+
+#pop header .logo {
+	padding-left: 0 ;
+	background: none ;
+	}
+
+#pop header .logo span {
+	display: none ;
+	}
+
+/* nav sub（CLOSE以外を消去） */
+#pop header ul {
+	position: absolute ;
+	top: 31px ;
+	right: 0 ;
+	}
+
+#pop header ul li:nth-last-child(n+2) {
+	display: none ;
+	}
+
+#pop header ul li:last-child {
+	display: block ;
+	background-image: url("../gfx/h_btn04_on.png") ;
+	}
+
+#pop header ul li:last-child a {
+	background-image: url("../gfx/h_btn04_off.png") ;
+	}
+
+/* time */
+#pop header p {
+	display: none ;
+	}
+
+
+/*! foot ============================================== */
+
+#pop footer .close {
+	display: block ;
+	}
+
+#pop footer .close a {
+	display: block ;
+	width: 120px ;
+	margin: 0 auto ;
+	padding: 7px 0 4px ;
+	background-color: #dcd9cc ;
+	border: 1px solid #a7a59b ;
+	border-radius: 2px ;
+	font-size: 11px ;
+	font-weight: bold ;
+	text-align: center ;
+	color: #79776d ;
+	}
+
+#pop footer .close a:hover {
+	background-color: #f1efe5 ;
+	border: 1px solid #a7a59b ;
+	text-decoration: none ;
+	color: #ee8907 ;
+	}
+
+
+/*! title ============================================== */
+
+#pop main h1 {
+	margin: -25px -25px 30px ;
+	padding-left: 50px ;
+	background-position: 25px 17px ;
+	}

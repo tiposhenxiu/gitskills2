@@ -1,0 +1,361 @@
+@charset "UTF-8";
+
+/*! bace ============================================== */
+
+html, body {
+	margin: 0 ;
+	padding: 0 ;
+	background: #f1efe5 url("../gfx/h_back.png") repeat-x left top ;
+	}
+
+html, body, table {
+	font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", メイリオ, Meiryo, "ＭＳ Ｐゴシック", sans-serif ;
+	font-size: 12px ;
+	line-height: 1.8 ;
+	word-wrap: break-word ;
+	color: #333333 ;
+	}
+
+p, dl, dt, dd, ul, li, th, td {
+	margin: 0 ;
+	padding: 0 ;
+	}
+
+h1, h2, h3, h4, h5, h6, h7 {
+	margin: 0 ;
+	padding: 0 ;
+	font-size: 12px ;
+	line-height: 1.5 ;
+	}
+
+table { border-collapse: collapse ;}
+ul { list-style: none ;}
+ul li img  { vertical-align: top ;}
+main img	{ vertical-align: bottom ;}
+
+
+/*! html5（ie） ============================================== */
+
+header, footer, main, aside, nav, menu, section, article, hgroup, figure, figcaption, address, canvas, details, summary {
+	display: block ;
+	margin: 0 ;
+	padding: 0 ;
+	font-style: normal ;
+	}
+
+
+/*! link ============================================== */
+
+a {
+	text-decoration: none ;
+	transition: all 0.3s ;
+	}
+a:link { color: #ea7f00 ;}
+a:visited { color: #ea7f00 ;}
+a:hover { color: #795c3a ; text-decoration:underline ;}
+
+a img {
+	border: 0 ;
+	transition: 0.3s ;
+	}
+
+/* link（green） */
+a.ag:link,
+a.ag:visited {
+	color: #40a29a ;
+	}
+
+a.ag:hover {
+	color: #ea7f00 ;
+	}
+
+
+/*! layout ============================================== */
+
+#base {
+	width: 1000px ;
+	margin: 0 auto ;
+	padding: 0 ;
+	}
+
+header {
+	position: relative ;
+	height: 90px ;
+	}
+
+aside {
+	float: left ;
+	width: 200px ;
+	margin-top: 15px ;	
+	background-color: #ffffff ;
+	border-radius: 6px ;
+	box-shadow: 1px 1px 2px 0px #a9a89e ;
+	}
+
+main {
+	float: right ;
+	width: 750px ;
+	margin-top: 15px ;
+	padding: 15px 15px 25px ;
+	background-color: #ffffff ;
+	border-radius: 6px 6px 4px 4px ;
+	box-shadow: 1px 1px 2px 0px #a9a89e ;
+	}
+
+
+/*! head ============================================== */
+
+/* logo */
+header .logo {
+	display: inline-block ;
+	box-sizing: border-box ;
+	height: 70px ;
+	padding-top: 15px ;
+	font-size: 18px ;
+	font-weight: bold ;
+	color: #f4c255 ;
+	}
+
+	/* logo画像の指定 + スペース調整 */
+header .logo {
+	padding-left: 61px ; /* 画像幅 +5px程度から調整 */
+	background: url("../gfx/h_logo.png") no-repeat left center ;
+	}
+
+header .logo span {
+	display: block ;
+	font-family: "Lucida Grande", sans-serif ;
+	font-size: 7px ;
+	line-height: 0.8 ;
+	color: #e5e5e5 ;
+	}
+
+/* nav sub */
+header ul {
+	position: absolute ;
+	top: 22px ;
+	right: 0 ;
+	}
+
+header ul li {
+	display: inline-block ;
+	margin-left: 2px ;
+	background-repeat: no-repeat ;
+	}
+header ul li:nth-child(1) { background-image: url("../gfx/h_btn01_on.png") ;}
+header ul li:nth-child(2) { background-image: url("../gfx/h_btn02_on.png") ;}
+header ul li:nth-child(3) { background-image: url("../gfx/h_btn03_on.png") ;}
+
+header ul li a {
+	display: block ;
+	width: 120px ;
+	height: 30px ;
+	text-indent: -9999px ;
+	background-repeat: no-repeat ;
+	}
+header ul li:nth-child(1) a { background-image: url("../gfx/h_btn01_off.png") ;}
+header ul li:nth-child(2) a { background-image: url("../gfx/h_btn02_off.png") ;}
+header ul li:nth-child(3) a { background-image: url("../gfx/h_btn03_off.png") ;}
+header ul li a:hover {
+	opacity: 0 ;
+	}
+
+/* nav sub（CLOSEを消去） */
+header ul li:last-child {
+	display: none ;
+	}
+
+/* time */
+header p {
+	padding-top: 2px ;
+	font-size: 10px ;
+	text-align: right ;
+	color: #bfbfbf ;
+	}
+
+
+/*! side ============================================== */
+
+aside .id {
+	padding: 15px ;
+	background-color: #395173 ;
+	border-radius: 4px 4px 0 0 ;
+	}
+
+aside .id p {
+	padding: 9px 10px 5px 36px ;
+	border-radius: 3px ;
+	box-shadow: 1px 1px 1px 0px #1a1a1a inset ;
+	font-size: 13px ;
+	line-height: 1.6 ;
+	font-weight: bold ;
+	color: #8dbefe ;
+	}
+
+/* icon（gakusei + tyutar） */
+aside .id p.gaku { background: #213550 url("../gfx/s_id01.png") no-repeat 10px 9px ;}
+aside .id p.tyu { background: #213550 url("../gfx/s_id02.png") no-repeat 14px 9px ;}
+
+aside .id ul {
+	padding: 10px 0 0 30px ;
+	}
+
+aside .id ul li {
+	font-size: 11px ;
+	text-indent: -1em ;
+	color: #f2f2f2 ;
+	}
+
+aside .id ul li:before {
+	content: "●" ;
+	font-family: "Arial", "Helvetica", sans-serif ;
+	margin-right: 6px ;
+	font-size: 10px ;
+	vertical-align: 1px ;
+	color: #e5e5e5 ;
+	}
+
+/* nav */
+aside nav {
+	padding: 15px 15px 10px ;
+	}
+
+aside nav h3 {
+	padding: 5px 5px 3px 7px ;
+	background-color: #bfbfbf ;
+	border-radius: 2px ;
+	font-weight: bold ;
+	color: #ffffff ;
+	}
+
+aside nav ul {
+	padding: 0 1px ;
+	}
+
+aside nav ul li.main {
+	display: block ;
+	padding: 7px 25px 5px 6px ;
+	background: url("../gfx/m_aco_on.png") no-repeat 155px center ;
+	line-height: 1.6 ;
+	color: #656565 ;
+	border-bottom: 1px dotted #b2b2b2 ;
+	}
+
+aside nav ul li.main:hover {
+	background: #f7f7f7 url("../gfx/m_aco_on.png") no-repeat 155px center ;
+	text-decoration: none ;
+	color: #f39800 ;
+	}
+
+aside nav ul li:last-child {
+	border-bottom: none ;
+	}
+
+aside nav ul li a:link,
+aside nav ul li a:visited {
+	display: block ;
+	padding: 7px 25px 5px 6px ;
+	background: url("../gfx/s_nav_off.png") no-repeat 155px center ;
+	line-height: 1.6 ;
+	color: #656565 ;
+	}
+
+aside nav ul li a:hover {
+	background: #f7f7f7 url("../gfx/s_nav_on.png") no-repeat 155px center ;
+	text-decoration: none ;
+	color: #f39800 ;
+	}
+
+/* tyutar list */
+aside .tyulist {
+	padding: 15px ;
+	background-color: #dcd9cc ;
+	border-radius: 0 0 4px 4px ;	
+	}
+
+aside .tyulist h2 {
+	padding: 8px 0 6px ;
+	border: 1px solid #a7a59b ;
+	border-radius: 3px ;
+	font-weight: bold ;
+	text-align: center ;
+	color: #79776d ;
+	}
+
+aside .tyulist ul {
+	padding: 10px 0 0 18px ;
+	}
+
+aside .tyulist li {
+	text-indent: -1em ;
+	}
+
+aside .tyulist li:before {
+	content: "●" ;
+	font-family: "Arial", "Helvetica", sans-serif ;
+	margin-right: 6px ;
+	font-size: 10px ;
+	vertical-align: 1px ;
+	color: #7f7d72 ;
+	}
+
+
+/*! foot ============================================== */
+
+footer {
+	clear: both ;
+	padding: 20px 0 10px ;
+	}
+
+/* close（消去） */
+footer .close {
+	display: none ;
+	}
+
+
+/*! page top ============================================== */
+
+footer .ptop {
+	position: fixed ;
+	bottom: -25px ;
+	right: 10px ;
+	}
+
+footer .ptop a:link,
+footer .ptop a:visited {
+	display: block ;
+	width: 40px ;
+	height: 25px ;
+	background-color: #a6a6a6 ;
+	border-radius: 3px 3px 0 0 ;
+	line-height: 30px ;
+	font-size: 11px ;
+	text-align: center ;
+	text-decoration: none ;
+	color: #ffffff ;
+	}
+
+footer .ptop a:hover {
+	background-color: #8d8d8d ;
+	text-decoration: none ;
+	color: #f4c255 ;
+	}
+
+
+/*! clear ============================================== */
+
+.cut,
+#base,
+main dl {
+	zoom: 100%;
+	}
+
+.cut:after,
+#base:after,
+main dl:after {
+	content: " "; 
+	clear: both; 
+	height: 0; 
+	display: block; 
+	visibility: hidden;
+	}

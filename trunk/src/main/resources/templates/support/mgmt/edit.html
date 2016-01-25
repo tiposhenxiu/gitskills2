@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/base" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<!-- current script -->
+<th:block layout:fragment="layout-script">
+<script th:inline="javascript">
+	$().ready(function() {
+			// validate signup form on keyup and submit
+			$("#formRegist").validate({
+				rules : {
+					supportKeyword : {
+						required : true,
+						maxlength : 100
+					},
+					supportTitle : {
+						required : true,
+						maxlength : 100
+					},
+					supportSybCodeArray : {
+						required : true,
+						minlength: 1,
+					},
+					url : {
+						required : true,
+					},
+					supportContext : {
+						required : true,
+					},
+					supportStartDate : {
+						required : true,
+					},
+					supportEndDate : {
+						required : true,
+					},
+				},
+			});
+
+			$('.input-group.date').datepicker({
+				format : "yyyy/mm/dd"
+				,language : 'ja'
+				,showOn : "button"
+				,buttonImageOnly : true
+				,buttonImage : '/img/m_ical.png'
+			});
+			$('.datepicker').change(function () {
+				//カレンダー確定時にフォームに反映
+				var dates = $(this).val().split('/');
+				$(this).parent().parent().find(".year").val(dates[0]);
+				$(this).parent().parent().find(".month").val(dates[1]);
+				$(this).parent().parent().find(".day").val(dates[2]);
+			});
+
+			$("input[class~='year'], input[class~='month'], input[class~='day']").change(function () {
+				//カレンダー確定時にフォームに反映
+				var year = $(this).parent().find(".year").val();
+				var month = $(this).parent().find(".month").val();
+				var day = $(this).parent().find(".day").val();
+				$(this).parent().find(".datepicker").val(year + "/" + month + "/" + day);
+			});
+
+		});
+</script>
+</th:block>
+
+<body>
+
+	<div layout:decorator="layout">
+		<th:block layout:fragment="layout-content">
+			<div>
+			<!-- Start -->
+
+			<!--/* 戻るためのform */-->
+			<form th:action="@{/mgmt/support/list}" method="post" role="form" autocomplete="off" id="formBack" name="form">
+				<input type="hidden" name="searchKeyword" th:value="${form.searchKeyword}" />
+				<input type="hidden" name="searchSybCode" th:value="${form.searchSybCode}" />
+			</form>
+
+			<!-- Start -->
+			<form th:action="@{|/mgmt/support/__${form.pageActionUrl}__|}" method="post" role="form" autocomplete="off" th:object="${form}" id="formRegist" name="form">
+				<input type="hidden" name="pageMode" th:field="*{pageMode}" />
+				<input type="hidden" name="searchKeyword" th:value="${form.searchKeyword}" />
+				<input type="hidden" name="searchSybCode" th:value="${form.searchSybCode}" />
+				<input type="hidden" name="supportKey" th:field="*{supportKey}" />
+				<input type="hidden" name="supportSpkikiKbn" th:field="*{supportSpkikiKbn}" />
+				<input type="hidden" name="publicFlag" th:field="*{publicFlag}" />
+				<input type="hidden" name="supportContext" value="" />
+				<div th:remove="${T(jp.co.sraw.common.CommonConst).PAGE_MODE_ADD == form.pageMode ? 'all' : 'none'}">
+					<input type="hidden" name="supportInsDate" th:field="*{supportInsDate}"/>
+					<input type="hidden" name="updDate" th:field="*{updDate}"/>
+				</div>
+				<!-- !title -->
+				<h1 th:text="#{support.title.mgmt.edit}">支援制度</h1>
+
+				<!-- !menu -->
+
+				<menu>
+					<ul>
+						<li><button type="button" class="btn btn-primary regist" name="regist" th:text="#{button.regist}">登 録</button></li>
+						<li><button type="button" class="btn btn-default back" name="back" th:text="#{button.back}">戻る</button></li>
+					</ul>
+				</menu>
+
+
+				<!-- !登録 -->
+				<h2>支援制度情報</h2>
+				<br />
+
+				<font color="red">*の項目は一覧に掲載されます</font>
+				<table class="boxf01">
+					<tr>
+						<th><font color="red">*</font>種別：</th>
+						<td><th:block th:each="sybItem: ${sybList}"><input type="checkbox" name="supportSybCode"
+							th:field="*{supportSybCodeArray}"
+							th:value="${sybItem.code}" th:id="sybCode+${sybItem.code}"/><label
+							th:for="sybCode+${sybItem.code}" th:text="${sybItem.value}"></label></th:block></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>キーワード：</th>
+						<td><input type="text" name="supportKeyword"
+							th:field="*{supportKeyword}" /></td>
+					</tr>
+					<tr>
+						<th>公開日：</th>
+						<td><input type="text" class="year" name="supportStartDateYear" size="4" th:value="${#strings.substring(form.supportStartDate,0,4)}"/>年
+						<input type="text" class="month" name="supportStartDateMonth" size="4" th:value="${#strings.substring(form.supportStartDate,5,7)}"/>月
+						<input type="text" class="day" name="supportStartDateDay" size="4" th:value="${#strings.substring(form.supportStartDate,8,10)}"/>日
+						<div class="input-group date">
+						<input type="text" class="datepicker" id="supportStartDate" name="supportStartDate" th:field="*{supportStartDate}" style="display:none;"/>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div></td>
+					</tr>
+					<tr>
+						<th>配信停止日：</th>
+						<td><input type="text" class="year" name="supportEndDateYear" size="4" th:value="${#strings.substring(form.supportEndDate,0,4)}"/>年
+						<input type="text" class="month" name="supportEndDateMonth" size="4" th:value="${#strings.substring(form.supportEndDate,5,7)}"/>月
+						<input type="text" class="day" name="supportEndDateDay" size="4" th:value="${#strings.substring(form.supportEndDate,8,10)}"/>日
+						<div class="input-group date">
+						<input type="text" class="datepicker" id="supportEndDate" name="supportEndDate" th:field="*{supportEndDate}" style="display:none;"/>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>タイトル：</th>
+						<td><input type="text" name="supportTitle"
+							th:field="*{supportTitle}" /></td>
+					</tr>
+					<tr>
+						<th><font color="red">*</font>リンク先：</th>
+						<td><input type="text" name="url" th:field="*{url}" /></td>
+					</tr>
+					<tr>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>概要：</th>
+						<td><textarea class="textarea" name="supportContent"
+								placeholder="Enter text ..." style="width: 550px; height: 200px"
+								th:field="*{supportContent}" required="required"></textarea></td>
+					</tr>
+				</table>
+
+			</form>
+			<!-- End -->
+			</div>
+		</th:block>
+	</div>
+
+</body>
+</html>
