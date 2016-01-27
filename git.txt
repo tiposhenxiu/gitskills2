@@ -1,0 +1,155 @@
+Pleiades All in One 4.5.1.v20151002
+
+http://mergedoc.osdn.jp/index.html#/pleiades_distros4.5.html
+http://ftp.jaist.ac.jp/pub/mergedoc/pleiades/4.5/pleiades-e4.5-java-jre_20151002.zip
+
+
+http://linux-star.jugem.jp/?cid=6
+http://linux-star.jugem.jp/?eid=28
+
+
+http://mooc.guokr.com/post/645581/
+
+https://code.csdn.net/DOC_CSDN/git_lxf/file/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93.md
+
+
+git
+sudo apt-get install git
+”@‰Ê¥‘´‘¼Linux”Å–{C‰ÂˆÈ’¼Ú’Ê?Œ¹?ˆÀ‘•Bæ˜¸GitŠ¯ã¤‰º?Œ¹?C‘R@‰ğ?CˆËŸ?“üF./configCmakeCsudo make install
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"
+mkdir learngit
+cd learngit
+git init
+git add readme.txt
+git commit -m "wrote a readme file"
+git status
+git diff readme.txt
+git log
+git reflog
+git reset --hard HEAD^
+git reset --hard 3628168
+cat readme.txt
+git checkout -- readme.txt
+git rm test.txt
+ssh-keygen -t rsa -C "your\_email@example.com"
+git remote add origin git@github.com:tiposhenxiu/learngit.git
+git remote add origin git@github.com:tiposhenxiu/000git.git
+git remote add origin git@github.com:tiposhenxiu/gitskills2.git
+git push -u origin tiposhenxiu/000git/master
+git pull origin git@github.com:tiposhenxiu/000git.git
+git push -u origin master
+git push origin master
+git clone git@github.com:michaelliao/gitskills.git
+cd gitskills
+ls
+git mergetool
+
+git branch dev
+git checkout dev
+git checkout -b dev
+
+git branch
+git checkout master
+git merge dev
+git branch -d dev
+?ŠÅ•ªxFgit branch
+
+?Œš•ªxFgit branch name
+
+Ø?•ªxFgit checkout name
+
+?Œš+Ø?•ªxFgit checkout -b name
+
+‡›ó–^•ªx““–‘O•ªxFgit merge name
+
+?œ•ªxFgit branch -d name
+
+git log --graph --pretty=oneline --abbrev-commit
+git merge --no-ff -m "merge with no-ff" dev
+
+git stash
+git checkout master
+git checkout -b issue-101
+git add readme.txt
+git commit -m "fix bug 101"
+git checkout master
+git merge --no-ff -m "merged bug fix 101" issue-101
+git branch -d issue-101
+git checkout dev
+git status
+git stash list
+git stash apply stash@{0}
+git stash apply
+git stash drop
+git stash pop
+
+
+git remote
+git remote -v
+git push origin master
+git push origin dev
+
+git clone git@github.com:michaelliao/learngit.git
+git branch
+git checkout -b dev origin/dev
+git commit -m "add /usr/bin/env"
+
+İ–{’n‡›óC‰ğ™r™t“ËCÄ„‘—
+git pull
+git branch --set-upstream dev origin/dev
+git pull
+git commit -m "merge & fix hello.py"
+git push origin dev
+
+
+git tag v1.0
+git tag
+git tag v0.9 6224937
+git show v0.9
+git tag -a v0.1 -m "version 0.1 released" 3628164
+git tag -s v0.2 -m "signed version 0.2 released" fec145a
+git tag -d v0.1
+git push origin v1.0
+
+git tag -d v0.9
+git push origin :refs/tags/v0.9
+
+git config --global color.ui true
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+
+git config --global alias.last 'log -1'
+git last
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+git lg
+
+sudo apt-get install git
+sudo adduser git
+sudo git init --bare sample.git
+sudo chown -R git:git sample.git
+git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
+git clone git@server:/srv/sample.git
+
+
+
+
+
+
+
+
+pwd
+cd..
+cd  c/Users/sraw/learngit/gitskills2
+git add .
+git commit -m "wrote a readme file"
+git push origin master
+git push -u origin master
+
+
+http://blog.csdn.net/mchdba/article/details/12083965
+http://blog.csdn.net/lw_power/article/details/46558845
+
+
